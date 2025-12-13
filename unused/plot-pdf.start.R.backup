@@ -1,0 +1,74 @@
+
+iaw$pdf.start <- function (pdffilename,
+                       scale = 0.75, wd = 9, ht = 6, pointsize = (-1),
+                       family = 'Bitstream Vera Serif', embed = 2,
+                       verbose = 1, ...)
+{
+  (iaw$is.character(pdffilename,1)) %or% "pdffilename {{pdffilename}} has to be a string"
+  (iaw$is.numeric(scale,1) & (scale>0)) %or% "scale {{scale}} is wrong"
+  (iaw$is.numeric(wd,1) & (wd>0)) %or% "wd {{wd} is wrong:"
+  (iaw$is.numeric(ht,1) & (ht>0)) %or% "ht {{ht}} is wrong:"
+
+  pdf.openfile <- options("pdf.openfile")$pdf.openfile
+  if (!is.null(pdf.openfile)) {
+      iaw$estring("[you forgot to invoke pdf.end() for {{pdf.openfile[1]}}.  doing it for you\n")
+      iaw$pdf.end()
+  }
+
+  (grepl(".eps$", pdffilename)) %and% "eps file extension in {{pdffilename}} is not allowed"
+  pdffilename <- paste0(gsub("\\.pdf", "", pdffilename, ignore.case=TRUE), ".pdf")
+
+  if (!grepl("/", pdffilename)) {
+    for (dir in c("pdf/", "figs/", "fig/")) {
+      if (iaw$dir.exists(dir)) {
+        pdffilename <- paste0(dir, pdffilename) }
+    }
+  }
+
+  if (pointsize < 0) pointsize <- 12/scale
+  scale <- 1
+  width <- wd * scale
+  height <- ht * scale
+
+  if (verbose) iaw$cat.stderr("[pdf.start: ", pdffilename, "]", sep = "")
+  options( pdf.openfile = c(file=pdffilename) )
+
+  pdf(file = pdffilename,
+      width = width, height = height, pointsize = pointsize,
+      title = paste("R Graphics --", pdffilename, iaw$now(), " -- ", paste(commandArgs(), "--", Rscriptname, collapse="")),
+      family = family,
+      ...)
+  par(family = family)
+  par(mar = c(4, 4, 1, 1) + 0.1)
+  par(las = 1, mgp = c(2.5, 0.75, 0))
+}
+
+
+################
+#if (getOption("os")=="osx") library("Cairo")
+#if (getOption("os") == "osx") pdf <- CairoPDF
+
+
+## pdfFonts(Bera = Type1Font("Bera", paste0(getOption("texfonts"), "afm/public/bera/", c("fvsr8a","fvsb8a","fvsro8a","fvsbo8a"), ".afm")))
+
+## showtextprep <- function() {
+##    library(showtext)
+##    n <- c(paste0(getOption("texfonts"), "type1/public/bera/"))
+##    font_add("Bera", paste0(n,"fvsr8a.pfb"), bold=paste0(n,"fvsb8a.pfb"),italic=paste0(n,"fvsro8a.pfb"),bolditalic=paste0(n,"fvsbo8a.pfb"))
+##    showtext_auto()
+## }
+
+
+c(doc= '
+@TITLE pdf.start
+@AUTHOR ivo.welch@gmail.com
+@DATE 2013
+@DESCRIPTION
+@USAGE pdf.start (file="hi",...)
+@ARGUMENTS
+@DETAILS
+@SEEALSO
+@EXAMPLES
+', test= '
+', changes= '
+')
