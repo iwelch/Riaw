@@ -18,9 +18,6 @@
 #' @seealso wide2long( d, "id1", "id2", "val" )
 #'
 
-    o <- matrix( 1:(3*7), 7, 3 )
-    rownames(o) <- paste0("r",1:7)
-    colnames(o) <- paste0("c",1:3)
 
 iaw$wide2long <- function(d, valname.is="val", row.is="time", col.is="unit") {
     "note: matrx.  column is usually time, row is usually firm; output: time varies first, then unit";

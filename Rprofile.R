@@ -52,8 +52,14 @@ for (pkg in addlibraries) {
 ################################################################
 
 
-stopifnot(file.exists("/opt/X11/include"))
-Sys.setenv(C_INCLUDE_PATH = "/opt/X11/include")  ## for Cairo Installation
+if (getOption("os") == "macos" && file.exists("/opt/X11/include")) {
+    Sys.setenv(C_INCLUDE_PATH = "/opt/X11/include")  ## for Cairo Installation
+} else {
+    stop("you probably need an X installed somewhere.  after this is done, please add it here (in Rprofile.R)")
+}
+
+
+stopifnot( getRversion() >= "4.5.0" )  ## please upgrade!
 
 use("compiler", "cmpfun")
 use("Cairo", c("CairoFonts", "CairoPDF"))  # NOTE: install fonts with `font_import(); loadfonts()`

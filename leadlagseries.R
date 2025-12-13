@@ -105,7 +105,7 @@ iaw$lagseries <- function( series, numlags = 1, panelid = NULL, timeid = NULL )
                     if (numlags == 0) return( series )
                     if (numlags < 0) return( iaw$leadseries( series, -numlags, panelid, timeid ))
                     x <- series[1:(length(series) - numlags)]
-                    if (is.factor(x)) factor(c(rep(NA, numlags), levels(x)[x])) else c(rep(NA, numlags), x)
+                    if (is.factor(x)) factor( c( levels(x), rep(NA, numleads))[x] ) else c(x, rep(NA, numleads))
                 },
                 param= numlags,
                 series= series
