@@ -180,7 +180,7 @@ if (!exists('%and%')) base::source(paste0(libdir, "/%and%.R"))
 if (!exists('%or%'))  base::source(paste0(libdir, "/%or%.R"))
 if (!exists('%inrange%')) base::source(paste0(libdir, "/%inrange%.R"))
 
-fname.lib.cached <- paste0(libdir, "/library.Rdata")
+fname.lib.cached <- paste0(libdir, "/Riaw-library.Rdata")
 
 iawRsourcefilenames <- c(Sys.glob(paste0(libdir, "/*.R")), 
                          Sys.glob(paste0(libdir, "/plotsupport/*.R")))
