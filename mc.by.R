@@ -81,7 +81,7 @@ iaw$mc.by <- function (indata, INDICES, FUNIN, ...)  {
     if ((Sys.time() - timestart)>10)
         message("[splitting for mc.by done: ",length(ssplit)," groups from ", nrow(indata), " observations]\n")
 
-    wapply <- if (iaw$.mc.cripple) lapply else iaw$mclapply
+    wapply <- if (iaw$.mc.cripple) lapply else mclapply
 
     applytoeach <- (wapply(ssplit, FUN=function(.index) FUNIN(indata[.index, , drop = FALSE], ...)))
     if ((Sys.time() - timestart)>20) message("[applying mc.by done]\n")

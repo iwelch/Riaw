@@ -4,7 +4,7 @@
 
 base::source(paste0(libdir, "/base.R"))
 
-message(libdir, "/Rprofile.R on ", hostname())  ## libdir is usually "~/src/R"
+message(libdir, "/Rprofile.R on ", hostname())  ## libdir is usually "~/src/Riaw"
 
 
 T <- TRUE

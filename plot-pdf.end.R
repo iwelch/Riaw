@@ -14,10 +14,10 @@ preamble <- c(doc= '
 
 iaw$pdf.end <- function (verbose = 1)
 {
-    if (isTRUE(getOption('knitr.in.progress'))) return
+    if (isTRUE(getOption('knitr.in.progress'))) return(invisible(NULL))
 
-  dev.off()
+    dev.off()
                                         #  embedFonts( file=getOption("pdf.openfile"), fontpaths = getOption("pfbdir") )
-  if (verbose) iaw$cat.stderr("[pdf.end]\n")
-  options(pdf.openfile = NULL)
+    if (verbose) iaw$cat.stderr("[pdf.end]\n")
+    options(pdf.openfile = NULL)
 }

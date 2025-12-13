@@ -38,11 +38,12 @@ iaw$wide2long <- function(d, valname.is="val", row.is="time", col.is="unit") {
     names(rv) <- c(row.is, col.is, valname.is)
     return( rv )
 
-    ## test
-    o <- matrix( 1:(3*7), 7, 3 )
-    rownames(o) <- paste0("r",1:7)
-    colnames(o) <- paste0("c",1:3)
     iaw$wide2long( o, "tval" )
     ## reshape( d, direction="long", idvar= "unit", timevar= "time",
     ## varying= list(colnames(d)), times= colnames(d), ids= rownames(d) )
 }
+
+    ## test
+    ## o <- matrix( 1:(3*7), 7, 3 )
+    ## rownames(o) <- paste0("r",1:7)
+    ## colnames(o) <- paste0("c",1:3)

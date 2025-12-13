@@ -34,7 +34,7 @@ iaw$summary <- function (df, verbose = "X", digits = 4) {
     wantedstats[['x']] <- c(wantedstats[['p']], c("min", "median", "max"))
     wantedstats[['X']] <- c(wantedstats[['p']], c("pmost", "auto"))
     wantedstats[['a']] <- c(wantedstats[['p']], c("pall", "frcpos", "trimmn", "sd2", "auto"))
-    if (verbose %in% names(wantedstats)) w <- wantedstats[[verbose]] else stop("Sorry, but I do not know wantedstats of {{verbose}}}")
+    if (verbose %in% names(wantedstats)) w <- wantedstats[[verbose]] else stop("Sorry, but I do not know wantedstats of {{verbose}}")
 
 
     nok <- function(x, na.rm=F) sum(!is.na(x))

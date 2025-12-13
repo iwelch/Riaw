@@ -17,7 +17,7 @@ iaw$yearly.tickmarks <- function (yyyymm, decades = 0)
   tr <- if (decades) 1000 else 100
   mi <- yyyymm
   yi <- as.integer(mi/tr)
-  yl <- as.integer(iaw$lagseries(yi)/tr)
+  yl <- iaw$lagseries(yi)
   newyear <- (yi != yl)
   tickloc <- (1:length(mi))[newyear]
   tickval <- yi[newyear]

@@ -11,6 +11,9 @@
 #' @examples
 #' print(head(famamacbeth.gammas( ret ~ bm + m, data=crsp )))
 #'
+#' @seealso
+#'   install.packages("plm"); library(plm);  pmg(investment ~ mvalue + kstock, data = grunfeld, index = c("FIRM", "YEAR"))
+#'
 #' @return data.frame of yyyymm, degrees.freedom, coefficients
 #'
 
@@ -44,7 +47,7 @@ iaw$famamacbeth.gammas <- function(formula, data, timeid="yyyymm") {
 #' @return
 
 iaw$famamacbeth <- function(formula, data, timeid="yyyymm", printn= TRUE) {
-    gs <- famamacbeth.gammas( formula, data, timeid )
+    gs <- iaw$famamacbeth.gammas( formula, data, timeid )
     if (printn) {
         gsminn <- subset(gs, gs$df==min(gs$df))
         gsmaxn <- subset(gs, gs$df==max(gs$df))

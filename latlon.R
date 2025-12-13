@@ -25,7 +25,7 @@ iaw$latlonx <- function( lat1, lon2=NULL ) {
     if (!is.null( ncol(lat1) )) {
         ## we are passing a matrix or dataframe
         if (ncol(lat1)>=2) return( iaw$mklatlonid( as.numeric(lat1[,1]), as.numeric( lat1[,2] )) ) ## a matrix of 2 vectors is standard
-        return( invlatlon( as.numeric(argc[,1]) ) )  ## a matrix of 1 vector is an inverse operation
+        return( iaw$invlatlon( as.numeric(lat1[,1]) ) )  ## a matrix of 1 vector is an inverse operation
     }
 
     if (is.null(lon2)) {

@@ -42,7 +42,7 @@
 iaw$printolm <- function( ..., yname=NULL, xnames=NULL, wantedcols=1:7, description=NULL ) {
 
     va <- list(...)
-    if ((length(va) ==1) & (class(va[[1]]) == "summary.lm")) {
+    if ((length(va) == 1) && inherits(va[[1]], "summary.lm")) {
         ## should test further for an iaw$olm summary
         olmobject <- va[[1]]
     } else {

@@ -5,7 +5,7 @@
 #'
 #'  out-of-sample linear model
 #'
-#' @usage ooslm (formula, starti, data, winlen=999999)
+#' @usage ooslm (formula, data, ...)
 #'
 #' @param formula on the data
 #' @param the first observation
@@ -17,10 +17,10 @@
 iaw$ooslm <- function( formula, data, ... ) {
     library( strucchange )
 
-    condesterr.standardized <- recresid( formula=formula, data=data, ... )
-    K <- nrow(data) - length(condesterr.standardized)  ## for constant model, K=1
-    condesterr <- condesterr.standardized * sqrt(1.0+1.0/(1:length(condesterr.standardized)))  ## not sure.
-    condesterr <- c( rep(NA, K), condesterr)
+    cond.esterr.standardized <- recresid( formula=formula, data=data, ... )
+    K <- nrow(data) - length(cond.esterr.standardized)  ## for constant model, K=1
+    cond.esterr <- cond.esterr.standardized * sqrt(1.0+1.0/(1:length(cond.esterr.standardized)))  ## not sure.
+    cond.esterr <- c( rep(NA, K), cond.esterr)
 
     ## note: reports (yreal - yhat) / sqrt(1+1/(N-K)),
     ##  so multiply by sqrt(1+1/1:N) to recover unstandardized values, where N=1:(nrow(x)-K)
@@ -39,13 +39,13 @@ iaw$ooslm <- function( formula, data, ... ) {
     ## to.predict <- get.lhs( formula, data )
     to.predict <- data[[ all.vars(formula)[1] ]]  # , because all.vars( y ~ x1 + x3 ) gives "y", "x1", "x3"
 
-    uncondesterr <- sapply( 1:nrow(data), function(i) to.predict[i+1] - mean( to.predict[1:i] ) )
-    ## uncondesterr.standardized <- condesterr / sqrt(1.0+1.0/(1:length(condesterr)))  ## not sure.
-    uncondesterr <- head(c(NA,uncondesterr), -1)
+    uncond.esterr <- sapply( 1:nrow(data), function(i) to.predict[i+1] - mean( to.predict[1:i] ) )
+    ## uncond.esterr.standardized <- cond.esterr / sqrt(1.0+1.0/(1:length(cond.esterr)))  ## not sure.
+    uncond.esterr <- head(c(NA,uncond.esterr), -1)
 
-    ## message( length(uncondesterr), " / ", length(condesterr), " / ", length(to.predict) )
+    ## message( length(uncond.esterr), " / ", length(cond.esterr), " / ", length(to.predict) )
 
-    dr <- data.frame( delta.abserr=(abs(uncondesterr) - abs(condesterr)), uncondesterr, condesterr, to.predict )
+    dr <- data.frame( delta.abserr=(abs(uncond.esterr) - abs(cond.esterr)), uncond.esterr, cond.esterr, to.predict )
     rownames(dr) <- rownames( data )
     dr
 }

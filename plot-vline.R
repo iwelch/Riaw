@@ -12,12 +12,6 @@ preamble <- c(doc= '
 ', changes= '
 ')
 
-iaw$vline <- function (xloc, yloc = c(-9e99,9e99), ...) 
-{
-  for (i in 1:length(xloc)) {
-    lines(c(xloc[i], xloc[i]), yloc, ...)
-  }
-}
 
 iaw$vline <- function (atxloc, yrange = NULL, ...) 
 {

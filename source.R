@@ -46,7 +46,7 @@ source <- function(file, verbose = FALSE, ...) {
             iaw$msg("[automatic source sinking into ", file, "out was closed]")
     }, add = TRUE)
 
-    base_source(file, keep.source = TRUE, ...)
+    base::source(file, keep.source = TRUE, ...)
 }
 
 

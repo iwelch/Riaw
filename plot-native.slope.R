@@ -12,7 +12,7 @@ preamble <- c(doc= '
 ', changes= '
 ')
 
-#if (!exists("libdir")) libdir <- "~/src/R/"
+#if (!exists("libdir")) libdir <- "~/src/Riaw/"
 
 if (!exists('%and%')) source( paste0(libdir, "/%and%.R") )
 if (!exists('%or%'))  source( paste0(libdir, "/%or%.R") )
@@ -31,7 +31,7 @@ iaw$native.slope <- function (x, y, where.i, debug = 0) {
     l1 <- where.i + 1
 
     left <- x[l0];  (!is.na(left)) %or% "Sorry, but left x[l0={{l0}}]=NA\n"; 
-    right <- x[l1]; (!is.na(right)) %or% "Sorry, but right x[l0={{l0}}]=NA\n"; 
+    right <- x[l1]; (!is.na(right)) %or% "Sorry, but right x[l1={{l1}}]=NA\n"; 
     (left != right) %or% "Sorry, but {{left}} is the same as {{right}}\n";
 
     dn <- y[l0];  (!is.na(dn)) %or% "Sorry, but dn y[l0={{l0}}]=NA\n"; 

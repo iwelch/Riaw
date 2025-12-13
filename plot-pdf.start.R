@@ -13,7 +13,7 @@ iaw$pdf.start <- function (pdffilename,
                            mar = c(4, 4, 1, 1) + 0.1,
                            mgp = c(2.5, 0.75, 0), ...)
 {
-    if (isTRUE(getOption('knitr.in.progress'))) return
+    if (isTRUE(getOption('knitr.in.progress'))) return(invisible(NULL))
 
     (iaw$is.character(pdffilename,1)) %or% "pdffilename {{pdffilename}} has to be a string"
     (iaw$is.numeric(scale,1) & (scale>0)) %or% "scale {{scale}} is wrong"
@@ -44,7 +44,7 @@ iaw$pdf.start <- function (pdffilename,
     if (verbose) iaw$cat.stderr("[pdf.start: ", pdffilename, "]", sep = "")
     options( pdf.openfile = c(file=pdffilename) )
 
-    if (getOption("os")=="osx") {
+    if (getOption("os")=="macos") {
         library("Cairo")
         pdf <- CairoPDF
         ## CairoFonts( regular="Bitstream Charter:style=Regular" )

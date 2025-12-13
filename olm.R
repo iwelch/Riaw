@@ -10,7 +10,7 @@
 
 iaw$olm <- function (..., newey.west=(0), stdcoefs=TRUE, include.anova=T, keep.pval=F, truncate.T=T, digits=4) {
 
-    use("lmtest", "coeftest")
+    use("lmtest", "coeftest")  ## use is a new feature of R 4.5
 
     ## R is painfully error-tolerant. I prefer reasonable and immediate error warnings.
     stopifnot( (is.vector(newey.west))&(length(newey.west)==1)|(is.numeric(newey.west)) )

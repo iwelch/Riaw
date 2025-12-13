@@ -21,7 +21,7 @@
 
 
 iaw$ols <- function( y.or.f, data, detail=0 ) {
-    if (class(y.or.f)=="formula") {
+    if (inherits(y.or.f,"formula")) {
         yx <- model.frame( y.or.f, data= data )
         y.or.f <- yx[,1]
         data <- yx[,-1]

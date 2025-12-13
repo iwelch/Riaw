@@ -15,6 +15,6 @@ function (x, na.rm = FALSE, dims = 1L)
         dim(z) <- dn
         dimnames(z) <- dimnames(x)[-id]
     }
-    else names(z) <- dimnames(x)[[dims + 1L]]
+    else names(z) <- rownames(x)
     z
 }

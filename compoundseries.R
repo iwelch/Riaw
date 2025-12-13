@@ -15,7 +15,7 @@
 #'
 
 
-iaw$compoundoneseries <- function( rate.of.return.timeseries, window=0, geomean=FALSE, na.is.zero = FALSE ) {
+iaw$compoundseries <- function( rate.of.return.timeseries, window=0, geomean=FALSE, na.is.zero = FALSE ) {
 
     ## cumprod( (1 + rate.of.return.timeseries) ) -1
 
@@ -28,7 +28,7 @@ iaw$compoundoneseries <- function( rate.of.return.timeseries, window=0, geomean=
     (is.logical(na.is.zero)) %or% "compoundseries: geomean must be logical"
 
     if (!na.is.zero) {
-        all( !is.na(rate.of.return.timeseries ) ) %or% "compoundoneseries: ERROR: if na's are in the series, this function does not work"
+        all( !is.na(rate.of.return.timeseries ) ) %or% "compoundseries: ERROR: if na's are in the series, this function does not work"
     }
 
     xx <- rate.of.return.timeseries

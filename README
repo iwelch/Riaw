@@ -1,5 +1,8 @@
 
-Documenting Functions
+# Riaw
+
+
+# Documenting Functions
 
 Documented functions usually sit in their own files.  Unlike oxygen2, we can first write the function and then the basic documentation, and we can use the naming feature of R to designate the standard fields.
 

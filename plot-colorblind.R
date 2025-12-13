@@ -13,7 +13,7 @@ iaw$darkblue <- darkblue <- iaw$colorblind['darkblue']
 iaw$lightgreen <- lightgreen <- iaw$colorblind['green']
 iaw$darkgreen <- darkgreen <- iaw$colorblind['darkgreen']
 iaw$green <- green <- iaw$colorblind['green']
-iaw$yellow <- yellow <- iaw$colorblind['yello']
+iaw$yellow <- yellow <- iaw$colorblind['yellow']
 iaw$red <- red <- iaw$colorblind['red']  # almost brown
 iaw$darkred <- darkred <- iaw$colorblind['red']
 iaw$purple <- purple <- iaw$colorblind['purple']

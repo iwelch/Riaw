@@ -25,7 +25,8 @@
 
 iaw$rename.columns <- function (d.or.n, from, to =NULL) {
   nms <- if (is.data.frame(d.or.n)) names(d.or.n) else d.or.n
-  if (is.null(to)) { from <- names(from); names(to) <- NULL}
+
+  if (is.null(to)) { to <- as.character(from); from <- names(from) }
 
   ## maybe I should rewrite this using function 'recode'
   for (i in 1:length(from)) nms[nms == from[i]] <- to[i]

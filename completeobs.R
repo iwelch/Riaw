@@ -13,4 +13,7 @@
 #'
 #'
 
-iaw$completeobs <- function (object) iaw$abort("please use na.omit or complete.cases instead") # (object[complete.cases(object), ])
+iaw$completeobs <- function (object) {
+    .Deprecated("na.omit")
+    iaw$abort("please use na.omit or complete.cases instead") # (object[complete.cases(object), ])
+}
