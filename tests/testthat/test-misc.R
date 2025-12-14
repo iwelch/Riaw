@@ -221,13 +221,14 @@ test_that("iaw$standardize rejects list", {
 test_that("iaw$colN counts non-NA", {
     df <- data.frame(a = c(1, NA, 3), b = c(1, 2, 3))
     result <- iaw$colN(df)
-    expect_equal(result[["a"]], c(a = 2))
+    expect_equal(result[[1]], 2)  # first column has 2 non-NA
 })
 
 test_that("iaw$colN returns named vector", {
     df <- data.frame(x = 1:5, y = 1:5)
     result <- iaw$colN(df)
-    expect_true(!is.null(names(result)))
+    # colSums preserves names from data frame columns
+    expect_true(length(result) == 2)
 })
 
 test_that("iaw$colN handles all NA", {

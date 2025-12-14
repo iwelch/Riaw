@@ -20,6 +20,5 @@
     stopifnot(is.numeric(x))
     stopifnot(is.numeric(range_vector), length(range_vector) == 2L)
 #    stopifnot( typeof(x) == typeof(range_vector) )
-
     (x >= range_vector[1]) & (x <= range_vector[2])
 }
