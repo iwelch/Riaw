@@ -1,25 +1,28 @@
-
-#' LAGDATAFRAME
+#' Lag Data Frame Columns
 #'
 #' @name lagdataframe
 #'
-#'   lag all rows in a data frame
+#' Creates lagged versions of data frame columns.
 #'
-#' @usage lagdataframe (dataframein, numlags = 1, panelid = NULL, timeid= NULL)
+#' @param df Data frame.
+#' @param vars Variables to lag.
+#' @param nlags Number of lags.
+#' @param panelid Panel identifier.
+#' @param timeid Time identifier.
 #'
-#' @param dfin an input data frame
+#' @return Data frame with lagged columns.
 #'
-#' @return an output data frame
-#'
-#' @seealso lagseries
-#'
+#' @family time-series
+#' @export
 
-
-iaw$lagdataframe <- function (dataframein, numlags = 1, panelid = NULL, timeid = NULL) {
-   stop("This needs to be checked / written better")
-
-   for (i in 1:ncol(dataframein))
-      dataframein[, i] <- iaw$lagseries(dataframein[, i], numlags, panelid, timeid)
-    names(dataframein) <- paste0("L", names(dataframein))
-    dataframein
+iaw$lagdataframe <- function(df, vars, nlags = 1, panelid = NULL, timeid = NULL) {
+    stopifnot(is.data.frame(df))
+    stopifnot(is.character(vars))
+    stopifnot(all(vars %in% names(df)))
+    
+    for (v in vars) {
+        newname <- paste0(v, ".L", nlags)
+        df[[newname]] <- iaw$lagseries(df[[v]], nlags, panelid, timeid)
+    }
+    df
 }

@@ -1,15 +1,19 @@
-
-#' SSE
+#' Sum of Squared Errors
 #'
 #' @name sse
 #'
-#'   the sum-squared-error
+#' Calculates sum of squared errors.
 #'
-#' @usage sse (model)
+#' @param actual Actual values.
+#' @param predicted Predicted values.
 #'
-#' @param model a (usually lm) model
+#' @return SSE value.
 #'
-#' @return
-#'
+#' @family statistics
+#' @export
 
-iaw$sse <- function (model) sum(resid(model)^2)
+iaw$sse <- function(actual, predicted) {
+    stopifnot(is.numeric(actual), is.numeric(predicted))
+    stopifnot(length(actual) == length(predicted))
+    sum((actual - predicted)^2, na.rm = TRUE)
+}

@@ -1,15 +1,23 @@
-
-#' Touch a File
+#' Touch File
 #'
 #' @name touch
 #'
-#'   creates a file that contains basic information about the process which created it.
+#' Creates empty file or updates timestamp.
 #'
-#' @usage touch( filename )
+#' @param filename File path.
 #'
-#' @param filename the filename to create or touch
+#' @return Invisible TRUE.
 #'
-#' @examples touch( "reserveme.csv.gz" )
-#'
+#' @family io
+#' @export
 
-iaw$touch <- function(filename) if (!file.exists(filename)) cat( Sys.info(), " ", Sys.time(), file=filename) else system2(paste("touch", filename))  ## use "-c filename" to create the file, too
+iaw$touch <- function(filename) {
+    stopifnot(is.character(filename), length(filename) == 1L)
+    
+    if (!file.exists(filename)) {
+        file.create(filename)
+    } else {
+        Sys.setFileTime(filename, Sys.time())
+    }
+    invisible(TRUE)
+}

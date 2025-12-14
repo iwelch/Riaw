@@ -1,22 +1,22 @@
-preamble <- c(doc= '
-@TITLE hist2d
-@AUTHOR ivo.welch@gmail.com
-@DATE 2013
-@DESCRIPTION
-@USAGE hist2d (x, y, ngroups = 20, bandwidth = 0.2) 
-@ARGUMENTS
-@DETAILS
-@SEEALSO
-@EXAMPLES
-', test= '
-', changes= '
-')
+#' 2D Histogram
+#'
+#' @name plot.hist2d
+#'
+#' Creates 2D histogram/heatmap.
+#'
+#' @param x X values.
+#' @param y Y values.
+#' @param nbins Number of bins.
+#'
+#' @return Invisible NULL.
+#'
+#' @family plotting
+#' @export
 
-iaw$hist2d <- function (x, y, ngroups = 20, bandwidth = 0.2) 
-{
-  library("KernSmooth")
-  b2d <- KernSmooth::bkde2D(iaw$completeobs(cbind(x, y)),
-                gridsize = c(ngroups, ngroups), bandwidth = bandwidth)
-  names(b2d) <- c("x", "y", "z")
-  return(b2d)
+iaw$plot.hist2d <- function(x, y, nbins = 50) {
+    stopifnot(is.numeric(x), is.numeric(y))
+    stopifnot(length(x) == length(y))
+    h <- MASS::kde2d(x, y, n = nbins)
+    filled.contour(h)
+    invisible(NULL)
 }

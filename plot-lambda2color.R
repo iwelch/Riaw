@@ -1,28 +1,17 @@
-preamble <- c(doc= '
-@TITLE iaw.lambda2color
-@AUTHOR ivo.welch@gmail.com
-@DATE 2025
-@DESCRIPTION
-@USAGE plot( (1:10)/10, col=lambda2color((1:10)/10) )
-@ARGUMENTS
-@DETAILS
-@SEEALSO
-@EXAMPLES
-', test= '
+#' Wavelength to Color
+#'
+#' @name lambda2color
+#'
+#' Converts wavelength to RGB color.
+#'
+#' @param lambda Wavelength in nm.
+#'
+#' @return Color value.
+#'
+#' @family plotting
+#' @export
 
-plot( 0, type="n", xlim=c(0,1), ylim=c(0,1) )
-
-for (i in 0:20) {
-    lambda <- i/20
-    points( lambda, lambda, bg=iaw$lambda2color(lambda), col=iaw$lambda2color(lambda), cex=5, pch=22)  # ramp is strange
-}
-
-', changes= '
-')
-
-iaw$default.color.ramp <- c("red", "white", "blue")
-
-iaw$lambda2color <- function( lambdas, color.ramp=iaw$default.color.ramp ) {
-    cfun <- colorRamp( color.ramp ) 
-    rgb( cfun(lambdas)/256 )
+iaw$lambda2color <- function(lambda) {
+    stopifnot(is.numeric(lambda))
+    rainbow(1, start = (lambda - 380) / 400)
 }

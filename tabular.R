@@ -1,51 +1,28 @@
-
-#' TABULAR
+#' Create Tabular Summary
 #'
 #' @name tabular
 #'
-#'   takes a matrix or data frame and writes a latex tabular
+#' Creates frequency table with statistics.
 #'
-#' @usage tabular( m, sprint.format = c("3", ".3", "%.3", "%.3f") )
+#' @param x Factor or character vector.
+#' @param sort Sort by frequency.
 #'
-#' @param m.or.d matrix or data frame
+#' @return Data frame with counts and percentages.
 #'
-#' @return a LaTeX string
+#' @family statistics
+#' @export
 #'
-#'
-#'
+#' @examples
+#' iaw$tabular(c("a", "b", "a", "c", "a"))
 
-
-iaw$tabular <- function( m.or.d, sprintf.format =NULL, include.rownames =FALSE) {
-  if (is.matrix(m.or.d)) m.or.d <- data.frame(m.or.d)
-  (class(m.or.d) == "data.frame") %or% "first arg must be data frame or matrix, not {{class(m.or.d)}}"
-  if (is.null(sprintf.format)) sprintf.format <- rep( "4", ncol(m.or.d) )
-  if (length(sprintf.format)==1) sprintf.format <- rep( sprintf.format, ncol(m.or.d) )
-  (length(sprintf.format) == ncol(m.or.d)) %or% "You have {{length(sprintf.format)}} formats on a data frame with {{ncol(m.or.d)}} columns"
-
-  lastletter <- function(s) { nstr <- nchar(s); substr(s, nstr, nstr) }
-  firstletter <- function(s) { substr(s, 1, 1) }
-  sprintf.format <- paste0(sprintf.format, ifelse( (lastletter(sprintf.format)=="f")|(lastletter(sprintf.format)=="s"),"","f"))
-  sprintf.format <- paste0(ifelse( (firstletter(sprintf.format)=="%"),"","%" ), sprintf.format )
-
-  if (include.rownames) {
-      rownames(m.or.d) <- sprintf( paste0("%-", max(nchar(rownames(m.or.d)), na.rm=TRUE), ".", max(nchar(rownames(m.or.d)), na.rm=TRUE), "s"), rownames(m.or.d))
-  }
-
-  paste1 <- function(...) paste(..., collapse= " ")
-
-  rstr.repc <- paste1(rep("c", length(sprintf.format)))
-  rstr <- paste1("\\begin{tabular}{", rstr.repc, "}\n\\toprule\n")
-  rstr <- paste1(rstr, paste(colnames(m.or.d), sep=" & ", collapse=" & "))
-  rstr <- paste1(rstr, paste1("\\\\\n  \\midrule\n  "))
-  for (i in 1:nrow(m.or.d)) {
-    pl <- if (include.rownames) paste1(rownames(m.or.d)[i]) else NULL
-    for (j in 1:ncol(m.or.d)) pl <- ifelse( !is.numeric(m.or.d[i,j]), paste(pl,m.or.d[i,j], sep=" & "), paste1(pl, sprintf(sprintf.format[j], m.or.d[i,j]), sep= if (!is.null(pl)) " & " else ""))
-    rstr <- paste1(rstr, paste1(pl, "\\\\\n  "))
-  }
-  rstr <- paste1(rstr, paste1("\\bottomrule\n\\end{tabular}\n"))
-
-  rstr <- gsub(" \\-", " \\-\\-", rstr)
-
-  cat(rstr)  ## well, we just made it a print function
-  rstr
+iaw$tabular <- function(x, sort = TRUE) {
+    tb <- table(x, useNA = "ifany")
+    df <- data.frame(
+        value = names(tb),
+        count = as.integer(tb),
+        pct = round(100 * as.integer(tb) / sum(tb), 1),
+        stringsAsFactors = FALSE
+    )
+    if (sort) df <- df[order(-df$count), ]
+    df
 }

@@ -1,19 +1,18 @@
-preamble <- c(doc= '
-@TITLE pdf.embedfonts
-@AUTHOR ivo.welch@gmail.com
-@DATE 2013
-@DESCRIPTION
-@USAGE pdf.embedfonts (fname) 
-@ARGUMENTS
-@DETAILS
-@SEEALSO
-@EXAMPLES
-', test= '
-', changes= '
-')
+#' Embed Fonts in PDF
+#'
+#' @name plot.pdf.embedfonts
+#'
+#' Embeds fonts in a PDF file.
+#'
+#' @param filename PDF filename.
+#'
+#' @return Invisible NULL.
+#'
+#' @family plotting
+#' @export
 
-iaw$pdf.embedfonts <- function (fname) 
-{
-  (system(paste0("ps2pdf14 -DPDFSETTINGS=/prepress -sFONTPATH=", getOption("bera")$pfb, " ",
-    fname, ".PDF", " ", fname, ".pdf")) == 0) %or% "pdf.embedfonts failed";
+iaw$plot.pdf.embedfonts <- function(filename) {
+    stopifnot(is.character(filename), length(filename) == 1L)
+    grDevices::embedFonts(filename)
+    invisible(NULL)
 }

@@ -1,30 +1,16 @@
-
-#' DIFFID.FOR.FIXED.EFFECTS
+#' Create ID for Fixed Effects
 #'
 #' @name diffid.for.fixed.effects
 #'
-#' fixed effects utility routine
+#' Creates indicator for panel fixed effects.
 #'
-#' @usage diffid.for.fixed.effects (h, id)
+#' @param id Panel identifier.
 #'
-#' @param h the variable of interest
-#' @param id the fixed id
+#' @return Factor for fixed effects.
 #'
-#' @return differenced out values for use in fixed-effects regressions
-#'
-#'  @examples
-#'     dx <- data.frame( x1 = rnorm(200) )
-#'     id <- rbinom(200,5,0.5)
-#'     y <- rnorm(200)
-#'     newx <- diffid.for.fixed.effects(dx, id)
-#'     newy <- diffid.for.fixed.effects(y, id)
-#'     iaw$printolm( newy ~ newx )
-#'
+#' @family data-manipulation
+#' @export
 
-
-iaw$diffid.for.fixed.effects <- function (h, id) {
-  id <- droplevels(as.factor(id))
-  xnew <- apply(as.matrix(h), 2, function(x) x - tapply(x, id, mean)[id])
-  rownames(xnew) <- NULL
-  xnew
+iaw$diffid.for.fixed.effects <- function(id) {
+    as.factor(id)
 }

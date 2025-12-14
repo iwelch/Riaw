@@ -1,16 +1,20 @@
-
-#' Perfect Exponential Random Numbers
+#' Perfect Exponential Sample
 #'
 #' @name rexp.perfect
 #'
-#' @param N number to draw
-#' @param lambda probability (rate parameter)
+#' Generates exponential values with exact quantiles.
 #'
-#' @return a vector of length N, containing only positive numbers
+#' @param n Number of values.
+#' @param rate Rate parameter.
 #'
-#' @seealso rnorm.perfect, runif.perfect
+#' @return Numeric vector.
 #'
+#' @family utilities
+#' @export
 
-iaw$rexp.perfect <- function(N, lambda =1) {
-    return( (sample(( qexp( seq(0,1,length.out=(N+2)), rate=lambda ) )[2:(N+1)])) )
+iaw$rexp.perfect <- function(n, rate = 1) {
+    stopifnot(is.numeric(n), length(n) == 1L, n >= 1)
+    stopifnot(is.numeric(rate), length(rate) == 1L, rate > 0)
+    
+    iaw$rdraw.perfect(n, function(p) qexp(p, rate = rate))
 }

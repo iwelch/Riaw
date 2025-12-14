@@ -1,21 +1,19 @@
-
-#' Size of an R Object in MegaBytes
+#' Object Size in MB
 #'
 #' @name object.size.MB
 #'
-#' provides a nice character description of the size of an object
+#' Returns object size in megabytes.
 #'
-#' @usage object.size.MB(obj)
-#' @param x an object
+#' @param x Object to measure.
 #'
-#' @return
+#' @return Size in MB.
 #'
-#' @aliases object.size.mb
+#' @family utilities
+#' @export
+#'
+#' @examples
+#' iaw$object.size.MB(1:1000000)
 
-
-iaw$object.size.MB <- function (x) {
-  gc()
-  paste( round(as.numeric(object.size(x))/1024/1024,1), "MB")
+iaw$object.size.MB <- function(x) {
+    round(object.size(x) / 1024^2, 2)
 }
-
-iaw$object.size.mb <- iaw$object.size.MB

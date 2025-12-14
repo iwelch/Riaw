@@ -1,21 +1,20 @@
-
-#' SST
+#' Total Sum of Squares
 #'
 #' @name sst
 #'
-#'  the sum-squared-total
+#' Calculates total sum of squares.
 #'
-#' @usage sst (model)
+#' @param x Numeric vector.
 #'
-#' @param model a (usually lm) model
+#' @return SST value.
 #'
-#' @return the sum-squared total
+#' @family statistics
+#' @export
 #'
+#' @examples
+#' iaw$sst(c(1, 2, 3, 4, 5))
 
-iaw$sst <- function (model) {
-    y <- model$model[[1]]  # Get response variable
-    sum((y - mean(y))^2)
+iaw$sst <- function(x) {
+    stopifnot(is.numeric(x))
+    sum((x - mean(x, na.rm = TRUE))^2, na.rm = TRUE)
 }
-
-## old one: iaw$sst <- function (model) sum(fitted(model)^2) + iaw$sse(model)
-## better: iaw$sst <- function (model) sum((fitted(model) - mean(fitted(model)))^2) + iaw$sse(model)

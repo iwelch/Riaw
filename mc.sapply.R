@@ -1,26 +1,16 @@
-
-#' MC.SAPPLY
+#' Multicore Sapply (Alias)
 #'
 #' @name mc.sapply
 #'
-#' sapply is a simplied lapply that tries to return the same return type
+#' Alias for mcsapply.
 #'
-#' @param X an indexed length structure (list, array, etc.)
-#' @param FUN the function to be applied to each element
-#' @param simplify (must be named to distinguish from FUN arguments
-#' @param use.names try to use the same names
+#' @param X List or vector.
+#' @param FUN Function to apply.
+#' @param ... Arguments to FUN.
 #'
-#' @return a vector or matrix
+#' @return Simplified result.
 #'
+#' @family parallel
+#' @export
 
-library(parallel)
-
-iaw$mc.sapply <- function (X, FUN, ..., simplify = TRUE, USE.NAMES = TRUE) {
-    FUN <- match.fun(FUN)
-    answer <- mclapply(X = X, FUN = FUN, ...)
-    if (USE.NAMES && is.character(X) && is.null(names(answer)))
-        names(answer) <- X
-    if (!identical(simplify, FALSE) && length(answer))
-        simplify2array(answer, higher = (simplify == "array"))
-    else answer
-}
+iaw$mc.sapply <- iaw$mcsapply

@@ -1,19 +1,17 @@
-
 #' Time Difference in Seconds
 #'
-#' @name tmsec( a, Sys.time() ), " seconds" )
+#' @name tmdiffsec
 #'
-#'   return number of seconds between two times
+#' Calculates time difference in seconds.
 #'
-#' @usage tmdiffsec( Sys.time(), Sys.time() )
+#' @param t1 First time.
+#' @param t2 Second time.
 #'
-#' @param t1 the first time, often set at the start of the program
-#' @param t1 the first time, a second time
+#' @return Numeric seconds.
 #'
-#' @return an integer: the number of seconds
-#'
-#' @examples a <- Sys.time(); sleep(10); cat("Run: ", iaw$tmsec( a, Sys.time() ), " seconds" )
-#'
-#' @seealso system.time()
+#' @family datetime
+#' @export
 
-iaw$tmdiffsec <- function(s1,s2) abs(as.integer(difftime(s1 , s2, units="secs")))
+iaw$tmdiffsec <- function(t1, t2) {
+    as.numeric(difftime(t2, t1, units = "secs"))
+}

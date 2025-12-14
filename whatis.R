@@ -1,48 +1,31 @@
-#' Describe an R Object
+#' Describe Object Type and Structure
 #'
-#' Returns a human-readable description of an R object's type and dimensions.
-#' Useful for debugging and understanding unfamiliar objects.
+#' @name whatis
 #'
-#' @param object Any R object.
+#' Returns description of object type, class, and dimensions.
 #'
-#' @return A character string describing the object's type and size.
+#' @param x Any R object.
 #'
+#' @return Character string description.
+#'
+#' @family utilities
 #' @export
 #'
-#' @seealso \code{\link{class}}, \code{\link{str}}, \code{\link{typeof}}
-#'
 #' @examples
-#' iaw$whatis(NULL)
-#' # "is NULL"
-#'
 #' iaw$whatis(1:10)
-#' # "integer with length 10"
-#'
-#' iaw$whatis(matrix(1:12, 3, 4))
-#' # "matrix with 4 cols and 3 rows"
-#'
-#' iaw$whatis(data.frame(a = 1:5, b = letters[1:5]))
-#' # "data.frame with 2 variables and 5 observations"
-#'
-#' iaw$whatis(factor(c("a", "b", "a", "c")))
-#' # "factor with unique keys 3"
-#'
-#' iaw$whatis(lm)
-#' # "it is function --- use unlist() or str() to determine contents"
+#' iaw$whatis(data.frame(a = 1))
 
-iaw$whatis <- function(object) {
-    if (is.null(object)) {
-        return("is NULL")
-    } else if (is.matrix(object)) {
-        return(paste(class(object)[1], "with", ncol(object), "cols and", nrow(object), "rows"))
-    } else if (is.data.frame(object)) {
-        return(paste(class(object)[1], "with", ncol(object), "variables and", nrow(object), "observations"))
-    } else if (is.vector(object)) {
-        return(paste(class(object)[1], "with length", length(object)))
-    } else if (is.factor(object)) {
-        return(paste(class(object)[1], "with unique keys", length(unique(object))))
+iaw$whatis <- function(x) {
+    type <- typeof(x)
+    cls <- class(x)
+    len <- length(x)
+    dims <- dim(x)
+    
+    desc <- paste0(cls[1], " (", type, ")")
+    if (!is.null(dims)) {
+        desc <- paste0(desc, " [", paste(dims, collapse = "x"), "]")
     } else {
-        cat("it is", class(object)[1], "--- use unlist() or str() to determine contents")
-        return(class(object)[1])
+        desc <- paste0(desc, " length=", len)
     }
+    desc
 }

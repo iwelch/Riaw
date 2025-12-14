@@ -1,22 +1,22 @@
-
-#' SOURCE.DEBUG
+#' Source with Debug
 #'
 #' @name source.debug
 #'
-#'   a debugging helper that prints the call stack on error.
+#' Sources file with error recovery.
 #'
-#' @usage source.debug (sourcefilename)
+#' @param file R file to source.
 #'
-#' @param sourcefilename the function to run
+#' @return Invisible result.
 #'
-#' @return
-#'
+#' @family io
+#' @export
 
-iaw$source.debug <- function (sourcefilename)
-  tryCatch({
-    base::source(sourcefilename)
-  }, finally = {
-      iaw$sink(stderr())
-      traceback()
-      iaw$sink()
-  })
+iaw$source.debug <- function(file) {
+    stopifnot(is.character(file), length(file) == 1L)
+    
+    old_opt <- getOption("error")
+    options(error = recover)
+    on.exit(options(error = old_opt))
+    
+    source(file)
+}

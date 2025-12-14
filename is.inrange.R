@@ -1,34 +1,23 @@
-#' Test if Values Fall Within a Range (Exclusive)
+#' Test if Values Fall Within a Range
 #'
-#' Returns a logical vector indicating whether each element of x falls
-#' strictly within the specified range (exclusive of boundaries).
+#' @name is.inrange
 #'
-#' @param x A numeric vector to test.
-#' @param r A numeric vector of length 2: \code{c(lower, upper)}.
+#' Returns logical vector for values strictly within range.
 #'
-#' @return A logical vector the same length as \code{x}.
+#' @param x Numeric vector to test.
+#' @param r Numeric vector of length 2: c(lower, upper).
 #'
-#' @note Uses strict inequalities (< and >), so boundary values return FALSE.
-#'   For inclusive boundaries, use \code{\link{\%inrange\%}}.
+#' @return Logical vector.
 #'
+#' @family type-checking
 #' @export
 #'
-#' @seealso \code{\link{\%inrange\%}} for inclusive range testing
-#'
 #' @examples
-#' x <- 1:10
-#'
-#' # Strict inequality (exclusive)
-#' iaw$is.inrange(x, c(3, 7))
-#' # FALSE FALSE FALSE TRUE TRUE TRUE FALSE FALSE FALSE FALSE
-#' # Note: 3 and 7 are FALSE
-#'
-#' # Compare to %inrange% (inclusive)
-#' x %inrange% c(3, 7)
-#' # FALSE FALSE TRUE TRUE TRUE TRUE TRUE FALSE FALSE FALSE
+#' iaw$is.inrange(1:10, c(3, 7))
 
 iaw$is.inrange <- function(x, r) {
-    (length(r) == 2) %or% "range must be vector of length 2"
-    (r[1] <= r[2]) %or% "lower range must be <= upper range: {{r}}"
+    stopifnot(is.numeric(x))
+    stopifnot(is.numeric(r), length(r) == 2L)
+    (r[1] <= r[2]) %or% "lower range must be <= upper range"
     (x > r[1]) & (x < r[2])
 }

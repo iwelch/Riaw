@@ -1,49 +1,29 @@
-#' Add Vertical Reference Lines to a Plot
+#' Add Vertical Lines to Plot
 #'
-#' Draws vertical lines across the plot at specified x-coordinates. Useful for
-#' marking events, thresholds, or time points.
+#' @name vline
 #'
-#' @param atxloc Numeric vector of x-coordinates where vertical lines should
-#'   be drawn.
-#' @param yrange Optional numeric vector of length 2 specifying the y-range
-#'   \code{c(ymin, ymax)}. If NULL, extends to the plot boundaries.
-#' @param ... Additional graphical parameters passed to \code{lines()}, such as
-#'   \code{col}, \code{lty}, \code{lwd}.
+#' Draws vertical lines at specified x values.
 #'
-#' @return Invisibly returns NULL. Called for its side effect of adding lines
-#'   to the current plot.
+#' @param atxloc X coordinates for lines.
+#' @param yrange Optional y range.
+#' @param ... Graphics parameters.
 #'
-#' @details
-#' When \code{yrange} is not specified, the function automatically detects
-#' log-scale axes and adjusts the line extent appropriately.
+#' @return Invisible NULL.
 #'
+#' @family plotting
 #' @export
 #'
-#' @seealso \code{\link{iaw$hline}} for horizontal lines, \code{\link{abline}}
-#'
 #' @examples
-#' # Time series plot with event markers
-#' dates <- 1:100
-#' values <- cumsum(rnorm(100))
-#' plot(dates, values, type = "l")
-#'
-#' # Mark specific dates
-#' iaw$vline(c(25, 50, 75), col = "gray", lty = 2)
-#'
-#' # Highlight a particular point
-#' iaw$vline(50, col = "red", lwd = 2)
-#'
-#' # With custom range
-#' iaw$vline(25, yrange = c(-5, 5), col = "blue")
+#' plot(1:10)
+#' iaw$vline(5, col = "blue")
 
 iaw$vline <- function(atxloc, yrange = NULL, ...) {
+    stopifnot(is.numeric(atxloc))
     if (length(yrange) != 2) {
         yrange <- if (par("ylog")) c(9e-99, 9e99) else c(-9e99, 9e99)
     }
-
     for (i in seq_along(atxloc)) {
         lines(c(atxloc[i], atxloc[i]), yrange, ...)
     }
-
     invisible(NULL)
 }

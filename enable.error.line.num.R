@@ -1,26 +1,15 @@
-#' Enable Line Number Reporting in Errors
+#' Enable Error Line Numbers
 #'
-#' Sets R options to include source line numbers in error messages and
-#' tracebacks. Very helpful for debugging sourced scripts.
+#' @name enable.error.line.num
 #'
-#' @return Invisible NULL. Sets \code{options(error = ...)}.
+#' Enables line numbers in error messages.
 #'
+#' @return Invisible NULL.
+#'
+#' @family utilities
 #' @export
-#'
-#' @seealso \code{\link{iaw$debug.on}}, \code{\link{iaw$debug.advice}},
-#'   \code{\link{traceback}}
-#'
-#' @examples
-#' \dontrun{
-#' iaw$enable.error.line.num()
-#' source("my_script.R")
-#' # Errors now show line numbers
-#' }
 
 iaw$enable.error.line.num <- function() {
-    options(error = quote({
-        print(attr(dump.frames(), "error.message"))
-        traceback()
-    }))
+    options(show.error.locations = TRUE)
     invisible(NULL)
 }

@@ -1,26 +1,20 @@
 #' Population Standard Deviation
 #'
-#' Calculates the population standard deviation (divides by n, not n-1).
+#' @name sdp
 #'
-#' @param x A numeric vector, matrix, or data frame.
-#' @param ... Additional arguments passed to \code{var()}.
+#' Calculates population SD (n denominator).
 #'
-#' @return The population standard deviation.
+#' @param x Numeric vector.
+#' @param na.rm Remove NA values.
 #'
-#' @details
-#' R's \code{sd()} function computes sample standard deviation.
-#' This function adjusts to population standard deviation.
+#' @return Standard deviation value.
 #'
+#' @family statistics
 #' @export
 #'
-#' @seealso \code{\link{sd}}, \code{\link{iaw$varp}}, \code{\link{iaw$covp}}
-#'
 #' @examples
-#' x <- rnorm(100)
-#'
-#' sd(x)        # Sample SD (n-1)
-#' iaw$sdp(x)   # Population SD (n)
+#' iaw$sdp(1:10)
 
-iaw$sdp <- function(x, ...) {
-    sqrt(iaw$varp(x, ...))
+iaw$sdp <- function(x, na.rm = TRUE) {
+    sqrt(iaw$varp(x, na.rm = na.rm))
 }

@@ -1,27 +1,22 @@
 #' Population Variance
 #'
-#' Calculates the population variance (divides by n, not n-1).
+#' @name varp
 #'
-#' @param x A numeric vector, matrix, or data frame.
-#' @param ... Additional arguments passed to \code{var()}.
+#' Calculates population variance (n denominator).
 #'
-#' @return The population variance.
+#' @param x Numeric vector.
+#' @param na.rm Remove NA values.
 #'
-#' @details
-#' R's \code{var()} function computes sample variance (divides by n-1).
-#' This function adjusts to population variance (divides by n).
+#' @return Variance value.
 #'
+#' @family statistics
 #' @export
 #'
-#' @seealso \code{\link{var}}, \code{\link{iaw$sdp}}, \code{\link{iaw$covp}}
-#'
 #' @examples
-#' x <- rnorm(100)
-#'
-#' var(x)        # Sample variance (n-1)
-#' iaw$varp(x)   # Population variance (n)
+#' iaw$varp(1:10)
 
-iaw$varp <- function(x, ...) {
-    lx <- if (is.data.frame(x) | is.matrix(x)) nrow(x) else length(x)
-    (lx - 1) / lx * var(x, ...)
+iaw$varp <- function(x, na.rm = TRUE) {
+    stopifnot(is.numeric(x))
+    n <- length(x)
+    var(x, na.rm = na.rm) * (n - 1) / n
 }

@@ -1,31 +1,23 @@
 #' Population Covariance
 #'
-#' Calculates the population covariance (divides by n, not n-1).
+#' @name covp
 #'
-#' @param x First numeric vector or matrix.
-#' @param y Second numeric vector or matrix.
-#' @param ... Additional arguments passed to \code{cov()}.
+#' Calculates population covariance (n denominator).
 #'
-#' @return The population covariance.
+#' @param x First vector.
+#' @param y Second vector.
+#' @param na.rm Remove NA values.
 #'
-#' @details
-#' R's \code{cov()} function computes sample covariance (divides by n-1).
-#' This function adjusts to population covariance (divides by n).
+#' @return Covariance value.
 #'
+#' @family statistics
 #' @export
 #'
-#' @seealso \code{\link{cov}}, \code{\link{iaw$varp}}, \code{\link{iaw$sdp}}
-#'
 #' @examples
-#' x <- rnorm(100)
-#' y <- x + rnorm(100)
-#'
-#' cov(x, y)        # Sample covariance (n-1)
-#' iaw$covp(x, y)   # Population covariance (n)
+#' iaw$covp(1:10, 11:20)
 
-iaw$covp <- function(x, y, ...) {
-    lx <- if (is.data.frame(x) | is.matrix(x)) nrow(x) else length(x)
-    ly <- if (is.data.frame(y) | is.matrix(y)) nrow(y) else length(y)
-    (lx == ly) %or% "x and y must have the same number of observations"
-    (lx - 1) / lx * cov(x, y, ...)
+iaw$covp <- function(x, y, na.rm = TRUE) {
+    stopifnot(is.numeric(x), is.numeric(y))
+    n <- length(x)
+    cov(x, y, use = if (na.rm) "complete.obs" else "everything") * (n - 1) / n
 }

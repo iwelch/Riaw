@@ -1,42 +1,30 @@
-
-#' LIST OBJECTS
+#' List Objects with Sizes
 #'
-#' @name ls.objects()
+#' @name ls.objects
 #'
-#' a nicer listing of objects in an environment
+#' Lists objects in environment with memory sizes.
 #'
-#' @usage ls.objects(..., n=10)
+#' @param envir Environment to list.
+#' @param n Number to show.
 #'
-#' @param n the maximum number to print
+#' @return Data frame of objects and sizes.
+#'
+#' @family utilities
+#' @export
 #'
 #' @examples
-#'        iaw$ls.objects()
-#'
+#' iaw$ls.objects()
 
-# improved list of objects
-# shorthand
-iaw$ls.objects <- function(..., n=10) {
-    .ls.objects <- function (pos = 1, pattern, order.by,
-                             decreasing=FALSE, head=FALSE, n=5) {
-        napply <- function(names, fn) sapply(names, function(x)
-                                         fn(get(x, pos = pos)))
-        names <- ls(pos = pos, pattern = pattern)
-        obj.class <- napply(names, function(x) as.character(class(x))[1])
-        obj.mode <- napply(names, mode)
-        obj.type <- ifelse(is.na(obj.class), obj.mode, obj.class)
-        obj.size <- napply(names, object.size)
-        obj.dim <- t(napply(names, function(x)
-                            as.numeric(dim(x))[1:2]))
-        vec <- is.na(obj.dim)[, 1] & (obj.type != "function")
-        obj.dim[vec, 1] <- napply(names, length)[vec]
-        out <- data.frame(obj.type, obj.size, obj.dim)
-        names(out) <- c("Type", "Size", "Rows", "Columns")
-        if (!missing(order.by))
-            out <- out[order(out[[order.by]], decreasing=decreasing), ]
-        if (head)
-            out <- head(out, n)
-        out
-    }
-
-    .ls.objects(..., order.by="Size", decreasing=TRUE, head=TRUE, n=n)
+iaw$ls.objects <- function(envir = .GlobalEnv, n = 20) {
+    objs <- ls(envir = envir)
+    if (length(objs) == 0) return(data.frame())
+    
+    sizes <- sapply(objs, function(x) object.size(get(x, envir = envir)))
+    df <- data.frame(
+        object = objs,
+        size_MB = round(sizes / 1024^2, 2),
+        stringsAsFactors = FALSE
+    )
+    df <- df[order(-df$size_MB), ]
+    head(df, n)
 }

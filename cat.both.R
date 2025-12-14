@@ -1,22 +1,18 @@
-#' Print to Both stdout and stderr
+#' Cat to Both stdout and stderr
 #'
-#' Prints output to both standard output and standard error streams.
-#' Useful for ensuring messages appear both in console and in log files.
+#' @name cat.both
 #'
-#' @param ... Arguments passed to \code{cat()}.
+#' Prints to both standard output and error.
+#'
+#' @param ... Items to print.
 #'
 #' @return Invisible NULL.
 #'
+#' @family utilities
 #' @export
-#'
-#' @seealso \code{\link{iaw$cat.stderr}}, \code{\link{cat}}, \code{\link{message}}
-#'
-#' @examples
-#' iaw$cat.both("Processing step 1\n")
-#' # Prints to both stdout and stderr
 
 iaw$cat.both <- function(...) {
-    cat(..., file = stderr())
     cat(...)
+    cat(..., file = stderr())
     invisible(NULL)
 }

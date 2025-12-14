@@ -1,22 +1,23 @@
-
-#' SETUPKNITR
+#' Setup Knitr Options
 #'
 #' @name setupknitr
 #'
-#'  @details None
+#' Sets default knitr chunk options.
 #'
-#'  @usage setupknitr()
+#' @return Invisible NULL.
 #'
+#' @family utilities
+#' @export
 
-iaw$setup.knitr <- function() {
-    library(knitr)
-    knitr::opts_chunk$set(echo = TRUE,results = "hold")
-
-    df.round <<- function(df) data.frame( lapply(df, function(dc) if(is.numeric(dc)) round(dc, 2) else dc) )
-
-    use(DT, "datatable")
-    p <<- function(...) DT::datatable(...)
-
-    # knit_print.data.frame <- function(x, ...) asis_output(  paste( c("",p(x)) , collapse="" )  )
-    # registerS3method("knit_print", "data.frame", knit_print.data.frame)
+iaw$setupknitr <- function() {
+    if (requireNamespace("knitr", quietly = TRUE)) {
+        knitr::opts_chunk$set(
+            echo = TRUE,
+            message = FALSE,
+            warning = FALSE,
+            fig.width = 7,
+            fig.height = 5
+        )
+    }
+    invisible(NULL)
 }

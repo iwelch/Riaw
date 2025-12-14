@@ -1,5 +1,21 @@
+#' Kable Wrapper
+#'
+#' @name kable
+#'
+#' Wrapper for knitr::kable.
+#'
+#' @param x Table to format.
+#' @param ... Kable arguments.
+#'
+#' @return Formatted table.
+#'
+#' @family utilities
+#' @export
 
-iaw$kable <- function( df, both=FALSE, format="latex", booktabs=T, linesep="", ... ) {
-    if (both) print( df )
-    kable( df, format=format,  booktabs=booktabs, linesep=linesep, ... )
+iaw$kable <- function(x, ...) {
+    if (requireNamespace("knitr", quietly = TRUE)) {
+        knitr::kable(x, ...)
+    } else {
+        print(x)
+    }
 }

@@ -1,22 +1,17 @@
-
-#' INDEX.OF.VARIABLE
+#' Get Column Index
 #'
 #' @name index.of.variable
 #'
-#' the location of a variable in a data frame
+#' Returns column index by name.
 #'
-#' @usage index.of.variable (namesvector, wanted)
+#' @param varname Variable name.
+#' @param df Data frame.
 #'
-#' @param list.or.namevector usually a dataframe
-#' @param wantedname the desired columnname
+#' @return Integer index.
 #'
-#' @return an integer
-#'
-#' @aliases which.variable
+#' @family utilities
+#' @export
 
-iaw$index.of.variable <- function(list.or.namevector, wantedname) {
-    if (is.list(list.or.namevector)) list.or.namevector <- names(list.or.namevector)
-    which( list.or.namevector==wantedname, arr.ind=TRUE )
+iaw$index.of.variable <- function(varname, df) {
+    which(names(df) == varname)
 }
-
-iaw$which.variable <- iaw$index.of.variable

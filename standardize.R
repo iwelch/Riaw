@@ -1,11 +1,20 @@
-
-#' STANDARDIZE
+#' Standardize a Vector
 #'
 #' @name standardize
 #'
-#' an error with reference to the correct function to use
+#' Centers and scales to mean=0, sd=1.
 #'
-#' @seealso scale
+#' @param x Numeric vector.
 #'
+#' @return Numeric vector.
+#'
+#' @family data-transformation
+#' @export
+#'
+#' @examples
+#' iaw$standardize(c(1, 2, 3, 4, 5))
 
-iaw$standardize <- function(...) iaw$abort("use scale()")
+iaw$standardize <- function(x) {
+    stopifnot(is.numeric(x))
+    scale(x)[, 1]
+}

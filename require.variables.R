@@ -1,32 +1,24 @@
-
-#' Check if All Variables Exist
+#' Require Variables Exist
 #'
 #' @name require.variables
 #'
-#' check that variables exist in a list
+#' Checks required variables exist in data frame.
 #'
-#'  @usage require.variables (names, d)
+#' @param vars Required variable names.
+#' @param df Data frame.
 #'
-#'  @param names the names that need to exist
-#'  @param d the environment
+#' @return Invisible TRUE if all exist.
 #'
-#'  @return aborts if a variable does not exist
-#'
-#' @note the R `exists` functions gives a strange answer for a vector argument as in exists( v1, v2 ).  If v1 exists but v2 does not, the answer is not 'TRUE FALSE' but 'TRUE'
-#'
+#' @family utilities
+#' @export
 
-iaw$require.variables <- function(vnames, d) {
-    (is.vector(vnames) & (class(vnames) == "character")) %or% "[require.variables: {{iaw$whatis(vnames)}} is wrong type.]
-"
-    names.d <- if (is.data.frame(d)) names(d) else d
-    (is.character(names.d)) %or% "[require.variables: incorrect call. second arg should be data frame or names, not {{typeof(names.d)}}.]
-"
-    set.not.there <- (!( vnames %in% names.d ))
-    if (any(set.not.there)) {
-        ds <- iaw$strcat(names.d)
-        ws <- iaw$strcat(vnames[set.not.there])
-        FALSE %or% "Variable Name Set {{ws}} not found in Names {{ds}}"
+iaw$require.variables <- function(vars, df) {
+    stopifnot(is.character(vars))
+    stopifnot(is.data.frame(df))
+    
+    missing <- setdiff(vars, names(df))
+    if (length(missing) > 0) {
+        stop("Missing variables: ", paste(missing, collapse = ", "))
     }
+    invisible(TRUE)
 }
-
-iaw$select <- iaw$require.variables

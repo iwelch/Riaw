@@ -1,16 +1,20 @@
-
-#' NOW
+#' Current Timestamp
 #'
-#' @name now() )
-#'       2019-02-16 17:37:40
-#' the current day and time
+#' @name now
 #'
-#' @usage now ()
+#' Returns current time as string.
 #'
-#' @return the current data in readable format, such as "2019-02-16 17:37:02"
+#' @param format Time format string.
+#'
+#' @return Character timestamp.
+#'
+#' @family utilities
+#' @export
 #'
 #' @examples
-#'    message( iaw$now() )
-#'       2019-02-16 17:37:40
+#' iaw$now()
 
-iaw$now <- function () as.character(Sys.time())
+iaw$now <- function(format = "%Y-%m-%d %H:%M:%S") {
+    stopifnot(is.character(format), length(format) == 1L)
+    format(Sys.time(), format)
+}

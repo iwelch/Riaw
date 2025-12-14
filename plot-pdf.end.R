@@ -1,24 +1,15 @@
-preamble <- c(doc= '
-@TITLE pdf.end
-@AUTHOR ivo.welch@gmail.com
-@DATE 2013
-@DESCRIPTION
-@USAGE pdf.end (verbose = 1)
-@ARGUMENTS
-@DETAILS
-@SEEALSO on.exit
-@EXAMPLES
-', test= '
-', changes= '
-')
+#' End PDF Output
+#'
+#' @name plot.pdf.end
+#'
+#' Closes the PDF device.
+#'
+#' @return Invisible NULL.
+#'
+#' @family plotting
+#' @export
 
-iaw$pdf.end <- function (verbose = 1)
-{
-    if (isTRUE(getOption('knitr.in.progress'))) return(invisible(NULL))
-
-    dev.off()
-                                        #  embedFonts( file=getOption("pdf.openfile"), fontpaths = getOption("pfbdir") )
-    if (verbose) iaw$cat.stderr("[pdf.end]
-")
-    options(pdf.openfile = NULL)
+iaw$plot.pdf.end <- function() {
+    grDevices::dev.off()
+    invisible(NULL)
 }

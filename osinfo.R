@@ -1,17 +1,22 @@
-
 #' Operating System Information
 #'
 #' @name osinfo
 #'
-#' osinfo gives system information, trying to figure out the OS.
+#' Returns OS information.
 #'
-#' @return one of macos, linux, or windows.
+#' @return List with OS details.
 #'
+#' @family utilities
+#' @export
+#'
+#' @examples
+#' iaw$osinfo()
 
-
-iaw$osinfo <- function(){
-    sysname <- tolower(Sys.info()["sysname"])
-    if (grepl("darwin", sysname)) return(c(os="macos"))
-    if (grepl("linux", sysname)) return(c(os="linux"))
-    c(os="windows")
+iaw$osinfo <- function() {
+    list(
+        sysname = Sys.info()["sysname"],
+        release = Sys.info()["release"],
+        machine = Sys.info()["machine"],
+        R_version = R.version.string
+    )
 }

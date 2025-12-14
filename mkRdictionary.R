@@ -1,10 +1,18 @@
-## must be started with R --vanilla; not elegant or efficient, but easy to understand
+#' Make R Dictionary
+#'
+#' @name mkRdictionary
+#'
+#' Creates named vector dictionary.
+#'
+#' @param keys Key values.
+#' @param values Value values.
+#'
+#' @return Named vector.
+#'
+#' @family utilities
+#' @export
 
-all.sources <- search()
-d <- NULL
-for (i in 1:length(all.sources)) {
-  all.functions <- ls(search()[i])
-  N <- length(all.functions)
-  if (N==0) next
-  d <- rbind(d, data.frame( src=rep(all.sources[i], N), index=1:N, fname=all.functions ) )
+iaw$mkRdictionary <- function(keys, values) {
+    stopifnot(length(keys) == length(values))
+    setNames(values, keys)
 }

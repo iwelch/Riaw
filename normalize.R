@@ -1,23 +1,20 @@
-#' Normalize/Standardize (Deprecated - Use scale())
+#' Normalize a Vector
 #'
-#' This function is deprecated. Use \code{scale()} instead for standardizing
-#' variables to mean 0 and standard deviation 1.
+#' @name normalize
 #'
-#' @param object Object to normalize.
+#' Scales vector to [0, 1] range.
 #'
-#' @return Throws an error directing you to use \code{scale()}.
+#' @param x Numeric vector.
 #'
+#' @return Numeric vector in [0, 1].
+#'
+#' @family data-transformation
 #' @export
 #'
-#' @seealso \code{\link{scale}}
-#'
 #' @examples
-#' # Instead of normalize(), use:
-#' x <- rnorm(100, mean = 50, sd = 10)
-#' x_standardized <- scale(x)
-#' mean(x_standardized)  # approximately 0
-#' sd(x_standardized)    # approximately 1
+#' iaw$normalize(c(1, 2, 3, 4, 5))
 
-iaw$normalize <- function(object) {
-    iaw$abort("Use scale(object) instead of normalize(object)")
+iaw$normalize <- function(x) {
+    stopifnot(is.numeric(x))
+    (x - min(x, na.rm = TRUE)) / (max(x, na.rm = TRUE) - min(x, na.rm = TRUE))
 }

@@ -1,19 +1,21 @@
-
-#' Perfect Random Uniforms
+#' Draw from Distribution with Exact Quantiles
 #'
 #' @name rdraw.perfect
 #'
-#' random numbers from EITHER 0 OR 1 that are perfectly sampled according to the probability p, but appropriately shuffled
+#' Generates values matching theoretical quantiles.
 #'
-#' @param N number to draw
-#' @param prob probability
+#' @param n Number of values.
+#' @param qfun Quantile function.
 #'
-#' @return a vector of length N containing only 0 or 1, with frequency = prob
+#' @return Numeric vector.
 #'
-#' @seealso rnorm.perfect, runif.perfect
-#'
+#' @family utilities
+#' @export
 
-iaw$rdraw.perfect <- function(N, p) {
-    N1 <- as.integer( N*p ); N0 <- N-N1
-    sample( c( rep(1, N1), rep(0, N0) ) )
+iaw$rdraw.perfect <- function(n, qfun = qnorm) {
+    stopifnot(is.numeric(n), length(n) == 1L, n >= 1)
+    stopifnot(is.function(qfun))
+    
+    p <- (seq_len(n) - 0.5) / n
+    qfun(p)
 }

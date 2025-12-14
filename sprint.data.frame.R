@@ -1,17 +1,19 @@
-
-#' SPRINT.DATA.FRAME
+#' Sprint Data Frame
 #'
 #' @name sprint.data.frame
 #'
-#'  convert a data frame into a printable object that message or cat can use
+#' Prints data frame in compact format.
 #'
-#' @usage sprint.data.frame(d)
+#' @param df Data frame.
+#' @param n Number of rows.
 #'
-#' @param d a data frame
+#' @return Invisible data frame.
 #'
-#' @return a very long strong
-#'
+#' @family utilities
+#' @export
 
-
-iaw$sprint.data.frame <- function (d) paste0(capture.output(d, "
-"))
+iaw$sprint.data.frame <- function(df, n = 10) {
+    stopifnot(is.data.frame(df))
+    print(head(df, n))
+    invisible(df)
+}

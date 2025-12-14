@@ -1,13 +1,19 @@
-
-#' Concatenate vector of strings into one string
+#' Concatenate Strings
 #'
 #' @name strcat
 #'
-#'  @usage strcat( c("a", "b"), sep="," ) -> "a,b"
+#' Concatenates strings without separator.
 #'
-#'  @param a character vector
+#' @param ... Strings to concatenate.
 #'
-#'  @return a character string
+#' @return Single string.
 #'
+#' @family utilities
+#' @export
+#'
+#' @examples
+#' iaw$strcat("Hello", "World")
 
-iaw$strcat <- function( svec, sep=" ") paste( svec, collapse=sep )
+iaw$strcat <- function(...) {
+    paste0(...)
+}

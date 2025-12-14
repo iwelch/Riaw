@@ -1,32 +1,22 @@
-#' Remove Columns with No Variance
+#' Remove Constant Columns
 #'
-#' Removes all columns from a data frame that have only one unique value
-#' (i.e., no variance). Useful for cleaning data before analysis.
+#' @name kill.useless.cols
 #'
-#' @param d A data frame.
+#' Removes columns with no variance.
 #'
-#' @return A data frame with constant columns removed.
+#' @param d Data frame.
 #'
+#' @return Data frame with constant columns removed.
+#'
+#' @family data-manipulation
 #' @export
 #'
-#' @seealso \code{\link{iaw$completeobs}}
-#'
 #' @examples
-#' df <- data.frame(
-#'     a = c(1, 2, 3, 4),
-#'     b = c(5, 5, 5, 5),  # constant - will be removed
-#'     c = c("x", "y", "x", "z"),
-#'     d = c(NA, NA, NA, NA)  # all NA - will be removed
-#' )
-#'
+#' df <- data.frame(a = 1:3, b = c(1,1,1))
 #' iaw$kill.useless.cols(df)
-#' #   a c
-#' # 1 1 x
-#' # 2 2 y
-#' # 3 3 x
-#' # 4 4 z
 
 iaw$kill.useless.cols <- function(d) {
+    stopifnot(is.data.frame(d))
     to_keep <- sapply(d, function(col) length(unique(col)) > 1)
     d[, to_keep, drop = FALSE]
 }

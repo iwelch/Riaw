@@ -1,12 +1,18 @@
-
-
-#' NUMBER OF OBERVATIONS OF (AS.FACTOR) VARIABLE
+#' Number of Observations by Group
 #'
 #' @name numobs.by
 #'
-#' an error with reference to the correct function to use
+#' Counts observations per group.
 #'
-#' @seealso table
+#' @param df Data frame.
+#' @param by Grouping variable.
 #'
+#' @return Table of counts.
+#'
+#' @family utilities
+#' @export
 
-iaw$numobs.by <- function (...) iaw$abort("use table()")
+iaw$numobs.by <- function(df, by) {
+    stopifnot(is.data.frame(df))
+    table(df[[by]])
+}

@@ -1,23 +1,22 @@
-preamble <- c(doc= '
-@TITLE text.bf
-@AUTHOR ivo.welch@gmail.com
-@DATE 2022
-@DESCRIPTION
-@USAGE test.bg (... , bgcol= )
-@ARGUMENTS
-@DETAILS
-@SEEALSO
-@EXAMPLES
-', test= '
-', changes= '
-')
+#' Text with Background
+#'
+#' @name plot.text.bg
+#'
+#' Adds text with background color.
+#'
+#' @param x X position.
+#' @param y Y position.
+#' @param labels Text.
+#' @param bg Background color.
+#' @param ... Text arguments.
+#'
+#' @return Invisible NULL.
+#'
+#' @family plotting
+#' @export
 
-iaw$text.bg <- function( x, y, labels, bgcol="white", ... ) {
-    w <- strwidth( labels )
-    h <- strheight( labels )
-    buf <- 0.1
-    rect( xleft= x - 0.5*w - buf, ybottom= y - 0.5*h - buf,
-         xright= x + 0.5*w + buf, ytop= y + 0.5*h + buf,
-         col = bgcol, border = NA)
-    text(x = x, y = y, labels = labels, adj = c(0.5, 0.5), ...)
+iaw$plot.text.bg <- function(x, y, labels, bg = "white", ...) {
+    rect(x - 0.1, y - 0.1, x + 0.1, y + 0.1, col = bg, border = NA)
+    text(x, y, labels, ...)
+    invisible(NULL)
 }

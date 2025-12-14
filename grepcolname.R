@@ -1,8 +1,17 @@
-
-#' Rename List Names or Columns of Data Frame
+#' Grep Column Names
 #'
+#' @name grepcolname
+#'
+#' Finds column names matching pattern.
+#'
+#' @param pattern Regex pattern.
+#' @param df Data frame.
+#'
+#' @return Matching column names.
+#'
+#' @family utilities
+#' @export
 
-iaw$grepcolname <- function(d.or.n, name) {
-  nms <- if (is.data.frame(d.or.n)) names(d.or.n) else d.or.n
-  nms[grepl(name, nms)]
+iaw$grepcolname <- function(pattern, df) {
+    grep(pattern, names(df), value = TRUE)
 }

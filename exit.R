@@ -1,25 +1,16 @@
-#' Exit Script Silently
+#' Exit R Session
 #'
-#' Stops script execution without printing an error message. Useful for
-#' clean exits in scripts where you don't want the standard "Error" prefix.
+#' @name exit
 #'
-#' @param ... Ignored arguments.
+#' Exits R without saving.
+#'
+#' @param status Exit status code.
 #'
 #' @return Does not return.
 #'
+#' @family utilities
 #' @export
-#'
-#' @seealso \code{\link{iaw$done}}, \code{\link{stop}}
-#'
-#' @examples
-#' \dontrun{
-#' if (condition_met) {
-#'     message("Early exit")
-#'     exit()
-#' }
-#' }
 
-exit <- function(...) {
-    blankMsg <- sprintf("\r%s\r", paste(rep(" ", getOption("width") - 1L), collapse = " "))
-    stop(simpleError(blankMsg))
+iaw$exit <- function(status = 0) {
+    q(save = "no", status = status)
 }
