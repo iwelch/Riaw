@@ -16,5 +16,5 @@
 #' iaw$colN(df)
 
 iaw$colN <- function(x) {
-    setNames(as.integer(colSums(!is.na(x))), colnames(df))
+    setNames(as.integer(colSums(!is.na(x))), colnames(x))
 }

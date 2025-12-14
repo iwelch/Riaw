@@ -21,3 +21,5 @@
 iaw$mcsapply <- function(X, FUN, ...) {
     simplify2array(iaw$mclapply(X, FUN, ...))
 }
+
+iaw$mc.sapply <- iaw$mcsapply

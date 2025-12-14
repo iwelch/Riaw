@@ -1,132 +1,22 @@
 ✔ | F W  S  OK | Context
-⠏ |          0 | data-manipulation                                                                                                  ⠧ |         48 | data-manipulation                                                                                                  ✔ |         59 | data-manipulation
-⠏ |          0 | data-transformation                                                                                                ⠙ |         62 | data-transformation                                                                                                ✔ |         63 | data-transformation
+⠏ |          0 | data-manipulation                                                                                                  ⠙ |         52 | data-manipulation                                                                                                  ✔ |         59 | data-manipulation
+⠏ |          0 | data-transformation                                                                                                ⠋ |         61 | data-transformation                                                                                                ✔ |         63 | data-transformation
 ⠏ |          0 | datetime                                                                                                           ✔ |         52 | datetime
 ⠏ |          0 | error-handling                                                                                                     ✔ |         28 | error-handling
 ⠏ |          0 | io                                                                                                                 ⠹ |         33 | io                                                                                                                 ⠼ |         45 | io                                                                                                                 ⠧ |         48 | io                                                                                                                 ✔ |         51 | io [1.3s]
-⠏ |          0 | misc                                                                                                               ⠙ | 2       40 | misc                                                                                                               ✖ | 5       66 | misc
-────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
-Error ('test-misc.R:224:5'): iaw$colN counts non-NA
-<subscriptOutOfBoundsError/error/condition>
-Error in `result[["a"]]`: subscript out of bounds
-Backtrace:
-    ▆
- 1. └─testthat::expect_equal(result[["a"]], c(a = 2)) at test-misc.R:224:5
- 2.   └─testthat::quasi_label(enquo(object), label, arg = "object")
- 3.     └─rlang::eval_bare(expr, quo_get_env(quo))
-
-Failure ('test-misc.R:230:5'): iaw$colN returns named vector
-!is.null(names(result)) is not TRUE
-
-`actual`:   FALSE
-`expected`: TRUE 
-
-Failure ('test-misc.R:236:5'): iaw$colN handles all NA
-result["a"] not equal to c(a = 0).
-names for current but not for target
-
-Failure ('test-misc.R:242:5'): iaw$colN handles no NA
-result["a"] not equal to c(a = 5).
-names for current but not for target
-
-Failure ('test-misc.R:285:5'): iaw$colSds constant column
-result[1] not equal to 0.
-names for target but not for current
-────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
-⠏ |          0 | operators                                                                                                          ✖ | 4       25 | operators
-────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
-Failure ('test-operators.R:28:5'): %and% handles NA correctly
-`(NA) %and% stop("test")` threw an error with unexpected message.
-Expected match: "!is.na(e1) is not TRUE"
-Actual message: "!is.na(e1) is not TRUE"
-Backtrace:
-    ▆
- 1. ├─testthat::expect_error((NA) %and% stop("test"), "!is.na(e1) is not TRUE") at test-operators.R:28:5
- 2. │ └─testthat:::quasi_capture(...)
- 3. │   ├─testthat (local) .capture(...)
- 4. │   │ └─base::withCallingHandlers(...)
- 5. │   └─rlang::eval_bare(quo_get_expr(.quo), quo_get_env(.quo))
- 6. └─(NA) %and% stop("test")
- 7.   └─base::stopifnot(is.logical(e1), length(e1) == 1L, !is.na(e1)) at src/Riaw/%and%.R:24:5
-
-Failure ('test-operators.R:127:5'): %inrange% rejects non-numeric x
-`"a" %inrange% c(1, 10)` did not throw an error.
-
-Failure ('test-operators.R:131:5'): %inrange% rejects wrong length range
-`5 %inrange% c(1, 5, 10)` did not throw an error.
-
-Failure ('test-operators.R:135:5'): %inrange% rejects non-numeric range
-`5 %inrange% c("a", "b")` did not throw an error.
-────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
-⠏ |          0 | parallel                                                                                                           ⠸ |         34 | parallel                                                                                                           ⠧ | 1       47 | parallel                                                                                                           ⠼ | 1       54 | parallel                                                                                                           ✖ | 1       58 | parallel
-────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
-Error ('test-parallel.R:264:5'): iaw$mcsapply alias mc.sapply works
-Error in `eval(code, test_env)`: attempt to apply non-function
-────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
-⠏ |          0 | plotting                                                                                                           ⠏ |         40 | plotting                                                                                                           ✔ |         57 | plotting
+⠏ |          0 | misc                                                                                                               ⠙ |         62 | misc                                                                                                               ✔ |         71 | misc
+⠏ |          0 | operators                                                                                                          ✔ |         29 | operators
+⠏ |          0 | parallel                                                                                                           ⠴ |         36 | parallel                                                                                                           ⠇ |         49 | parallel                                                                                                           ⠴ |         56 | parallel                                                                                                           ✔ |         59 | parallel
+⠏ |          0 | plotting                                                                                                           ⠸ |         54 | plotting                                                                                                           ✔ |         57 | plotting
 ⠏ |          0 | random-utilities                                                                                                   ✔ |         40 | random-utilities
 ⠏ |          0 | regression                                                                                                         ✔ |         27 | regression
-⠏ |          0 | statistics                                                                                                         ⠹ |         53 | statistics                                                                                                         ✔ |         63 | statistics
+⠏ |          0 | statistics                                                                                                         ⠧ |         58 | statistics                                                                                                         ✔ |         63 | statistics
 ⠏ |          0 | string-dict                                                                                                        ✔ |         40 | string-dict
 ⠏ |          0 | time-series                                                                                                        ⠋ |         61 | time-series                                                                                                        ✔ |         61 | time-series
 ⠏ |          0 | type-checking                                                                                                      ✔ |         40 | type-checking
 ⠏ |          0 | utilities                                                                                                          ⠇ |         29 | utilities                                                                                                          ⠙ |         32 | utilities                                                                                                          ⠸ |         34 | utilities                                                                                                          ⠹ |         53 | utilities                                                                                                          ✔ |         60 | utilities
 
 ══ Results ═════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════
-Duration: 3.4 s
+Duration: 3.2 s
 
-── Failed tests ────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
-Error ('test-misc.R:224:5'): iaw$colN counts non-NA
-<subscriptOutOfBoundsError/error/condition>
-Error in `result[["a"]]`: subscript out of bounds
-Backtrace:
-    ▆
- 1. └─testthat::expect_equal(result[["a"]], c(a = 2)) at test-misc.R:224:5
- 2.   └─testthat::quasi_label(enquo(object), label, arg = "object")
- 3.     └─rlang::eval_bare(expr, quo_get_env(quo))
-
-Failure ('test-misc.R:230:5'): iaw$colN returns named vector
-!is.null(names(result)) is not TRUE
-
-`actual`:   FALSE
-`expected`: TRUE 
-
-Failure ('test-misc.R:236:5'): iaw$colN handles all NA
-result["a"] not equal to c(a = 0).
-names for current but not for target
-
-Failure ('test-misc.R:242:5'): iaw$colN handles no NA
-result["a"] not equal to c(a = 5).
-names for current but not for target
-
-Failure ('test-misc.R:285:5'): iaw$colSds constant column
-result[1] not equal to 0.
-names for target but not for current
-
-Failure ('test-operators.R:28:5'): %and% handles NA correctly
-`(NA) %and% stop("test")` threw an error with unexpected message.
-Expected match: "!is.na(e1) is not TRUE"
-Actual message: "!is.na(e1) is not TRUE"
-Backtrace:
-    ▆
- 1. ├─testthat::expect_error((NA) %and% stop("test"), "!is.na(e1) is not TRUE") at test-operators.R:28:5
- 2. │ └─testthat:::quasi_capture(...)
- 3. │   ├─testthat (local) .capture(...)
- 4. │   │ └─base::withCallingHandlers(...)
- 5. │   └─rlang::eval_bare(quo_get_expr(.quo), quo_get_env(.quo))
- 6. └─(NA) %and% stop("test")
- 7.   └─base::stopifnot(is.logical(e1), length(e1) == 1L, !is.na(e1)) at src/Riaw/%and%.R:24:5
-
-Failure ('test-operators.R:127:5'): %inrange% rejects non-numeric x
-`"a" %inrange% c(1, 10)` did not throw an error.
-
-Failure ('test-operators.R:131:5'): %inrange% rejects wrong length range
-`5 %inrange% c(1, 5, 10)` did not throw an error.
-
-Failure ('test-operators.R:135:5'): %inrange% rejects non-numeric range
-`5 %inrange% c("a", "b")` did not throw an error.
-
-Error ('test-parallel.R:264:5'): iaw$mcsapply alias mc.sapply works
-Error in `eval(code, test_env)`: attempt to apply non-function
-
-[ FAIL 10 | WARN 0 | SKIP 0 | PASS 790 ]
+[ FAIL 0 | WARN 0 | SKIP 0 | PASS 800 ]

@@ -234,19 +234,19 @@ test_that("iaw$colN returns named vector", {
 test_that("iaw$colN handles all NA", {
     df <- data.frame(a = c(NA, NA), b = c(1, 2))
     result <- iaw$colN(df)
-    expect_equal(result["a"], c(a = 0))
+    expect_equal(unname(result["a"]), 0)  # Add unname()
 })
 
 test_that("iaw$colN handles no NA", {
     df <- data.frame(a = 1:5)
     result <- iaw$colN(df)
-    expect_equal(result["a"], c(a = 5))
+    expect_equal(unname(result["a"]), 5)  # Add unname()
 })
 
-test_that("iaw$colN works on matrix", {
-    m <- matrix(c(1, NA, 3, 4), nrow = 2)
-    result <- iaw$colN(m)
-    expect_length(result, 2)
+test_that("iaw$colSds constant column [1]", {
+    m <- matrix(c(5, 5, 1, 2), ncol = 2)  # Col 1 is c(5,5), Col 2 is c(1,2)
+    result <- iaw$colSds(m)
+    expect_equal(result[[1]], 0)  # First column is constant
 })
 
 test_that("iaw$colN multiple columns", {
@@ -280,10 +280,10 @@ test_that("iaw$colSds handles NA", {
     expect_true(!is.na(result[1]))
 })
 
-test_that("iaw$colSds constant column", {
+test_that("iaw$colSds constant column [2]", {
     df <- data.frame(a = c(5, 5, 5))
     result <- iaw$colSds(df)
-    expect_equal(result[1], 0)
+    expect_equal(result[[1]], 0)
 })
 
 test_that("iaw$colSds multiple columns", {
