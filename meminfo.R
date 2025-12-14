@@ -27,5 +27,3 @@ iaw$mem.setmc <- function() {
     options(mc.cores=nc)
     nc
 }
-
-

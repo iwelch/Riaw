@@ -20,4 +20,3 @@ iaw$index.of.variable <- function(list.or.namevector, wantedname) {
 }
 
 iaw$which.variable <- iaw$index.of.variable
-

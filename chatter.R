@@ -1,99 +1,88 @@
-#' Toggle Console Output Verbosity ("Chatter")
+#' Toggle Console Output Verbosity
 #'
-#' Creates a closure-based function that controls whether console messages and
-#' output are printed (`"verbose"`) or temporarily suppressed (`"quiet"`).
+#' Controls whether console messages and output are printed ("verbose") or
+#' temporarily suppressed ("quiet"). Useful for silencing noisy package
+#' loading or function output.
 #'
-#' When in `"quiet"` mode, both standard output and message streams are redirected
-#' to a temporary file (`/tmp/R-suppressed.Rout`), allowing silent loading of
-#' packages or functions that normally print a lot of information.
-#' When switched back to `"verbose"`, both sinks are closed, the connection is
-#' released, and normal console output resumes.
+#' @return A function with signature \code{chatter(quiet.verbose)} that:
+#'   \itemize{
+#'     \item When called with "quiet": suppresses output
+#'     \item When called with "verbose": restores output
+#'     \item When called with no arguments: returns current state
+#'   }
 #'
-#' If called with no arguments, the current chatter state is returned invisibly
-#' (`"quiet"` or `"verbose"`), allowing you to query the mode.
-#'
-#' @return
-#' A function that toggles or queries the current verbosity state.
-#' Each call returns (invisibly) the active state.
-#'
-#' @param quiet.verbose Character scalar; must be one of:
-#'   \describe{
-#'     \item{"quiet"}{Suppress console chatter by redirecting output and messages.}
-#'     \item{"verbose"}{Re-enable normal console output and close the sink.}
-#'     \item{""}{No effect (used internally).}
-#'     \item{missing}{If no argument is provided, returns the current state.}
+#' @param quiet.verbose One of:
+#'   \itemize{
+#'     \item "quiet": Suppress console output
+#'     \item "verbose": Restore normal output
+#'     \item missing: Query current state
 #'   }
 #'
 #' @details
-#' Internally, two closure variables persist between calls:
-#' \itemize{
-#'   \item `toggle_state` — the current verbosity mode.
-#'   \item `filecon` — the connection used for temporary output suppression.
-#' }
-#' No global variables are created or modified.
+#' In "quiet" mode, both stdout and message streams are redirected to
+#' \code{/tmp/R-suppressed.Rout}. When switched back to "verbose",
+#' normal console output resumes.
+#'
+#' @export
+#'
+#' @seealso \code{\link{sink}}, \code{\link{suppressMessages}}
 #'
 #' @examples
 #' \dontrun{
-#' # Attach to existing iaw environment or list
-#' iaw$chatter <- make_chatter()
+#' # Suppress output during package loading
+#' iaw$chatter("quiet")
+#' library(ggplot2)  # Silent loading
+#' iaw$chatter("verbose")
 #'
-#' iaw$chatter("quiet")     # Suppress output
-#' iaw$chatter("verbose")   # Restore normal output
-#'
-#' iaw$chatter()            # Query current mode (returns "verbose" or "quiet")
+#' # Check current state
+#' iaw$chatter()  # Returns "verbose" or "quiet"
 #' }
-#'
-#' @seealso [sink()], [message()]
-#'
-#' @export
+
 make_chatter <- function() {
+    toggle_state <- "verbose"
+    filecon <- NULL
 
-  # internal persistent variables
-  toggle_state <- "verbose"
-  filecon <- NULL
+    chatter_fun <- function(quiet.verbose) {
+        if (missing(quiet.verbose))
+            return(toggle_state)
 
-  chatter_fun <- function(quiet.verbose) {
+        if (toggle_state == "")
+            return(invisible(NULL))
 
-    # allow query mode
-    if (missing(quiet.verbose))
-      return(toggle_state)
+        stopifnot(quiet.verbose %in% c("quiet", "verbose", ""))
 
-    if (toggle_state == "")
-      return(0)  # no action if disabled
+        if (quiet.verbose == "quiet") {
+            if (toggle_state != "verbose")
+                message("warning: chatter was not verbose")
 
-    stopifnot(quiet.verbose %in% c("quiet", "verbose", ""))
+            toggle_state <<- "quiet"
+            filecon <<- file("/tmp/R-suppressed.Rout", "w")
 
-    if (quiet.verbose == "quiet") {
-      if (toggle_state != "verbose")
-        message("warning --- chatter was not verbose")
+            message("[suppressing chatter (quiet)]")
+            sink(file = filecon, type = "message")
+            sink(file = filecon, type = "output")
 
-      toggle_state <<- "quiet"
-      filecon <<- file("/tmp/R-suppressed.Rout", "w")
+        } else if (quiet.verbose == "verbose") {
+            if (toggle_state != "quiet")
+                message("warning: chatter was not quiet")
 
-      message("[suppressing chatter now (quiet) for loading of standard R libraries]")
-      sink(file = filecon, type = "message")
-      sink(file = filecon, type = "output")
+            toggle_state <<- "verbose"
+            sink(file = NULL, type = "output")
+            sink(file = NULL, type = "message")
 
-    } else if (quiet.verbose == "verbose") {
-      if (toggle_state != "quiet")
-        message("warning -- chatter was not quiet")
+            if (!is.null(filecon) && isOpen(filecon)) {
+                close(filecon)
+                filecon <<- NULL
+            }
 
-      toggle_state <<- "verbose"
-      sink(file = NULL, type = "output")
-      sink(file = NULL, type = "message")
+            message("[chatter restored (verbose)]")
+        }
 
-      if (!is.null(filecon) && isOpen(filecon)) {
-        close(filecon)
-        filecon <<- NULL
-      }
-
-      message("[chatter turned back on (verbose) for iaw progress]\n")
+        invisible(toggle_state)
     }
 
-      toggle_state
-  }
-
-  return(chatter_fun)
+    chatter_fun
 }
 
+#' @export
 iaw$chatter <- make_chatter()

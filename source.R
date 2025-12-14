@@ -16,8 +16,8 @@
 #'
 
 ## iaw$source <- function (Rsourcefilename, ...) {
-##     if (grepl("\\.Rinclude", Rsourcefilename)) return(base:::source(Rsourcefilename))
-##     (grepl("\\.R$",Rsourcefilename)) %or% "can only iaw$source file .R files [or .Rinclude] not {{Rsourcefilename}} with such ## ## ## ## ## an extension"
+##     if (grepl("\.Rinclude", Rsourcefilename)) return(base:::source(Rsourcefilename))
+##     (grepl("\.R$",Rsourcefilename)) %or% "can only iaw$source file .R files [or .Rinclude] not {{Rsourcefilename}} with such ## ## ## ## ## an extension"
 ##     (is.null(iaw$ARGV0)) %or% "cannot nest iaw$source.  please use base:::source() instead."
 ## 
 ##     {
@@ -48,7 +48,3 @@ source <- function(file, verbose = FALSE, ...) {
 
     base::source(file, keep.source = TRUE, ...)
 }
-
-
-
-

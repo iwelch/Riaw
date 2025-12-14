@@ -16,9 +16,11 @@
 #'
 
 iaw$require.variables <- function(vnames, d) {
-    (is.vector(vnames) & (class(vnames) == "character")) %or% "[require.variables: {{iaw$whatis(vnames)}} is wrong type.]\n"
+    (is.vector(vnames) & (class(vnames) == "character")) %or% "[require.variables: {{iaw$whatis(vnames)}} is wrong type.]
+"
     names.d <- if (is.data.frame(d)) names(d) else d
-    (is.character(names.d)) %or% "[require.variables: incorrect call. second arg should be data frame or names, not {{typeof(names.d)}}.]\n"
+    (is.character(names.d)) %or% "[require.variables: incorrect call. second arg should be data frame or names, not {{typeof(names.d)}}.]
+"
     set.not.there <- (!( vnames %in% names.d ))
     if (any(set.not.there)) {
         ds <- iaw$strcat(names.d)

@@ -17,6 +17,7 @@ iaw$setup.knitr <- function() {
     use(DT, "datatable")
     p <<- function(...) DT::datatable(...)
 
-    # knit_print.data.frame <- function(x, ...) asis_output(  paste( c("",p(x)) , collapse="" )  )
+    # knit_print.data.frame <- function(x, ...) asis_output(  paste( c("",p(x)) , collapse="
+" )  )
     # registerS3method("knit_print", "data.frame", knit_print.data.frame)
 }

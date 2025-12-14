@@ -23,7 +23,8 @@ iaw$lock.acquire <- function(textarg="unnamed") {
         }
         Sys.sleep( runif(1) )
     }
-    cat( textarg, " ", Sys.time(), "\n", file=iaw$lock.name)
+    cat( textarg, " ", Sys.time(), "
+", file=iaw$lock.name)
 }
 
 iaw$lock.release <- function() {

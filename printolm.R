@@ -1,73 +1,78 @@
+#' Print OLS Regression Results
+#'
+#' A compact printer for regression results from \code{iaw$olm()}. Displays
+#' coefficient table with optional customization of variable names and columns.
+#'
+#' @param ... Either a formula and data for \code{iaw$olm()}, or an existing
+#'   \code{summary.lm} object from \code{iaw$olm()}.
+#' @param yname Optional character string to label the dependent variable.
+#' @param xnames Optional character vector of names for independent variables.
+#' @param wantedcols Integer vector specifying which coefficient table columns
+#'   to display. Default is 1:7 (all columns).
+#' @param description Optional description string to print as header.
+#'
+#' @return Invisibly returns the adjusted R-squared value.
+#'
+#' @details
+#' Prints a formatted output including:
+#' \itemize{
+#'   \item Coefficient table (estimates, std errors, t-stats, p-values, etc.)
+#'   \item Adjusted R-squared
+#'   \item Degrees of freedom and sample size
+#'   \item Residual standard error
+#' }
+#'
+#' @export
+#'
+#' @seealso \code{\link{iaw$olm}}, \code{\link{summary.lm}}
+#'
+#' @examples
+#' # Basic usage
+#' x <- rnorm(100)
+#' y <- 2 + 3*x + rnorm(100)
+#' iaw$printolm(y ~ x)
+#'
+#' # With custom names
+#' iaw$printolm(y ~ x, yname = "Returns", xnames = "Market Beta")
+#'
+#' # With description
+#' iaw$printolm(y ~ x, description = "CAPM Model")
+#'
+#' # From existing olm object
+#' model <- iaw$olm(y ~ x)
+#' iaw$printolm(model)
 
-#' PRINTOLM
-#'
-#' @name print.summary.lm( iaw$olm( rnorm(10) ~ rnorm(10) ))
-#'
-#' use as iaw$olm( y ~ x );  for a short printer, use iaw$printolm( y ~ x )
-#'
-#'   add newey-west and standardized coefficients to lm(), and return the summary.lm
-#'
-#'  @details
-#'     Note that when y or x have different observations, the coef(lm(y~x))*sd(x)/sd(y)
-#'     calculations are different from a scale(y) ~ scale(x) regression.
-#'
-#'     Note that the NeweyWest statistics could also be calculated as
-#'
-#'       library(sandwich)
-#'       se.nw <- NeweyWest( lmo, lag=0, prewhite=FALSE))
-#'
-#'  @usage olm(..., newey.west=0, stdcoefs=TRUE)
-#'
-#'  @param formula
-#'  @param newey.west the number of lags
-#'  @param stdcoefs whether to print the standardized coefficients or not.
-#'
-#'  @return the adjusted R^2 of the regression model
-#'
-#'  @seealso stats:::lm, stats:::summary.lm
-#'
-#'  @examples
-#'     set.seed(0)
-#'     x <- rnorm(12); y <- rnorm(12); z <- rnorm(12); x[2] <-NA;
-#'     (abs(x[1]-1.2630)<0.01) %or% "sorry, but your random numbers have changed"
-#'     cc<-lm( y ~ x + z )
-#'     (abs(sum(coef(cc))-3.25)) %or% "probably invalid calculations"
-#'
-#'     iaw$print.summary.lm( iaw$olm( rnorm(10) ~ rnorm(10) ))
-#'
-
-
-## use as iaw$olm( y ~ x );  for a short printer, use iaw$printolm( y ~ x )
-
-iaw$printolm <- function( ..., yname=NULL, xnames=NULL, wantedcols=1:7, description=NULL ) {
+iaw$printolm <- function(..., yname = NULL, xnames = NULL, wantedcols = 1:7, description = NULL) {
 
     va <- list(...)
     if ((length(va) == 1) && inherits(va[[1]], "summary.lm")) {
-        ## should test further for an iaw$olm summary
         olmobject <- va[[1]]
     } else {
-        olmobject <- iaw$olm( ... )
+        olmobject <- iaw$olm(...)
     }
 
-
-    ccc <- coef( olmobject )[,wantedcols]
+    ccc <- coef(olmobject)[, wantedcols, drop = FALSE]
     csigma <- olmobject$sigma
 
     if (!is.null(xnames)) {
         if (length(xnames) == nrow(ccc)) {
             rownames(ccc) <- xnames
-        } else if (length(xnames) == nrow(ccc)-1) {
-            rownames(ccc) <- c("const", xnames)
+        } else if (length(xnames) == nrow(ccc) - 1) {
+            rownames(ccc) <- c("(Intercept)", xnames)
         } else {
-            stop("Number of xnames: ", length(xnames), " number of variables: ", nrow(ccc), "\n")
+            stop("Number of xnames (", length(xnames), ") doesn't match variables (", nrow(ccc), ")")
         }
     }
-    if (!is.null(description)) cat("---------------- Model: ", description, "\n")
-    if (is.null(yname)) yname <- as.character(formula(olmobject))[2]
-    cat("--- Explaining '", yname, "':\n")
-    print(ccc)
-    cat("--- ar^2= ", olmobject$adj.r.squared, " df= ", olmobject$df[2], "  ( N=",olmobject$df[2]+olmobject$df[1],"),  sde=", csigma,
-        "  pctsumsqe=", olmobject$residssq, "\n\n")
-    invisible( olmobject$adj.r.squared )
-}
 
+    if (!is.null(description)) cat("---------------- Model:", description, "\n")
+    if (is.null(yname)) yname <- as.character(formula(olmobject))[2]
+    cat("--- Explaining '", yname, "':\n", sep = "")
+    print(ccc)
+    cat("--- adj.R2=", olmobject$adj.r.squared,
+        " df=", olmobject$df[2],
+        " (N=", olmobject$df[2] + olmobject$df[1], ")",
+        " sigma=", csigma,
+        " RSS%=", olmobject$residssq, "\n\n", sep = "")
+
+    invisible(olmobject$adj.r.squared)
+}

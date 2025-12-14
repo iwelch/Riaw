@@ -14,13 +14,21 @@ preamble <- c(doc= '
 
 iaw$iaw.boxplot <- function (ds, labels = names(ds), scalefactor = 1, ...) 
 {
-  cat("\n\n\n\n\n\n\n")
+  cat("
+
+
+
+
+
+
+")
   (is.data.frame(ds)) %or% "ds is not a data frame but a {{class(object)}}"
   (length(labels) != length(ds)) %or% "inconsistent length: {{length(labels)}} and {{length(ds)}}"
   my.cex.axis <- 1
   if ((length(ds) > 10) && (length(ds) < 30)) {
     my.cex.axis <- 1 - ((length(ds) - 10)/10)/3.5
-    cat("[Warning: iax.boxplot is scaling cex.axis]\n")
+    cat("[Warning: iax.boxplot is scaling cex.axis]
+")
   }
   plot(c(0, 1), c(0, 1), type = "n", axes = F, xlim = c(1, 
                                                  length(ds)), ...)

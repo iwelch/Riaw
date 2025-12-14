@@ -13,4 +13,5 @@
 #'
 
 
-iaw$sprint.data.frame <- function (d) paste0(capture.output(d, "\n"))
+iaw$sprint.data.frame <- function (d) paste0(capture.output(d, "
+"))

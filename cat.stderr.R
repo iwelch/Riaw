@@ -1,16 +1,20 @@
+#' Print to stderr Only
+#'
+#' Prints output to the standard error stream. Useful for log messages
+#' that should appear in error logs but not standard output.
+#'
+#' @param ... Arguments passed to \code{cat()}.
+#'
+#' @return Invisible NULL.
+#'
+#' @export
+#'
+#' @seealso \code{\link{iaw$cat.both}}, \code{\link{cat}}, \code{\link{message}}
+#'
+#' @examples
+#' iaw$cat.stderr("Debug info\n")
 
-#' CAT.STDERR
-#'
-#' @name cat.stderr
-#'
-#' mnemonic wrapper for cat(...,file=stderr())
-#'
-#' @usage cat.stderr("I am", x, "\n")
-#'
-#' @param ...
-#'
-#' @return
-#'
-
-iaw$cat.stderr <- function (...)
-  cat(..., file = stderr())
+iaw$cat.stderr <- function(...) {
+    cat(..., file = stderr())
+    invisible(NULL)
+}

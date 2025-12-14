@@ -1,25 +1,33 @@
-
-#' RESIDUALS
+#' Extract Residuals Preserving NA Positions
 #'
-#' @name residuals
+#' Extracts residuals from an lm object, preserving NA positions if
+#' \code{na.action=na.exclude} was used in the model.
 #'
-#'  add a keep.NA option to residuals
+#' @param lmobject An object returned by \code{lm()}.
+#' @param ... Additional arguments passed to \code{stats::residuals()}.
 #'
-#'  @usage residuals(lmobject, keep.NA=FALSE, ...)
+#' @return A numeric vector of residuals, with NA values in the positions
+#'   where the original data had missing values (if na.exclude was used).
 #'
-#'  @param lmobject a linear model, usually obtained from lm
+#' @details
+#' For NA positions to be preserved correctly, you must use
+#' \code{na.action=na.exclude} in your \code{lm()} call, not \code{na.omit}.
 #'
-#'  @return a vector with residuals of equal nrows as the number of observations in the model
+#' @export
 #'
+#' @seealso \code{\link{iaw$fitted}}, \code{\link{residuals}}
+#'
+#' @examples
+#' df <- data.frame(y = c(1, 2, NA, 4, 5), x = c(1, 2, 3, 4, 5))
+#'
+#' # Use na.exclude to preserve NA positions
+#' model <- lm(y ~ x, data = df, na.action = na.exclude)
+#' iaw$residuals(model)
+#' # Returns vector of length 5 with NA in position 3
 
 iaw$residuals <- function(lmobject, ...) {
-    if (!any(grepl("na\\.exclude", lmobject$call))) message("
-****************
-**
-** please add na.action=na.exclude to your lm call first!
-**
-****************
-")
-
-    stats:::residuals(lmobject,...)
+    if (!any(grepl("na\\.exclude", lmobject$call))) {
+        message("\n*** Please add na.action=na.exclude to your lm() call ***\n")
+    }
+    stats::residuals(lmobject, ...)
 }

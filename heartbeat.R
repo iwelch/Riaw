@@ -23,5 +23,6 @@
 iaw$heartbeat <- function (now, total, length.out = 100) {
   if (now %in% as.integer(seq(0, total, length.out = length.out)))
       message("[", now, "=", as.integer(now * 100/total), "%]")
-  if (now==total) cat("\n", file=stderr())
+  if (now==total) cat("
+", file=stderr())
 }

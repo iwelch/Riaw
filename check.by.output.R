@@ -26,7 +26,9 @@ iaw$by.check.rectangular <- function(mc.rv) {
     if (numofcols < 0)
       next
     if (ncol(mc.rv[[i]]) != numofcols) {
-      cat("\niaw-mc.R: check.output problem\n", file=stderr())
+      cat("
+iaw-mc.R: check.output problem
+", file=stderr())
       cat("First Element was:", file=stderr())
       print(head(firstnumofcolselement))
       cat("Element", i, " was:", file=stderr())

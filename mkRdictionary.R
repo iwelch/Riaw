@@ -8,4 +8,3 @@ for (i in 1:length(all.sources)) {
   if (N==0) next
   d <- rbind(d, data.frame( src=rep(all.sources[i], N), index=1:N, fname=all.functions ) )
 }
-

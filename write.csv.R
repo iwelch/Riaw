@@ -1,58 +1,86 @@
-
-#' Writing (Gzipped) CSV Files
+#' Fast CSV/TSV File Writing
 #'
-#' @name write.csv
+#' Writes data frames to CSV or gzipped CSV files using \code{data.table::fwrite()}
+#' for speed. Supports automatic gzip compression and verbose logging.
 #'
-#' transparent and fast writing of compressed csv files.  by default, uses data.table for quicker csv reading.
-#' for replicability, prints out information about the file being written.
+#' @param object Data frame to write.
+#' @param filename Output file path. Should end in \code{.csv} or \code{.csv.gz}.
+#' @param ... Additional arguments passed to \code{data.table::fwrite()}.
+#' @param allow.overwrite Logical; if FALSE, skips writing if file exists.
+#'   Default is TRUE.
+#' @param abort.on.overwrite Logical; if TRUE, aborts if file exists. Default FALSE.
+#' @param verbose Logical; if TRUE, prints file info. Default TRUE.
+#' @param use.data.table Logical; retained for compatibility. Always uses fwrite.
+#' @param gzip.in.background Logical; retained for compatibility.
 #'
-#' @usage write.csv (filename, ..., verbose = FALSE)
+#' @return Invisibly returns the input object.
 #'
-#' @param filename -- a csv or csv.gz file
-#' @param ... -- other arguments to fwrite
-#' @param verbose=TRUE --- print information about the file for replicability.
-#'
-#' @aliases write.csv.gz
-#'
-#' @seealso read.csv.gz, fread
+#' @details
+#' Modern versions of \code{data.table::fwrite()} support gzip compression
+#' natively when the filename ends in \code{.gz}.
 #'
 #' @export
+#'
+#' @seealso \code{\link{iaw$read.csv}}, \code{\link{fwrite}}
+#'
+#' @examples
+#' \dontrun{
+#' df <- data.frame(x = 1:1000, y = rnorm(1000))
+#'
+#' # Write CSV
+#' iaw$write.csv(df, "output.csv")
+#'
+#' # Write gzipped CSV
+#' iaw$write.csv(df, "output.csv.gz")
+#'
+#' # Silent writing
+#' iaw$write.csv(df, "output.csv", verbose = FALSE)
+#'
+#' # Prevent overwriting
+#' iaw$write.csv(df, "output.csv", allow.overwrite = FALSE)
+#' }
 
-iaw$write.csv <- function(object, filename, ..., allow.overwrite=TRUE, abort.on.overwrite=FALSE, verbose = TRUE, use.data.table=TRUE, gzip.in.background=FALSE) {
-    ## update: fwrite now supports gzip directly
+iaw$write.csv <- function(object, filename, ...,
+                           allow.overwrite = TRUE,
+                           abort.on.overwrite = FALSE,
+                           verbose = TRUE,
+                           use.data.table = TRUE,
+                           gzip.in.background = FALSE) {
 
     if (file.exists(filename)) {
-        (abort.on.overwrite) %and% "write.csv: filename {{filename}} exists AND abort.on.overwrite requested";
+        (abort.on.overwrite) %and% "write.csv: {{filename}} exists and abort.on.overwrite=TRUE"
         if (!allow.overwrite) {
-            cat("[write.csv --- not overwriting because file ", filename, " already exists]")
-            return(object)
+            cat("[write.csv: not overwriting existing file", filename, "]\n")
+            return(invisible(object))
         }
     }
 
-    iaw$is.character(filename,1) %or% "write.csv expects a filename"
+    iaw$is.character(filename, 1) %or% "filename must be a single string"
 
     is.gz <- grepl("sv.gz$", filename)
-    (grepl(".csv$", filename) | is.gz) %or% "Filename {{filename}} should contain .csv or .csv.gz"
+    (grepl(".csv$", filename) | is.gz) %or% "filename {{filename}} should end in .csv or .csv.gz"
 
-    ## plaincsv <- sub('\\.gz$','', filename)
+    if (verbose) {
+        cat("[write.csv: saving", filename, "via fwrite]\n", file = stderr())
+    }
 
-    if (verbose) cat("[write.csv: saving", filename, " via fwrite]\n", file=stderr())
+    data.table::fwrite(object, file = filename, ...)
 
-    data.table::fwrite(object, file=filename, ...)  ## no longer plaincsv, because data.table::fwrite now supports .gz natively
-
-    if ((verbose)) {
-        ## md5sum.unzipped <- (if (is.gz) NA else md5sum(plaincsv))
-        ## md5sum.zipped <- (if (is.gz) NA else md5sum(plaincsv))
-        md5sum.zipped <- md5sum.unzipped <- NA
-
-        cat("[wrote data frame:", nrow(object), "rows, ", ncol(object), "cols to", filename, "]\n", file=stderr())
-        cat("#---------------- Output File: ", filename, " unzipped=", md5sum.unzipped, "\n")
-        print( file.info(filename) )
-        cat("#---------------- ", Sys.time(), " zipped=", md5sum.zipped, ", dim=", paste(dim(object)), "\n")
+    if (verbose) {
+        cat("[wrote data frame:", nrow(object), "rows,", ncol(object), "cols to", filename, "]\n",
+            file = stderr())
+        cat("#---------------- Output File:", filename, "\n")
+        print(file.info(filename))
+        cat("#----------------", as.character(Sys.time()), ", dim=", paste(dim(object), collapse = "x"), "\n")
     }
 
     invisible(object)
 }
 
-iaw$write.csv.gz <- iaw$write.csv  ## an alias
-iaw$fwrite <- iaw$write.csv  ## an alias
+#' @rdname write.csv
+#' @export
+iaw$write.csv.gz <- iaw$write.csv
+
+#' @rdname write.csv
+#' @export
+iaw$fwrite <- iaw$write.csv

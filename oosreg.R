@@ -57,5 +57,3 @@ iaw$ooslm.test <- function() {
     formula <- y ~ z1 + z2
     iaw$ooslm( formula, df )
 }
-
-

@@ -1,44 +1,64 @@
-
-#' Lead-Lag Partial Autocorrelations of Two Time-Series Vectors
+#' Lead-Lag Partial Cross-Correlations of Two Time Series
 #'
-#' @name autopcorrel
+#' Calculates partial cross-correlations between two time series at various
+#' leads and lags using multiple regression. Unlike simple correlations, partial
+#' correlations control for other lags.
 #'
-#' calculate a vector of partial cross-correlation between two time-series at different leads and lags, scaled.
+#' @param series.x First numeric vector (time series).
+#' @param series.y Second numeric vector (time series), same length as series.x.
+#' @param around Integer specifying how many leads/lags to include (default 5).
 #'
-#' @param series.x the first timeseries
-#' @param series.y the second timeseries
+#' @return A named numeric vector of partial correlation coefficients (regression
+#'   coefficients on standardized variables). Names indicate the lag:
+#'   \code{pcor-5} through \code{pcor5}.
 #'
-#' @return a vector of partial autocorrelation coefficients
-#'
-#' @examples
-#'  > iaw$autopcorrel( sin(1:30)+tan(1:30)/1000, sin(0:29), around=3 )
-#'    (Intercept)      pcor-3      pcor-2      pcor-1       pcor0       pcor1       pcor2       pcor3
-#'       0.008496   -0.191502   -0.317053   -0.170215    0.128599    0.295066    0.179672   -0.112650
+#' @details
+#' The function standardizes both series, creates a matrix of lagged versions of
+#' series.x, and regresses series.y on all lags simultaneously. The coefficients
+#' represent partial correlations controlling for other lags.
 #'
 #' @export
+#'
+#' @seealso \code{\link{iaw$autocorrel}} for simple correlations, \code{\link{pacf}}
+#'
+#' @examples
+#' # Compare simple and partial correlations
+#' x <- sin(1:50) + rnorm(50, sd = 0.1)
+#' y <- sin(2:51) + rnorm(50, sd = 0.1)
+#'
+#' # Simple correlations
+#' iaw$autocorrel(x, y, around = 3)
+#'
+#' # Partial correlations (controlling for other lags)
+#' iaw$autopcorrel(x, y, around = 3)
 
-iaw$autopcorrel <- function (series.x, series.y, around = 5) {
-  if (!is.null(getOption("strict"))) {
-    (is.null(series.x)) %and% "series.x is null"
-    (is.vector(series.x, mode="numeric")) %or% "Your series is not a numeric vector, but a {{class(series.x)}}."
-    (length(series.x) > 1) %or% "Need more observations than in series.x"
+iaw$autopcorrel <- function(series.x, series.y, around = 5) {
+    if (!is.null(getOption("strict"))) {
+        (is.null(series.x)) %and% "series.x is null"
+        (is.vector(series.x, mode = "numeric")) %or%
+            "series.x must be numeric vector, not {{class(series.x)}}"
+        (length(series.x) > 1) %or% "series.x needs more observations"
 
-    (is.null(series.y)) %and% "series.y is null"
-    (is.vector(series.y, mode="numeric")) %or% "Your series is not a numeric vector, but a {{class(series.y)}}."
-    (length(series.y) > 1) %or% "Need more observations than in series.y"
+        (is.null(series.y)) %and% "series.y is null"
+        (is.vector(series.y, mode = "numeric")) %or%
+            "series.y must be numeric vector, not {{class(series.y)}}"
+        (length(series.y) > 1) %or% "series.y needs more observations"
 
-    (is.vector(around, mode="numeric")) %or% "around must be a single integer"
-    (iaw$is.numeric(around, 1)) %or% "around must be a single integer"
-  }
+        (iaw$is.numeric(around, 1)) %or% "around must be a single integer"
+    }
 
-  m <- matrix(nrow = length(series.x), ncol = (around * 2 + 1))
-  for (i in -around:+around)
-    m[, i + around + 1] <- scale(iaw$lagseries(series.x, i))
-  series.y <- scale(series.y)
-  robj <- lm(series.y ~ m)
-  c <- coefficients(robj)
-  for (i in -around:+around) {
-    names(c)[i + around + 2] <- paste0("pcor", i)
-  }
-  return(c)
+    m <- matrix(nrow = length(series.x), ncol = (around * 2 + 1))
+    for (i in -around:+around) {
+        m[, i + around + 1] <- scale(iaw$lagseries(series.x, i))
+    }
+    series.y <- scale(series.y)
+
+    robj <- lm(series.y ~ m)
+    coefs <- coefficients(robj)
+
+    for (i in -around:+around) {
+        names(coefs)[i + around + 2] <- paste0("pcor", i)
+    }
+
+    coefs
 }

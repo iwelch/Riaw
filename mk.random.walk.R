@@ -10,4 +10,3 @@
 
 iaw$mk.random.walk <- function (N, drift = 0, sd = 1)
     iaw$abort("use cumsum(  rnorm(n=N, mean=drift, sd=sd)  )")
-

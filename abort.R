@@ -1,14 +1,35 @@
-
-#' abort the program execution, with a message and a call stack
+#' Abort Program Execution with Error Message
 #'
-#' @param errstring An error string
+#' Terminates program execution with an informative error message. The message
+#' can contain \code{\{\{variable\}\}} syntax for interpolation via
+#' \code{iaw$estring()}.
+#'
+#' @param errstring A character string describing the error. Supports
+#'   \code{\{\{expr\}\}} syntax for variable interpolation.
+#'
+#' @return Does not return; stops execution with an error.
+#'
+#' @export
+#'
+#' @seealso \code{\link{iaw$assert}}, \code{\link{iaw$estring}},
+#'   \code{\link{iaw$debug.advice}}
+#'
 #' @examples
-#'   abort("You have made a mistake")
+#' \dontrun{
+#' # Simple error message
+#' iaw$abort("File not found")
+#'
+#' # With variable interpolation
+#' x <- 42
+#' iaw$abort("Expected positive value, got {{x}}")
+#'
+#' # Common usage with %or%
+#' (length(data) > 0) %or% "Data cannot be empty"
+#' }
 
 iaw$abort <- function(errstring) {
-  (iaw$is.character(errstring, 1)) %or% "argument must be a single string, not {{class(errstring)}}";
-  errstring <- paste(iaw$estring(errstring),"\n")  ## up one more level and evaluate
-  if (interactive()) message( errstring ) else cat( errstring )
-  ## cat("\nCall Stack:\n") -- discard <- traceback()  ## gives the call stack post-mortem.  not used.
-  stop( simpleError("see debug advice on start or iaw$debug.advice()") )
+    (iaw$is.character(errstring, 1)) %or% "argument must be a single string, not {{class(errstring)}}"
+    errstring <- paste(iaw$estring(errstring), "\n")
+    if (interactive()) message(errstring) else cat(errstring)
+    stop(simpleError("see debug advice on start or iaw$debug.advice()"))
 }

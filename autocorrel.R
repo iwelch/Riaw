@@ -1,45 +1,61 @@
-
-#' Lead-Lag Autocorrelation of Two Time-Series Vectors
+#' Lead-Lag Cross-Correlation of Two Time Series
 #'
-#' calculate a vector of cross-correlations between two time-series at different leads and lags.
+#' Calculates cross-correlations between two time series at various leads and
+#' lags. Useful for identifying lead-lag relationships and optimal timing offsets.
 #'
-#' @name autocorrel
+#' @param series.x First numeric vector (time series).
+#' @param series.y Second numeric vector (time series), same length as series.x.
+#' @param around Integer specifying how many leads/lags to compute (default 5).
+#'   Computes correlations from \code{-around} to \code{+around}.
 #'
-#' @param series.x  the first timeseries
+#' @return A named numeric vector of correlations. Names indicate the lag:
+#'   \code{cor-5} through \code{cor5} for \code{around=5}.
 #'
-#' @param  series.y  the second timeseries
+#' @details
+#' Positive lags mean series.x is lagged (shifted back) relative to series.y.
+#' The correlation at lag k is: \code{cor(x[t-k], y[t])}.
 #'
-#' @return a vector of autocorrelation coefficients
+#' @export
+#'
+#' @seealso \code{\link{iaw$autopcorrel}} for partial correlations,
+#'   \code{\link{ccf}}, \code{\link{acf}}
 #'
 #' @examples
-#'   > iaw$autocorrel( sin(1:9), sin(0:8) )
-#'       cor-5     cor-4     cor-3     cor-2     cor-1      cor0      cor1      cor2      cor3      cor4      cor5
-#'    0.884559  0.001787 -0.682950 -0.987981 -0.328011  0.542402  1.000000  0.603139 -0.458924 -0.994482 -0.886689
+#' # Create two related series
+#' x <- sin(1:100)
+#' y <- sin(2:101)  # y leads x by 1 period
 #'
-#' @seealso autopcorrel
+#' iaw$autocorrel(x, y, around = 3)
+#' # Highest correlation should be at cor1 (x lagged 1 matches y)
 #'
+#' # Check if stock returns predict future volume
+#' # returns <- diff(log(prices))
+#' # volume <- trading_volume
+#' # iaw$autocorrel(returns, volume, around = 5)
 
-autocorrel <- function (series.x, series.y, around = 5) {
-  if (!is.null(getOption("strict"))) {
-    (is.null(series.x)) %and% "series.x is null"
-    (is.vector(series.x, mode="numeric")) %or% "Your series is not a numeric vector, but a {{class(series.x)}}."
-    (length(series.x) > 1) %or% "Need more observations than in series.x"
+autocorrel <- function(series.x, series.y, around = 5) {
+    if (!is.null(getOption("strict"))) {
+        (is.null(series.x)) %and% "series.x is null"
+        (is.vector(series.x, mode = "numeric")) %or%
+            "series.x must be numeric vector, not {{class(series.x)}}"
+        (length(series.x) > 1) %or% "series.x needs more observations"
 
-    (is.null(series.y)) %and% "series.y is null"
-    (is.vector(series.y, mode="numeric")) %or% "Your series is not a numeric vector, but a {{class(series.y)}}."
-    (length(series.y) > 1) %or% "Need more observations than in series.y"
+        (is.null(series.y)) %and% "series.y is null"
+        (is.vector(series.y, mode = "numeric")) %or%
+            "series.y must be numeric vector, not {{class(series.y)}}"
+        (length(series.y) > 1) %or% "series.y needs more observations"
 
-    (is.vector(around, mode="numeric")) %or% "around must be a single integer"
-    (iaw$is.numeric(around, 1)) %or% "around must be a single integer"
-  }
+        (iaw$is.numeric(around, 1)) %or% "around must be a single integer"
+    }
 
-  v <- NULL
-  for (i in -around:+around)
-    v[i + around + 1] <- cor(iaw$lagseries(series.x, i), series.y, use = "pair")
-  for (i in -around:+around) {
-    names(v)[i + around + 1] <- paste0("cor", i)
-  }
-  return(v)
+    v <- numeric(2 * around + 1)
+    for (i in -around:+around) {
+        v[i + around + 1] <- cor(iaw$lagseries(series.x, i), series.y, use = "pair")
+        names(v)[i + around + 1] <- paste0("cor", i)
+    }
+
+    v
 }
 
+#' @export
 iaw$autocorrel <- autocorrel

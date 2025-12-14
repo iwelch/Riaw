@@ -30,12 +30,17 @@ iaw$native.slope <- function (x, y, where.i, debug = 0) {
     l0 <- where.i - 1
     l1 <- where.i + 1
 
-    left <- x[l0];  (!is.na(left)) %or% "Sorry, but left x[l0={{l0}}]=NA\n"; 
-    right <- x[l1]; (!is.na(right)) %or% "Sorry, but right x[l1={{l1}}]=NA\n"; 
-    (left != right) %or% "Sorry, but {{left}} is the same as {{right}}\n";
+    left <- x[l0];  (!is.na(left)) %or% "Sorry, but left x[l0={{l0}}]=NA
+"; 
+    right <- x[l1]; (!is.na(right)) %or% "Sorry, but right x[l1={{l1}}]=NA
+"; 
+    (left != right) %or% "Sorry, but {{left}} is the same as {{right}}
+";
 
-    dn <- y[l0];  (!is.na(dn)) %or% "Sorry, but dn y[l0={{l0}}]=NA\n"; 
-    up <- y[l1];    (!is.na(up)) %or% "Sorry, but up y[l1={{l1}}]=NA\n"; 
+    dn <- y[l0];  (!is.na(dn)) %or% "Sorry, but dn y[l0={{l0}}]=NA
+"; 
+    up <- y[l1];    (!is.na(up)) %or% "Sorry, but up y[l1={{l1}}]=NA
+"; 
 
     iaw$native.slope.make.angle( left, right, dn, up, debug )
 }
@@ -66,9 +71,13 @@ iaw$native.slope.make.angle <- function( left, right, dn, up, debug=FALSE ) {
 
     if (debug) {
         print(sys.call())
-        cat("\t", "debug: geoslope=", geoslope, " (LeftBot=(x=", left, ",y=",dn,").  Topright=(x=", right, ",y=",up,")\n")
-        cat("\t\tviewxform (rescaler)=", viewxform, " (usr=", .usr, ", plt=", .plt, ")\n");
-        cat("\t\tasp.ratio=", .fin, "\n\t\t==> net slope=", net.slope, "=", slope, "deg\n")
+        cat("	", "debug: geoslope=", geoslope, " (LeftBot=(x=", left, ",y=",dn,").  Topright=(x=", right, ",y=",up,")
+")
+        cat("		viewxform (rescaler)=", viewxform, " (usr=", .usr, ", plt=", .plt, ")
+");
+        cat("		asp.ratio=", .fin, "
+		==> net slope=", net.slope, "=", slope, "deg
+")
         points(left, dn, pch = 19, col="red")
         points(right, up, pch = 19, col="red")
         text( (left+right)/2, (up+dn)/2, "iaw$native.slope debug", col="red", srt= slope, cex=0.5)

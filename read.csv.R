@@ -1,48 +1,84 @@
-
-#' Reading (Gzipped) CSV Files
+#' Fast CSV/TSV File Reading
 #'
-#' @name read.csv
+#' Reads CSV, TSV, gzipped CSV/TSV, and FST files with automatic format
+#' detection. Uses \code{data.table::fread()} for speed. Supports caching
+#' with FST format and directory search paths.
 #'
-#' transparent and fast reading of compressed csv files.  by default, uses data.table for quicker csv reading.
-#' for replicability, prints out information about the file being read.
+#' @param filename Path to the file. Supported extensions: \code{.csv}, \code{.tsv},
+#'   \code{.csv.gz}, \code{.tsv.gz}, \code{.fst}.
+#' @param ... Additional arguments passed to \code{data.table::fread()}.
+#' @param search Optional directory to add to the search path.
+#' @param allow.fst.cache Logical; if TRUE (default), uses cached \code{.fst} file
+#'   if available and newer than the original.
+#' @param verbose Integer controlling output:
+#'   \itemize{
+#'     \item 0: silent
+#'     \item 1: print file info and dimensions (default)
+#'     \item 2+: also print MD5 checksum
+#'   }
 #'
-#' @usage read.csv (filename, ..., verbose = FALSE)
+#' @return A data frame.
 #'
-#' @param filename -- a csv or csv.gz file
-#' @param ... -- other arguments to fread
-#' @param verbose=TRUE --- print information about the file for replicability.
+#' @details
+#' The function automatically:
+#' \itemize{
+#'   \item Searches for the file in the current directory and any directories
+#'     added via the \code{search} parameter
+#'   \item Uses FST cache files when available (much faster for repeated reads)
+#'   \item Handles gzipped files transparently (requires R.utils package)
+#'   \item Converts integer64 columns to numeric
+#' }
 #'
-#' @note
-#'     please do not use bzip2 compression.  It is *MUCH* slower for both compression and decompression.
-#'     the most recent version of fread() can transparently read .csv.gz files, provided that R.utils has
-#'     been installed (does not need to be loaded!).
+#' @note Avoid bzip2 compression as it's much slower than gzip for both
+#' compression and decompression.
 #'
-#' @return a data frame
-#'
-#' @aliases read.csv.gz
-#'
-#' @seealso write.csv, fwrite
+#' @section Search Path:
+#' Directories added via \code{search} are remembered across calls in
+#' \code{iaw$searchdir}. Reset with \code{iaw$searchdir <- c(".")}.
 #'
 #' @export
-
+#'
+#' @seealso \code{\link{iaw$write.csv}}, \code{\link{fread}}, \code{\link{read.fst}}
+#'
+#' @examples
+#' \dontrun{
+#' # Basic usage
+#' df <- iaw$read.csv("data.csv")
+#'
+#' # Read gzipped file
+#' df <- iaw$read.csv("data.csv.gz")
+#'
+#' # Add search directory
+#' df <- iaw$read.csv("data.csv", search = "/data/project/")
+#'
+#' # Silent reading
+#' df <- iaw$read.csv("data.csv", verbose = 0)
+#'
+#' # Pass options to fread
+#' df <- iaw$read.csv("data.csv", select = c("id", "value"), nrows = 1000)
+#' }
 
 library(data.table)
 
 iaw$searchdir <- c(".")
 
-iaw$strcat0 <- function(svec, sep="") paste(svec,collapse=sep)
-iaw$strcat <- function(svec, sep=" ") paste(svec,collapse=sep)
+iaw$strcat0 <- function(svec, sep = "") paste(svec, collapse = sep)
+iaw$strcat <- function(svec, sep = " ") paste(svec, collapse = sep)
 
-iaw$read.csv <- function (filename, ..., search=NULL, allow.fst.cache= TRUE, verbose = 1) {
+#' @rdname read.csv
+#' @export
+iaw$read.csv <- function(filename, ..., search = NULL, allow.fst.cache = TRUE, verbose = 1) {
     (iaw$is.character(filename, 1)) %or% "read.csv expects a filename"
-    (grepl("sv$", filename) | grepl("sv.gz$", filename) | grepl(".fst$", filename))  %or% "read.csv: Filename {{filename}} should end in [ct]sv or [ct]sv.gz (or fst)"
+    (grepl("sv$", filename) | grepl("sv.gz$", filename) | grepl(".fst$", filename)) %or%
+        "read.csv: filename {{filename}} should end in .csv, .tsv, .csv.gz, .tsv.gz, or .fst"
 
-    ## on the first run, add the directory at the end
+    # Add search directory if provided
     if (!is.null(search)) {
-        search <- ifelse( iaw$substrRight(search,1) == "/", search, paste0(search, "/") ) ## append a trailing '/'
+        search <- ifelse(iaw$substrRight(search, 1) == "/", search, paste0(search, "/"))
         iaw$searchdir <<- unique(c(iaw$searchdir, search))
     }
 
+    # Search for file
     basic.filename <- filename
     if (!file.exists(filename)) {
         for (nm in paste0(iaw$searchdir, basic.filename)) {
@@ -52,42 +88,52 @@ iaw$read.csv <- function (filename, ..., search=NULL, allow.fst.cache= TRUE, ver
             }
         }
     }
-    (file.exists(filename)) %or% "read.csv: sorry, but {{filename}} does not exist anywhere in {{ iaw$strcat(iaw$searchdir)}}";
+    (file.exists(filename)) %or%
+        "read.csv: {{filename}} not found in {{ iaw$strcat(iaw$searchdir) }}"
 
-    ## .fst can be a cached version of the same file in the same directory
+    # Check for FST cache
     cachefilename <- sub(".csv.gz", ".fst", filename)
 
     if (grepl(".fst$", filename)) {
         library(fst)
-        object <- read.fst( filename )
-    } else if (((cachefilename != filename) & (file.exists( cachefilename ))) & (allow.fst.cache)) {
-        message("Using cached fst file ", cachefilename, " instead.  (For md5, set verbose to 2)")
-        if (file.info(cachefilename)$mtime < file.info(filename)$mtime ) stop("Please remove the older ", cachefilename, " first")
+        object <- read.fst(filename)
+    } else if (cachefilename != filename && file.exists(cachefilename) && allow.fst.cache) {
+        if (file.info(cachefilename)$mtime < file.info(filename)$mtime) {
+            stop("FST cache ", cachefilename, " is older than source. Please remove it.")
+        }
+        message("Using cached FST file: ", cachefilename)
         library(fst)
-        object <- read.fst( cachefilename )
+        object <- read.fst(cachefilename)
         filename <- cachefilename
     } else {
-        object <-  data.table::fread(filename, nThread=8, data.table=FALSE,  integer64="numeric", ...)
-        ## if integer64 fails, use:
-        ## coln.int64 <- names(which(sapply(df, bit64::is.integer64)))
-        ## if (length(coln.int64) > 0L) df[, c(coln.int64) := lapply(.SD, as.numeric), .SDcols = coln.int64]
+        object <- data.table::fread(filename, nThread = 8, data.table = FALSE,
+                                     integer64 = "numeric", ...)
     }
 
     if (verbose) {
-        cat("\n[read from", filename, ":", nrow(object), "rows, ", ncol(object), "cols]\n")
-        cat("#---------------- Input File: ", filename)
-        if (verbose>=2) cat(" ", md5sum(filename))
+        cat("\n[read from", filename, ":", nrow(object), "rows,", ncol(object), "cols]\n")
+        cat("#---------------- Input File:", filename)
+        if (verbose >= 2) cat(" ", tools::md5sum(filename))
         cat("\n")
-        print( file.info(filename) )
-        cat("#---------------- epoch=", Sys.time(), "\n")
+        print(file.info(filename))
+        cat("#---------------- epoch=", as.character(Sys.time()), "\n")
     }
 
     invisible(as.data.frame(object))
 }
 
-iaw$read.csv.gz <- iaw$read.csv  ## an alias
-iaw$read.fst <- iaw$read.csv  ## an alias
-iaw$fread <- iaw$read.csv  ## an alias
+#' @rdname read.csv
+#' @export
+iaw$read.csv.gz <- iaw$read.csv
 
-iaw$substrRight <- function(x, n){ substr(x, nchar(x)-n+1, nchar(x)) }
+#' @rdname read.csv
+#' @export
+iaw$read.fst <- iaw$read.csv
 
+#' @rdname read.csv
+#' @export
+iaw$fread <- iaw$read.csv
+
+iaw$substrRight <- function(x, n) {
+    substr(x, nchar(x) - n + 1, nchar(x))
+}

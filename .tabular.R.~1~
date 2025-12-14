@@ -34,17 +34,24 @@ iaw$tabular <- function( m.or.d, sprintf.format =NULL, include.rownames =FALSE) 
   paste1 <- function(...) paste(..., collapse= " ")
 
   rstr.repc <- paste1(rep("c", length(sprintf.format)))
-  rstr <- paste1("\\begin{tabular}{", rstr.repc, "}\n\\toprule\n")
+  rstr <- paste1("\begin{tabular}{", rstr.repc, "}
+  \toprule
+  ")
   rstr <- paste1(rstr, paste(colnames(m.or.d), sep=" & ", collapse=" & "))
-  rstr <- paste1(rstr, paste1("\\\\\n  \\midrule\n  "))
+  rstr <- paste1(rstr, paste1("\\
+  \midrule
+  "))
   for (i in 1:nrow(m.or.d)) {
     pl <- if (include.rownames) paste1(rownames(m.or.d)[i]) else NULL
     for (j in 1:ncol(m.or.d)) pl <- ifelse( !is.numeric(m.or.d[i,j]), paste(pl,m.or.d[i,j], sep=" & "), paste1(pl, sprintf(sprintf.format[j], m.or.d[i,j]), sep= if (!is.null(pl)) " & " else ""))
-    rstr <- paste1(rstr, paste1(pl, "\\\\\n  "))
+    rstr <- paste1(rstr, paste1(pl, "\\
+  "))
   }
-  rstr <- paste1(rstr, paste1("\\bottomrule\n\\end{tabular}\n"))
+  rstr <- paste1(rstr, paste1("\bottomrule
+\end{tabular}
+"))
 
-  rstr <- gsub(" \\-", " \\-\\-", rstr)
+  rstr <- gsub(" \-", " \-\-", rstr)
 
   cat(rstr)  ## well, we just made it a print function
   rstr
