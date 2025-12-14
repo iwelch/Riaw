@@ -1,6 +1,6 @@
 #' Create Tabular Summary
 #'
-#' @name tabular
+#' @name tabularsummary
 #'
 #' Creates frequency table with statistics.
 #'
@@ -15,7 +15,7 @@
 #' @examples
 #' iaw$tabular(c("a", "b", "a", "c", "a"))
 
-iaw$tabular <- function(x, sort = TRUE) {
+iaw$tabularsummary <- function(x, sort = TRUE) {
     tb <- table(x, useNA = "ifany")
     df <- data.frame(
         value = names(tb),
