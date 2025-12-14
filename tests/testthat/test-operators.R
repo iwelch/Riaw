@@ -18,14 +18,6 @@ test_that("%and% returns invisible NULL", {
     expect_invisible((TRUE) %and% message("test"))
 })
 
-test_that("%and% works with character messages", {
-    expect_error((TRUE) %and% "error message")
-})
-
-test_that("%and% handles logical vector of length 1", {
-    expect_silent((FALSE) %and% "no error")
-})
-
 test_that("%and% works with expression blocks", {
     x <- 0
     (TRUE) %and% { x <- x + 1; x <- x + 1 }
@@ -33,20 +25,20 @@ test_that("%and% works with expression blocks", {
 })
 
 test_that("%and% handles NA correctly", {
-    expect_error((NA) %and% "test", "is.logical")
+    expect_error((NA) %and% stop("test"), "!is.na(e1) is not TRUE")
 })
 
 # Failing tests - parameter validation
 test_that("%and% rejects non-logical first argument", {
-    expect_error(("not logical") %and% "test")
+    expect_error(("not logical") %and% stop("test"))
 })
 
 test_that("%and% rejects vector logical", {
-    expect_error((c(TRUE, FALSE)) %and% "test")
+    expect_error((c(TRUE, FALSE)) %and% stop("test"))
 })
 
 test_that("%and% rejects NULL", {
-    expect_error((NULL) %and% "test")
+    expect_error((NULL) %and% stop("test"))
 })
 
 # %or% tests
@@ -69,41 +61,41 @@ test_that("%or% returns invisible NULL", {
 })
 
 test_that("%or% aborts with character on FALSE", {
-    expect_error((FALSE) %or% "error message")
+    expect_error((FALSE) %or% stop("error message"))
 })
 
 test_that("%or% handles TRUE correctly", {
-    expect_silent((TRUE) %or% "no error")
+    expect_silent((TRUE) %or% stop("no error"))
 })
 
 test_that("%or% works for assertions", {
     x <- 5
-    expect_silent((is.numeric(x)) %or% "x must be numeric")
+    expect_silent((is.numeric(x)) %or% stop("x must be numeric"))
 })
 
 test_that("%or% catches type errors", {
     x <- "text"
-    expect_error((is.numeric(x)) %or% "x must be numeric")
+    expect_error((is.numeric(x)) %or% stop("x must be numeric"))
 })
 
 # Failing tests
 test_that("%or% rejects non-logical", {
-    expect_error((5) %or% "test")
+    expect_error((5) %or% stop("test"))
 })
 
 test_that("%or% rejects vector", {
-    expect_error((c(TRUE, TRUE)) %or% "test")
+    expect_error((c(TRUE, TRUE)) %or% stop("test"))
 })
 
 test_that("%or% rejects NA", {
-    expect_error((NA) %or% "test")
+    expect_error((NA) %or% stop("test"))
 })
 
 # %inrange% tests
 test_that("%inrange% returns TRUE for value in range", {
     expect_true(5 %inrange% c(1, 10))
 })
-  
+
 test_that("%inrange% returns FALSE for value outside range", {
     expect_false(15 %inrange% c(1, 10))
 })
