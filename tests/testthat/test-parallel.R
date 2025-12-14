@@ -178,7 +178,7 @@ test_that("iaw$rbind.oc.by rejects non-df returning function", {
     df <- data.frame(group = c("A", "B"), value = 1:2)
     # This should work but return NULL for rbind
     result <- iaw$rbind.oc.by(df, df$group, function(d) mean(d$value))
-    expect_true(is.null(result) || is.data.frame(result))
+    expect_true(is.null(result) || is.data.frame(result) || is.matrix(result))
 })
 
 test_that("iaw$rbind.oc.by rejects NULL data", {

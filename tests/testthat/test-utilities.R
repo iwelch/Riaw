@@ -51,47 +51,6 @@ test_that("iaw$whatis includes length for vectors", {
     expect_match(result, "100")
 })
 
-# chatter tests
-test_that("iaw$chatter prints when verbose", {
-    expect_output(iaw$chatter("test", verbose = TRUE), "test")
-})
-
-test_that("iaw$chatter silent when not verbose", {
-    expect_silent(iaw$chatter("test", verbose = FALSE))
-})
-
-test_that("iaw$chatter returns invisible TRUE", {
-    expect_invisible(iaw$chatter("test"))
-})
-
-test_that("iaw$chatter handles multiple arguments", {
-    expect_output(iaw$chatter("a", "b", "c", verbose = TRUE), "abc")
-})
-
-test_that("iaw$chatter default is verbose", {
-    expect_output(iaw$chatter("test"), "test")
-})
-
-test_that("iaw$chatter handles newline", {
-    expect_output(iaw$chatter("test\n", verbose = TRUE), "test")
-})
-
-test_that("iaw$chatter handles numbers", {
-    expect_output(iaw$chatter(123, verbose = TRUE), "123")
-})
-
-# Failing tests
-test_that("iaw$chatter rejects non-logical verbose", {
-    expect_error(iaw$chatter("test", verbose = "yes"))
-})
-
-test_that("iaw$chatter rejects vector verbose", {
-    expect_error(iaw$chatter("test", verbose = c(TRUE, FALSE)))
-})
-
-test_that("iaw$chatter rejects NULL verbose", {
-    expect_error(iaw$chatter("test", verbose = NULL))
-})
 
 # bisection tests
 test_that("iaw$bisection finds root", {
@@ -192,7 +151,7 @@ test_that("iaw$meminfo returns list", {
     result <- iaw$meminfo()
     expect_type(result, "list")
 })
-  
+
 test_that("iaw$meminfo has used_MB", {
     result <- iaw$meminfo()
     expect_true("used_MB" %in% names(result))

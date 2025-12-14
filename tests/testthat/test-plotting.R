@@ -267,38 +267,38 @@ test_that("iaw$plot.pdf.start rejects vector filename", {
 })
 
 # MixColor tests
-test_that("iaw$MixColor returns color", {
-    result <- iaw$MixColor("red", "blue")
+test_that("iaw$mixcolor returns color", {
+    result <- iaw$mixcolor("red", "blue")
     expect_type(result, "character")
 })
 
-test_that("iaw$MixColor mixes colors", {
-    result <- iaw$MixColor("white", "black")
+test_that("iaw$mixcolor mixes colors", {
+    result <- iaw$mixcolor("white", "black")
     expect_type(result, "character")
 })
 
-test_that("iaw$MixColor handles named colors", {
-    result <- iaw$MixColor("red", "green")
+test_that("iaw$mixcolor handles named colors", {
+    result <- iaw$mixcolor("red", "green")
     expect_type(result, "character")
 })
 
-test_that("iaw$MixColor single color output", {
-    result <- iaw$MixColor("blue", "yellow")
+test_that("iaw$mixcolor single color output", {
+    result <- iaw$mixcolor("blue", "yellow")
     expect_length(result, 1)
 })
 
-test_that("iaw$MixColor with ratio", {
-    result <- iaw$MixColor("red", "blue", ratio = 0.5)
+test_that("iaw$mixcolor with ratio", {
+    result <- iaw$mixcolor("red", "blue", ratio = 0.5)
     expect_type(result, "character")
 })
 
-test_that("iaw$MixColor same colors", {
-    result <- iaw$MixColor("red", "red")
+test_that("iaw$mixcolor same colors", {
+    result <- iaw$mixcolor("red", "red")
     expect_type(result, "character")
 })
 
-test_that("iaw$MixColor returns valid color", {
-    result <- iaw$MixColor("red", "blue")
+test_that("iaw$mixcolor returns valid color", {
+    result <- iaw$mixcolor("red", "blue")
     # Should be a hex color or named color
     expect_true(nchar(result) > 0)
 })

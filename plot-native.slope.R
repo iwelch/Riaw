@@ -12,7 +12,7 @@
 #' @export
 
 iaw$plot.native.slope <- function(slope) {
-    stopifnot(is.numeric(slope))
+    stopifnot(is.numeric(slope), length(slope)==1)
     usr <- par("usr")
     pin <- par("pin")
     asp <- diff(usr[3:4]) / diff(usr[1:2]) * pin[1] / pin[2]

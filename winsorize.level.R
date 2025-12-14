@@ -5,8 +5,7 @@
 #' Clips values to specified min/max.
 #'
 #' @param x Numeric vector.
-#' @param xmin Minimum value or c(min, max).
-#' @param xmax Maximum value (ignored if xmin is length 2).
+#' @param lvlminmax Minimum and Maximum value
 #' @param name Variable name for verbose output.
 #' @param verbose Print summary.
 #'
@@ -19,24 +18,16 @@
 #' x <- c(-100, 1, 2, 3, 100)
 #' iaw$winsorize.level(x, 0, 10)
 
-iaw$winsorize.level <- function(x, xmin, xmax = NULL, name = NULL, verbose = FALSE) {
-    stopifnot(is.numeric(x))
-    
-    if (length(xmin) == 2) {
-        xmax <- xmin[2]
-        xmin <- xmin[1]
-    }
-    
-    stopifnot(!is.null(xmax))
-    stopifnot(all(xmin <= xmax))
-    
+iaw$winsorize.level <- function(x, lvlminmax, name = NULL, verbose = FALSE) {
+    stopifnot(is.numeric(x), length(lvlminmax)==2L)
+    stopifnot(lvlminmax[1] < lvlminmax[2])  ## equal would be crazy
+
     if (verbose) {
         if (is.null(name)) name <- "x"
-        cat("[winsorize.level]", name, ":",
-            length(x), "values,", sum(!is.na(x)), "non-NA\n")
-        cat("  Bottom[<", xmin, "]: N=", sum(x < xmin, na.rm = TRUE),
-            " Top[>", xmax, "]: N=", sum(x > xmax, na.rm = TRUE), "\n")
+        cat("[winsorize.level]", name, ":", length(x), "values,", sum(!is.na(x)), "non-NA\n")
+        cat("  Bottom[<", lvlminmax[1], "]: N=", sum(x < lvlminmax[1], na.rm = TRUE),
+            " Top[>", lvlminmax[2], "]: N=", sum(x > lvlminmax[2], na.rm = TRUE), "\n")
     }
-    
-    pmin(pmax(x, xmin), xmax)
+
+    pmin(pmax(x, lvlminmax[1]), lvlminmax[2])
 }

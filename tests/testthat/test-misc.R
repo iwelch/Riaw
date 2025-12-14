@@ -51,63 +51,63 @@ test_that("iaw$strcat handles vectors", {
 })
 
 # tabular tests
-test_that("iaw$tabular returns data frame", {
+test_that("iaw$tabularsummary returns data frame", {
     x <- c("a", "b", "a", "c")
-    result <- iaw$tabular(x)
+    result <- iaw$tabularsummary(x)
     expect_s3_class(result, "data.frame")
 })
 
-test_that("iaw$tabular counts correctly", {
+test_that("iaw$tabularsummary counts correctly", {
     x <- c("a", "a", "b")
-    result <- iaw$tabular(x)
+    result <- iaw$tabularsummary(x)
     expect_equal(result$count[result$value == "a"], 2)
 })
 
-test_that("iaw$tabular includes percentages", {
+test_that("iaw$tabularsummary includes percentages", {
     x <- c("a", "a", "b", "b")
-    result <- iaw$tabular(x)
+    result <- iaw$tabularsummary(x)
     expect_true("pct" %in% names(result))
 })
 
-test_that("iaw$tabular sorts by count", {
+test_that("iaw$tabularsummary sorts by count", {
     x <- c("a", "b", "b", "b", "a")
-    result <- iaw$tabular(x, sort = TRUE)
+    result <- iaw$tabularsummary(x, sort = TRUE)
     expect_equal(result$value[1], "b")
 })
 
-test_that("iaw$tabular unsorted option", {
+test_that("iaw$tabularsummary unsorted option", {
     x <- c("a", "b", "b", "a")
-    result <- iaw$tabular(x, sort = FALSE)
+    result <- iaw$tabularsummary(x, sort = FALSE)
     expect_s3_class(result, "data.frame")
 })
 
-test_that("iaw$tabular handles NA", {
+test_that("iaw$tabularsummary handles NA", {
     x <- c("a", NA, "b")
-    result <- iaw$tabular(x)
+    result <- iaw$tabularsummary(x)
     expect_true(nrow(result) >= 2)
 })
 
-test_that("iaw$tabular has value column", {
+test_that("iaw$tabularsummary has value column", {
     x <- c("a", "b")
-    result <- iaw$tabular(x)
+    result <- iaw$tabularsummary(x)
     expect_true("value" %in% names(result))
 })
 
-test_that("iaw$tabular has count column", {
+test_that("iaw$tabularsummary has count column", {
     x <- c("a", "b")
-    result <- iaw$tabular(x)
+    result <- iaw$tabularsummary(x)
     expect_true("count" %in% names(result))
 })
 
-test_that("iaw$tabular percentages sum to 100", {
+test_that("iaw$tabularsummary percentages sum to 100", {
     x <- c("a", "b", "c", "d")
-    result <- iaw$tabular(x)
+    result <- iaw$tabularsummary(x)
     expect_equal(sum(result$pct), 100)
 })
 
-test_that("iaw$tabular handles numeric input", {
+test_that("iaw$tabularsummary handles numeric input", {
     x <- c(1, 2, 2, 3)
-    result <- iaw$tabular(x)
+    result <- iaw$tabularsummary(x)
     expect_s3_class(result, "data.frame")
 })
 
@@ -221,7 +221,7 @@ test_that("iaw$standardize rejects list", {
 test_that("iaw$colN counts non-NA", {
     df <- data.frame(a = c(1, NA, 3), b = c(1, 2, 3))
     result <- iaw$colN(df)
-    expect_equal(result["a"], c(a = 2))
+    expect_equal(result[["a"]], c(a = 2))
 })
 
 test_that("iaw$colN returns named vector", {
@@ -264,7 +264,7 @@ test_that("iaw$colN returns integer", {
 test_that("iaw$colSds computes column SDs", {
     df <- data.frame(a = c(1, 2, 3), b = c(10, 20, 30))
     result <- iaw$colSds(df)
-    expect_equal(result[1], sd(c(1, 2, 3)))
+    expect_equal(unname(result[1]), sd(c(1, 2, 3)))
 })
 
 test_that("iaw$colSds returns named vector", {

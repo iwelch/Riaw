@@ -45,7 +45,13 @@ iaw$mc.by.cripple.toggle <- function() {
 
 iaw$mc.by <- function(indata, INDICES, FUNIN, ...) {
     stopifnot(is.data.frame(indata))
-    
+    if (is.list(INDICES)) {
+        stopifnot(all(lengths(INDICES) == nrow(indata)))
+    } else if (is.vector(INDICES)) {
+        stopifnot(length(INDICES) == nrow(indata))
+    } else stop("INDICES must be list or vector")
+
+
     if (inherits(iaw$.mc.by.cache, "list")) {
         stopifnot(nrow(indata) == iaw$.mc.by.cache.nrow)
         ssplit <- iaw$.mc.by.cache
@@ -56,9 +62,9 @@ iaw$mc.by <- function(indata, INDICES, FUNIN, ...) {
             iaw$.mc.by.cache.nrow <<- nrow(indata)
         }
     }
-    
+
     wapply <- if (iaw$.mc.cripple) lapply else parallel::mclapply
-    
+
     wapply(ssplit, FUN = function(.index) {
         FUNIN(indata[.index, , drop = FALSE], ...)
     })

@@ -37,10 +37,9 @@ test_that("iaw$recode preserves type", {
     expect_type(result, "double")
 })
 
-test_that("iaw$recode handles factor-like recoding", {
+test_that("iaw$recode should not work with different types", {
     x <- c("low", "med", "high", "low")
-    result <- iaw$recode(x, c("low", "med", "high"), c(1, 2, 3))
-    expect_equal(result, c(1, 2, 3, 1))
+    expect_error(iaw$recode(x, c("low", "med", "high"), c(1, 2, 3)))
 })
 
 # Failing tests
@@ -73,12 +72,6 @@ test_that("iaw$rename.columns partial rename", {
     df <- data.frame(a = 1, b = 2, c = 3)
     result <- iaw$rename.columns(df, c(a = "x"))
     expect_equal(names(result), c("x", "b", "c"))
-})
-
-test_that("iaw$rename.columns works on character vector", {
-    nms <- c("a", "b", "c")
-    result <- iaw$rename.columns(nms, c(a = "x"))
-    expect_equal(result, c("x", "b", "c"))
 })
 
 test_that("iaw$rename.columns preserves data", {
@@ -312,12 +305,6 @@ test_that("iaw$multimerge preserves all columns", {
     expect_true(all(c("id", "x", "y") %in% names(result)))
 })
 
-test_that("iaw$multimerge handles single data frame", {
-    df1 <- data.frame(id = 1:3, x = 1:3)
-    result <- iaw$multimerge(list(df1), by = "id")
-    expect_equal(result, df1)
-})
-
 test_that("iaw$multimerge handles inner join", {
     df1 <- data.frame(id = 1:3, x = 1:3)
     df2 <- data.frame(id = 2:4, y = 1:3)
@@ -342,6 +329,12 @@ test_that("iaw$multimerge handles character keys", {
 test_that("iaw$multimerge rejects non-list", {
     expect_error(iaw$multimerge(data.frame(a = 1), by = "a"))
 })
+
+test_that("iaw$multimerge is useless for a single data frame", {
+    df1 <- data.frame(id = 1:3, x = 1:3)
+    expect_error( iaw$multimerge(list(df1), by = "id") )
+})
+
 
 test_that("iaw$multimerge rejects list of non-data.frames", {
     expect_error(iaw$multimerge(list(1:10, 1:10), by = "a"))

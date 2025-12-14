@@ -6,4 +6,4 @@ library(testthat)
 # library(Riaw)
 
 testthat::set_max_fails(Inf)
-test_dir("testthat/")
+invisible(test_dir("testthat/"))

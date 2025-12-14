@@ -20,8 +20,8 @@
 iaw$summary <- function(df, verbose = "X", digits = 4) {
     if (is.vector(df) | is.matrix(df)) df <- data.frame(df)
     stopifnot(is.data.frame(df))
-    if (nrow(df) == 0) return("no observations\n")
-    
+    stopifnot(nrow(df) >= 1)
+
     wantedstats <- list()
     wantedstats[["p"]] <- c("nok", "pctna", "mean", "sd", "tstat")
     wantedstats[["sr"]] <- c("nok", "pctna", "mean", "var", "sd", "tstat", "sharpe", "min", "max")
@@ -29,10 +29,10 @@ iaw$summary <- function(df, verbose = "X", digits = 4) {
     wantedstats[["x"]] <- c(wantedstats[["p"]], c("min", "median", "max"))
     wantedstats[["X"]] <- c(wantedstats[["p"]], c("pmost", "auto"))
     wantedstats[["a"]] <- c(wantedstats[["p"]], c("pall", "frcpos", "trimmn", "sd2", "auto"))
-    
+
     stopifnot(verbose %in% names(wantedstats))
     w <- wantedstats[[verbose]]
-    
+
     nok <- function(x, na.rm = FALSE) sum(!is.na(x))
     pctna <- function(x, na.rm = FALSE) {
         if (sum(is.na(x)) == 0) -1 else as.integer(100 * sum(is.na(x)) / length(x))
@@ -64,12 +64,12 @@ iaw$summary <- function(df, verbose = "X", digits = 4) {
     auto <- function(x, na.rm = FALSE) {
         suppressWarnings(cor(x[2:length(x)], x[1:(length(x) - 1)], use = "pair"))
     }
-    
+
     df <- as.data.frame(lapply(df, function(x) if (is.logical(x)) as.integer(x) else x))
     nums <- unlist(lapply(df, is.numeric))
     if (all(!nums)) stop("No numeric columns found")
     names.of.numerics <- names(nums[nums])
-    
+
     describeonevar <- function(x, statswanted) {
         if (is.logical(x)) x <- as.numeric(x)
         if (!is.numeric(x)) return(NULL)
@@ -80,7 +80,7 @@ iaw$summary <- function(df, verbose = "X", digits = 4) {
         }
         s
     }
-    
+
     o <- t(simplify2array(lapply(names.of.numerics, function(v) describeonevar(df[, v], w))))
     rownames(o) <- names.of.numerics
     round(o, digits)

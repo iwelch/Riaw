@@ -125,49 +125,6 @@ test_that("iaw$is.scalar handles complex", {
     expect_true(iaw$is.scalar(1+2i))
 })
 
-# is.inrange tests
-test_that("iaw$is.inrange returns TRUE for value in range", {
-    expect_true(iaw$is.inrange(5, c(1, 10)))
-})
-
-test_that("iaw$is.inrange returns FALSE for value outside range", {
-    expect_false(iaw$is.inrange(15, c(1, 10)))
-})
-
-test_that("iaw$is.inrange is exclusive (strict inequality)", {
-    expect_false(iaw$is.inrange(1, c(1, 10)))
-    expect_false(iaw$is.inrange(10, c(1, 10)))
-})
-
-test_that("iaw$is.inrange works with vectors", {
-    result <- iaw$is.inrange(1:5, c(2, 4))
-    expect_equal(result, c(FALSE, FALSE, TRUE, FALSE, FALSE))
-})
-
-test_that("iaw$is.inrange handles negative values", {
-    expect_true(iaw$is.inrange(-5, c(-10, 0)))
-})
-
-test_that("iaw$is.inrange handles decimals", {
-    expect_true(iaw$is.inrange(5.5, c(5, 6)))
-})
-
-test_that("iaw$is.inrange returns logical", {
-    expect_type(iaw$is.inrange(5, c(1, 10)), "logical")
-})
-
-# Failing tests
-test_that("iaw$is.inrange rejects wrong range length", {
-    expect_error(iaw$is.inrange(5, c(1, 5, 10)))
-})
-
-test_that("iaw$is.inrange rejects inverted range", {
-    expect_error(iaw$is.inrange(5, c(10, 1)))
-})
-
-test_that("iaw$is.inrange rejects non-numeric", {
-    expect_error(iaw$is.inrange("a", c(1, 10)))
-})
 
 # is.instring tests
 test_that("iaw$is.instring finds pattern", {

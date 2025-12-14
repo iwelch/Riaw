@@ -18,11 +18,12 @@
 iaw$doublesort <- function(df, var1, var2, n1 = 5, n2 = 5) {
     stopifnot(is.data.frame(df))
     stopifnot(var1 %in% names(df), var2 %in% names(df))
+
+    ntile <- function(x, n) {
+        floor((rank(x, na.last = "keep") - 1) / length(x[!is.na(x)]) * n) + 1
+    }
+
     df$port1 <- ntile(df[[var1]], n1)
     df$port2 <- ntile(df[[var2]], n2)
     df
-}
-
-ntile <- function(x, n) {
-    floor((rank(x, na.last = "keep") - 1) / length(x[!is.na(x)]) * n) + 1
 }

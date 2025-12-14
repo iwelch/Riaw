@@ -4,6 +4,8 @@
 #'
 #' Calculates cross-correlations at different leads/lags.
 #'
+#' **WARNING**: Be careful that you understand what the lead and what the lag is
+#'
 #' @param series.x First numeric vector.
 #' @param series.y Second numeric vector.
 #' @param around Number of leads/lags (default 5).
@@ -16,18 +18,18 @@
 #' @examples
 #' x <- sin(1:100)
 #' y <- sin(2:101)
-#' iaw$autocorrel(x, y, around = 3)
+#' iaw$autocorrel(x, y, leadlags = 3)
 
-autocorrel <- function(series.x, series.y, around = 5) {
+autocorrel <- function(series.x, series.y, leadlags = 5) {
     stopifnot(is.numeric(series.x), is.vector(series.x))
     stopifnot(is.numeric(series.y), is.vector(series.y))
     stopifnot(length(series.x) > 1L, length(series.y) > 1L)
-    stopifnot(is.numeric(around), length(around) == 1L)
-    
-    v <- numeric(2 * around + 1)
-    for (i in -around:+around) {
-        v[i + around + 1] <- cor(iaw$lagseries(series.x, i), series.y, use = "pair")
-        names(v)[i + around + 1] <- paste0("cor", i)
+    stopifnot(is.numeric(leadlags), length(leadlags) == 1L)
+
+    v <- numeric(2 * leadlags + 1)
+    for (i in -leadlags:+leadlags) {
+        v[i + leadlags + 1] <- cor(iaw$lagseries(series.x, i), series.y, use = "pair")
+        names(v)[i + leadlags + 1] <- paste0("cor", i)
     }
     v
 }

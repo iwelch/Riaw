@@ -20,9 +20,11 @@
 
 iaw$recode <- function(x, from, to, non.from.becomes.na = FALSE) {
     stopifnot(length(from) == length(to))
-    
+    stopifnot(typeof(from)==typeof(to))
+    stopifnot(typeof(x)==typeof(from))
+
     y <- if (non.from.becomes.na) rep(NA, length(x)) else x
-    
+
     for (f in seq_along(from)) {
         y[x == from[f]] <- to[f]
     }

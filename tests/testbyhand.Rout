@@ -1,72 +1,40 @@
 ✔ | F W  S  OK | Context
-⠏ |          0 | data-manipulation                                                                                                                                                            ⠼ | 3       52 | data-manipulation                                                                                                                                                            ✖ | 4       56 | data-manipulation
-──────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
-Failure ('test-data-manipulation.R:43:5'): iaw$recode handles factor-like recoding
-Expected `result` to equal `c(1, 2, 3, 1)`.
-Differences:
-Types not compatible: character is not double
+⠏ |          0 | data-manipulation                                                                                                  ⠧ |         48 | data-manipulation                                                                                                  ✔ |         59 | data-manipulation
+⠏ |          0 | data-transformation                                                                                                ⠙ |         62 | data-transformation                                                                                                ✔ |         63 | data-transformation
+⠏ |          0 | datetime                                                                                                           ✔ |         52 | datetime
+⠏ |          0 | error-handling                                                                                                     ✔ |         28 | error-handling
+⠏ |          0 | io                                                                                                                 ⠹ |         33 | io                                                                                                                 ⠼ |         45 | io                                                                                                                 ⠧ |         48 | io                                                                                                                 ✔ |         51 | io [1.3s]
+⠏ |          0 | misc                                                                                                               ⠙ | 2       40 | misc                                                                                                               ✖ | 5       66 | misc
+────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
+Error ('test-misc.R:224:5'): iaw$colN counts non-NA
+<subscriptOutOfBoundsError/error/condition>
+Error in `result[["a"]]`: subscript out of bounds
+Backtrace:
+    ▆
+ 1. └─testthat::expect_equal(result[["a"]], c(a = 2)) at test-misc.R:224:5
+ 2.   └─testthat::quasi_label(enquo(object), label, arg = "object")
+ 3.     └─rlang::eval_bare(expr, quo_get_env(quo))
 
-Failure ('test-data-manipulation.R:56:5'): iaw$recode rejects empty from/to
-Expected `iaw$recode(1:3, c(), c())` to throw a error.
+Failure ('test-misc.R:230:5'): iaw$colN returns named vector
+!is.null(names(result)) is not TRUE
 
-Failure ('test-data-manipulation.R:115:5'): iaw$rename.columns rejects NULL input
-Expected `iaw$rename.columns(NULL, c(a = "x"))` to throw a error.
+`actual`:   FALSE
+`expected`: TRUE 
 
-Failure ('test-data-manipulation.R:351:5'): iaw$multimerge rejects empty list
-Expected `iaw$multimerge(list(), by = "a")` to throw a error.
-──────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
-⠏ |          0 | data-transformation                                                                                                                                                          ✔ |         63 | data-transformation
-⠏ |          0 | datetime                                                                                                                                                                     ✔ |         52 | datetime
-⠏ |          0 | error-handling                                                                                                                                                               ✔ |         28 | error-handling
-⠏ |          0 | io                                                                                                                                                                           ⠹ |         33 | io                                                                                                                                                                           ⠼ |         45 | io                                                                                                                                                                           ⠧ |         48 | io                                                                                                                                                                           ✔ |         51 | io [1.2s]
-⠏ |          0 | misc                                                                                                                                                                         ⠏ | 12       38 | misc                                                                                                                                                                        ✖ | 13       58 | misc
-──────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
-Error ('test-misc.R:56:5'): iaw$tabular returns data frame
-Error in `eval(code, test_env)`: attempt to apply non-function
+Failure ('test-misc.R:236:5'): iaw$colN handles all NA
+result["a"] not equal to c(a = 0).
+names for current but not for target
 
-Error ('test-misc.R:62:5'): iaw$tabular counts correctly
-Error in `eval(code, test_env)`: attempt to apply non-function
-
-Error ('test-misc.R:68:5'): iaw$tabular includes percentages
-Error in `eval(code, test_env)`: attempt to apply non-function
-
-Error ('test-misc.R:74:5'): iaw$tabular sorts by count
-Error in `eval(code, test_env)`: attempt to apply non-function
-
-Error ('test-misc.R:80:5'): iaw$tabular unsorted option
-Error in `eval(code, test_env)`: attempt to apply non-function
-
-Error ('test-misc.R:86:5'): iaw$tabular handles NA
-Error in `eval(code, test_env)`: attempt to apply non-function
-
-Error ('test-misc.R:92:5'): iaw$tabular has value column
-Error in `eval(code, test_env)`: attempt to apply non-function
-
-Error ('test-misc.R:98:5'): iaw$tabular has count column
-Error in `eval(code, test_env)`: attempt to apply non-function
-
-Error ('test-misc.R:104:5'): iaw$tabular percentages sum to 100
-Error in `eval(code, test_env)`: attempt to apply non-function
-
-Error ('test-misc.R:110:5'): iaw$tabular handles numeric input
-Error in `eval(code, test_env)`: attempt to apply non-function
-
-Failure ('test-misc.R:260:5'): iaw$colN returns integer
-Expected `result` to have type "integer".
-Actual type: "double"
-
-Failure ('test-misc.R:267:5'): iaw$colSds computes column SDs
-Expected `result[1]` to equal `sd(c(1, 2, 3))`.
-Differences:
-names for target but not for current
+Failure ('test-misc.R:242:5'): iaw$colN handles no NA
+result["a"] not equal to c(a = 5).
+names for current but not for target
 
 Failure ('test-misc.R:285:5'): iaw$colSds constant column
-Expected `result[1]` to equal 0.
-Differences:
+result[1] not equal to 0.
 names for target but not for current
-──────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
-⠏ |          0 | operators                                                                                                                                                                    ✖ | 1       28 | operators
-──────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
+────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
+⠏ |          0 | operators                                                                                                          ✖ | 4       25 | operators
+────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
 Failure ('test-operators.R:28:5'): %and% handles NA correctly
 `(NA) %and% stop("test")` threw an error with unexpected message.
 Expected match: "!is.na(e1) is not TRUE"
@@ -80,363 +48,59 @@ Backtrace:
  5. │   └─rlang::eval_bare(quo_get_expr(.quo), quo_get_env(.quo))
  6. └─(NA) %and% stop("test")
  7.   └─base::stopifnot(is.logical(e1), length(e1) == 1L, !is.na(e1)) at src/Riaw/%and%.R:24:5
-──────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
-⠏ |          0 | parallel                                                                                                                                                                     ⠋ | 3 8     30 | parallel                                                                                                                                                                     ⠸ | 3 8     43 | parallel                                                                                                                                                                     ⠙ | 4 8     50 | parallel                                                                                                                                                                     ✖ | 4 8     55 | parallel
-──────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
-Warning ('test-parallel.R:61:5'): iaw$mc.by rejects mismatched lengths
-data length is not a multiple of split variable
-Backtrace:
-    ▆
- 1. ├─testthat::expect_error(iaw$mc.by(df, 1:3, mean)) at test-parallel.R:61:5
- 2. │ └─testthat:::quasi_capture(...)
- 3. │   ├─testthat (local) .capture(...)
- 4. │   │ └─base::withCallingHandlers(...)
- 5. │   └─rlang::eval_bare(quo_get_expr(.quo), quo_get_env(.quo))
- 6. └─iaw$mc.by(df, 1:3, mean)
- 7.   ├─base::split(seq_len(nrow(indata)), INDICES) at src/Riaw/mc.by.R:53:9
- 8.   └─base::split.default(seq_len(nrow(indata)), INDICES)
 
-Warning ('test-parallel.R:61:5'): iaw$mc.by rejects mismatched lengths
-argument is not numeric or logical: returning NA
-Backtrace:
-     ▆
-  1. ├─testthat::expect_error(iaw$mc.by(df, 1:3, mean)) at test-parallel.R:61:5
-  2. │ └─testthat:::quasi_capture(...)
-  3. │   ├─testthat (local) .capture(...)
-  4. │   │ └─base::withCallingHandlers(...)
-  5. │   └─rlang::eval_bare(quo_get_expr(.quo), quo_get_env(.quo))
-  6. └─iaw$mc.by(df, 1:3, mean)
-  7.   └─base (local) wapply(...) at src/Riaw/mc.by.R:62:5
-  8.     └─FUN(X[[i]], ...)
-  9.       ├─base (local) FUNIN(indata[.index, , drop = FALSE], ...) at src/Riaw/mc.by.R:63:9
- 10.       └─base::mean.default(indata[.index, , drop = FALSE], ...)
+Failure ('test-operators.R:127:5'): %inrange% rejects non-numeric x
+`"a" %inrange% c(1, 10)` did not throw an error.
 
-Warning ('test-parallel.R:61:5'): iaw$mc.by rejects mismatched lengths
-argument is not numeric or logical: returning NA
-Backtrace:
-     ▆
-  1. ├─testthat::expect_error(iaw$mc.by(df, 1:3, mean)) at test-parallel.R:61:5
-  2. │ └─testthat:::quasi_capture(...)
-  3. │   ├─testthat (local) .capture(...)
-  4. │   │ └─base::withCallingHandlers(...)
-  5. │   └─rlang::eval_bare(quo_get_expr(.quo), quo_get_env(.quo))
-  6. └─iaw$mc.by(df, 1:3, mean)
-  7.   └─base (local) wapply(...) at src/Riaw/mc.by.R:62:5
-  8.     └─FUN(X[[i]], ...)
-  9.       ├─base (local) FUNIN(indata[.index, , drop = FALSE], ...) at src/Riaw/mc.by.R:63:9
- 10.       └─base::mean.default(indata[.index, , drop = FALSE], ...)
+Failure ('test-operators.R:131:5'): %inrange% rejects wrong length range
+`5 %inrange% c(1, 5, 10)` did not throw an error.
 
-Warning ('test-parallel.R:61:5'): iaw$mc.by rejects mismatched lengths
-argument is not numeric or logical: returning NA
-Backtrace:
-     ▆
-  1. ├─testthat::expect_error(iaw$mc.by(df, 1:3, mean)) at test-parallel.R:61:5
-  2. │ └─testthat:::quasi_capture(...)
-  3. │   ├─testthat (local) .capture(...)
-  4. │   │ └─base::withCallingHandlers(...)
-  5. │   └─rlang::eval_bare(quo_get_expr(.quo), quo_get_env(.quo))
-  6. └─iaw$mc.by(df, 1:3, mean)
-  7.   └─base (local) wapply(...) at src/Riaw/mc.by.R:62:5
-  8.     └─FUN(X[[i]], ...)
-  9.       ├─base (local) FUNIN(indata[.index, , drop = FALSE], ...) at src/Riaw/mc.by.R:63:9
- 10.       └─base::mean.default(indata[.index, , drop = FALSE], ...)
-
-Failure ('test-parallel.R:61:5'): iaw$mc.by rejects mismatched lengths
-Expected `iaw$mc.by(df, 1:3, mean)` to throw a error.
-
-Warning ('test-parallel.R:121:5'): iaw$oc.by rejects mismatched lengths
-data length is not a multiple of split variable
-Backtrace:
-    ▆
- 1. ├─testthat::expect_error(iaw$oc.by(df, 1:3, mean)) at test-parallel.R:121:5
- 2. │ └─testthat:::quasi_capture(...)
- 3. │   ├─testthat (local) .capture(...)
- 4. │   │ └─base::withCallingHandlers(...)
- 5. │   └─rlang::eval_bare(quo_get_expr(.quo), quo_get_env(.quo))
- 6. └─iaw$oc.by(df, 1:3, mean)
- 7.   ├─base::split(seq_len(nrow(indata)), INDICES) at src/Riaw/oc.by.R:19:5
- 8.   └─base::split.default(seq_len(nrow(indata)), INDICES)
-
-Warning ('test-parallel.R:121:5'): iaw$oc.by rejects mismatched lengths
-argument is not numeric or logical: returning NA
-Backtrace:
-     ▆
-  1. ├─testthat::expect_error(iaw$oc.by(df, 1:3, mean)) at test-parallel.R:121:5
-  2. │ └─testthat:::quasi_capture(...)
-  3. │   ├─testthat (local) .capture(...)
-  4. │   │ └─base::withCallingHandlers(...)
-  5. │   └─rlang::eval_bare(quo_get_expr(.quo), quo_get_env(.quo))
-  6. └─iaw$oc.by(df, 1:3, mean)
-  7.   └─base::lapply(...) at src/Riaw/oc.by.R:20:5
-  8.     └─FUN(X[[i]], ...)
-  9.       ├─base (local) FUNIN(indata[.index, , drop = FALSE], ...) at src/Riaw/oc.by.R:21:9
- 10.       └─base::mean.default(indata[.index, , drop = FALSE], ...)
-
-Warning ('test-parallel.R:121:5'): iaw$oc.by rejects mismatched lengths
-argument is not numeric or logical: returning NA
-Backtrace:
-     ▆
-  1. ├─testthat::expect_error(iaw$oc.by(df, 1:3, mean)) at test-parallel.R:121:5
-  2. │ └─testthat:::quasi_capture(...)
-  3. │   ├─testthat (local) .capture(...)
-  4. │   │ └─base::withCallingHandlers(...)
-  5. │   └─rlang::eval_bare(quo_get_expr(.quo), quo_get_env(.quo))
-  6. └─iaw$oc.by(df, 1:3, mean)
-  7.   └─base::lapply(...) at src/Riaw/oc.by.R:20:5
-  8.     └─FUN(X[[i]], ...)
-  9.       ├─base (local) FUNIN(indata[.index, , drop = FALSE], ...) at src/Riaw/oc.by.R:21:9
- 10.       └─base::mean.default(indata[.index, , drop = FALSE], ...)
-
-Warning ('test-parallel.R:121:5'): iaw$oc.by rejects mismatched lengths
-argument is not numeric or logical: returning NA
-Backtrace:
-     ▆
-  1. ├─testthat::expect_error(iaw$oc.by(df, 1:3, mean)) at test-parallel.R:121:5
-  2. │ └─testthat:::quasi_capture(...)
-  3. │   ├─testthat (local) .capture(...)
-  4. │   │ └─base::withCallingHandlers(...)
-  5. │   └─rlang::eval_bare(quo_get_expr(.quo), quo_get_env(.quo))
-  6. └─iaw$oc.by(df, 1:3, mean)
-  7.   └─base::lapply(...) at src/Riaw/oc.by.R:20:5
-  8.     └─FUN(X[[i]], ...)
-  9.       ├─base (local) FUNIN(indata[.index, , drop = FALSE], ...) at src/Riaw/oc.by.R:21:9
- 10.       └─base::mean.default(indata[.index, , drop = FALSE], ...)
-
-Failure ('test-parallel.R:121:5'): iaw$oc.by rejects mismatched lengths
-Expected `iaw$oc.by(df, 1:3, mean)` to throw a error.
-
-Failure ('test-parallel.R:181:5'): iaw$rbind.oc.by rejects non-df returning function
-Expected `is.null(result) || is.data.frame(result)` to be TRUE.
-Differences:
-`actual`:   FALSE
-`expected`: TRUE 
-
-
+Failure ('test-operators.R:135:5'): %inrange% rejects non-numeric range
+`5 %inrange% c("a", "b")` did not throw an error.
+────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
+⠏ |          0 | parallel                                                                                                           ⠸ |         34 | parallel                                                                                                           ⠧ | 1       47 | parallel                                                                                                           ⠼ | 1       54 | parallel                                                                                                           ✖ | 1       58 | parallel
+────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
 Error ('test-parallel.R:264:5'): iaw$mcsapply alias mc.sapply works
 Error in `eval(code, test_env)`: attempt to apply non-function
-──────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
-⠏ |          0 | plotting                                                                                                                                                                     ⠧ | 7       41 | plotting                                                                                                                                                                     ✖ | 8       49 | plotting
-──────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
-Error ('test-plotting.R:271:5'): iaw$MixColor returns color
-Error in `eval(code, test_env)`: attempt to apply non-function
+────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
+⠏ |          0 | plotting                                                                                                           ⠏ |         40 | plotting                                                                                                           ✔ |         57 | plotting
+⠏ |          0 | random-utilities                                                                                                   ✔ |         40 | random-utilities
+⠏ |          0 | regression                                                                                                         ✔ |         27 | regression
+⠏ |          0 | statistics                                                                                                         ⠹ |         53 | statistics                                                                                                         ✔ |         63 | statistics
+⠏ |          0 | string-dict                                                                                                        ✔ |         40 | string-dict
+⠏ |          0 | time-series                                                                                                        ⠋ |         61 | time-series                                                                                                        ✔ |         61 | time-series
+⠏ |          0 | type-checking                                                                                                      ✔ |         40 | type-checking
+⠏ |          0 | utilities                                                                                                          ⠇ |         29 | utilities                                                                                                          ⠙ |         32 | utilities                                                                                                          ⠸ |         34 | utilities                                                                                                          ⠹ |         53 | utilities                                                                                                          ✔ |         60 | utilities
 
-Error ('test-plotting.R:276:5'): iaw$MixColor mixes colors
-Error in `eval(code, test_env)`: attempt to apply non-function
+══ Results ═════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════
+Duration: 3.4 s
 
-Error ('test-plotting.R:281:5'): iaw$MixColor handles named colors
-Error in `eval(code, test_env)`: attempt to apply non-function
-
-Error ('test-plotting.R:286:5'): iaw$MixColor single color output
-Error in `eval(code, test_env)`: attempt to apply non-function
-
-Error ('test-plotting.R:291:5'): iaw$MixColor with ratio
-Error in `eval(code, test_env)`: attempt to apply non-function
-
-Error ('test-plotting.R:296:5'): iaw$MixColor same colors
-Error in `eval(code, test_env)`: attempt to apply non-function
-
-Error ('test-plotting.R:301:5'): iaw$MixColor returns valid color
-Error in `eval(code, test_env)`: attempt to apply non-function
-
-Failure ('test-plotting.R:381:5'): iaw$plot.native.slope rejects vector
-Expected `iaw$plot.native.slope(c(1, 2))` to throw a error.
-──────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
-⠏ |          0 | random-utilities                                                                                                                                                             ✔ |         40 | random-utilities
-⠏ |          0 | regression                                                                                                                                                                   ⠋ | 7       34 | regression                                                                                                                                                                   ✖ | 8       41 | regression
-──────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
-Error ('test-regression.R:6:5'): iaw$ols returns coefficients
-Error in `iaw$ols.nona(y.or.f[!one.bad], as.matrix(data[!one.bad, ]), detail)`: length(y) == length(w) is not TRUE
+── Failed tests ────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
+Error ('test-misc.R:224:5'): iaw$colN counts non-NA
+<subscriptOutOfBoundsError/error/condition>
+Error in `result[["a"]]`: subscript out of bounds
 Backtrace:
     ▆
- 1. └─iaw$ols(y ~ x, data = d) at test-regression.R:6:5
- 2.   └─iaw$ols.nona(y.or.f[!one.bad], as.matrix(data[!one.bad, ]), detail) at src/Riaw/ols.R:37:5
- 3.     └─base::stopifnot(length(y) == length(w)) at src/Riaw/ols.nona.R:31:9
+ 1. └─testthat::expect_equal(result[["a"]], c(a = 2)) at test-misc.R:224:5
+ 2.   └─testthat::quasi_label(enquo(object), label, arg = "object")
+ 3.     └─rlang::eval_bare(expr, quo_get_env(quo))
 
-Error ('test-regression.R:12:5'): iaw$ols finds perfect fit
-Error in `iaw$ols.nona(y.or.f[!one.bad], as.matrix(data[!one.bad, ]), detail)`: length(y) == length(w) is not TRUE
-Backtrace:
-    ▆
- 1. └─iaw$ols(y ~ x, data = d, detail = 2) at test-regression.R:12:5
- 2.   └─iaw$ols.nona(y.or.f[!one.bad], as.matrix(data[!one.bad, ]), detail) at src/Riaw/ols.R:37:5
- 3.     └─base::stopifnot(length(y) == length(w)) at src/Riaw/ols.nona.R:31:9
+Failure ('test-misc.R:230:5'): iaw$colN returns named vector
+!is.null(names(result)) is not TRUE
 
-Error ('test-regression.R:18:5'): iaw$ols includes intercept by default
-Error in `iaw$ols.nona(y.or.f[!one.bad], as.matrix(data[!one.bad, ]), detail)`: length(y) == length(w) is not TRUE
-Backtrace:
-    ▆
- 1. └─iaw$ols(y ~ x, data = d) at test-regression.R:18:5
- 2.   └─iaw$ols.nona(y.or.f[!one.bad], as.matrix(data[!one.bad, ]), detail) at src/Riaw/ols.R:37:5
- 3.     └─base::stopifnot(length(y) == length(w)) at src/Riaw/ols.nona.R:31:9
-
-Error ('test-regression.R:24:5'): iaw$ols handles no intercept
-Error in `iaw$ols(y ~ x - 1, data = d)`: is.matrix(data) || is.data.frame(data) is not TRUE
-Backtrace:
-    ▆
- 1. └─iaw$ols(y ~ x - 1, data = d) at test-regression.R:24:5
- 2.   └─base::stopifnot(is.matrix(data) || is.data.frame(data)) at src/Riaw/ols.R:34:5
-
-Error ('test-regression.R:30:5'): iaw$ols handles multiple regressors
-Error in `iaw$ols.nona(y.or.f[!one.bad], as.matrix(data[!one.bad, ]), detail)`: length(y) == length(w) is not TRUE
-Backtrace:
-    ▆
- 1. └─iaw$ols(y ~ x1 + x2, data = d) at test-regression.R:30:5
- 2.   └─iaw$ols.nona(y.or.f[!one.bad], as.matrix(data[!one.bad, ]), detail) at src/Riaw/ols.R:37:5
- 3.     └─base::stopifnot(length(y) == length(w)) at src/Riaw/ols.nona.R:31:9
-
-Error ('test-regression.R:36:5'): iaw$ols handles NA values
-Error in `iaw$ols.nona(y.or.f[!one.bad], as.matrix(data[!one.bad, ]), detail)`: length(y) == length(w) is not TRUE
-Backtrace:
-     ▆
-  1. ├─testthat::expect_silent(iaw$ols(y ~ x, data = d)) at test-regression.R:36:5
-  2. │ └─testthat:::quasi_capture(enquo(object), NULL, evaluate_promise)
-  3. │   ├─testthat (local) .capture(...)
-  4. │   │ ├─withr::with_output_sink(...)
-  5. │   │ │ └─base::force(code)
-  6. │   │ ├─base::withCallingHandlers(...)
-  7. │   │ └─base::withVisible(code)
-  8. │   └─rlang::eval_bare(quo_get_expr(.quo), quo_get_env(.quo))
-  9. └─iaw$ols(y ~ x, data = d)
- 10.   └─iaw$ols.nona(y.or.f[!one.bad], as.matrix(data[!one.bad, ]), detail) at src/Riaw/ols.R:37:5
- 11.     └─base::stopifnot(length(y) == length(w)) at src/Riaw/ols.nona.R:31:9
-
-Error ('test-regression.R:41:5'): iaw$ols detail 2 returns rsq
-Error in `iaw$ols.nona(y.or.f[!one.bad], as.matrix(data[!one.bad, ]), detail)`: length(y) == length(w) is not TRUE
-Backtrace:
-    ▆
- 1. └─iaw$ols(y ~ x, data = d, detail = 2) at test-regression.R:41:5
- 2.   └─iaw$ols.nona(y.or.f[!one.bad], as.matrix(data[!one.bad, ]), detail) at src/Riaw/ols.R:37:5
- 3.     └─base::stopifnot(length(y) == length(w)) at src/Riaw/ols.nona.R:31:9
-
-Failure ('test-regression.R:293:5'): fitted + residuals = y
-Expected `iaw$fitted(model) + iaw$residuals(model)` to equal `mtcars$mpg`.
-Differences:
-names for target but not for current
-──────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
-⠏ |          0 | statistics                                                                                                                                                                   ⠴ | 8       48 | statistics                                                                                                                                                                   ✖ | 8       55 | statistics
-──────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
-Failure ('test-statistics.R:59:5'): iaw$summary rejects empty data frame
-Expected `iaw$summary(df, "p")` to throw a error.
-
-Failure ('test-statistics.R:81:5'): iaw$autocorrel highest at lag 0 for identical series
-Expected `which.max(result)` to equal 4.
-Differences:
-names for target but not for current
-
-Failure ('test-statistics.R:88:5'): iaw$autocorrel detects shift
-Expected `result["cor1"] > result["cor-1"]` to be TRUE.
-Differences:
 `actual`:   FALSE
 `expected`: TRUE 
 
+Failure ('test-misc.R:236:5'): iaw$colN handles all NA
+result["a"] not equal to c(a = 0).
+names for current but not for target
 
-Failure ('test-statistics.R:109:5'): iaw$autocorrel returns correlation values
-Expected `result["cor0"]` to equal 1.
-Differences:
-names for target but not for current
-
-Failure ('test-statistics.R:185:5'): iaw$winsorize.percentile clips at percentiles
-Expected `max(result) < 100` to be TRUE.
-Differences:
-`actual`:   FALSE
-`expected`: TRUE 
-
-
-Failure ('test-statistics.R:186:5'): iaw$winsorize.percentile clips at percentiles
-Expected `min(result) > -100` to be TRUE.
-Differences:
-`actual`:   FALSE
-`expected`: TRUE 
-
-
-Failure ('test-statistics.R:210:5'): iaw$winsorize.percentile clips extreme values
-Expected `abs(result[1]) < 1000` to be TRUE.
-Differences:
-`actual`:   FALSE
-`expected`: TRUE 
-
-
-Failure ('test-statistics.R:211:5'): iaw$winsorize.percentile clips extreme values
-Expected `abs(result[100]) < 1000` to be TRUE.
-Differences:
-`actual`:   FALSE
-`expected`: TRUE 
-
-──────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
-⠏ |          0 | string-dict                                                                                                                                                                  ✔ |         40 | string-dict
-⠏ |          0 | time-series                                                                                                                                                                  ✔ |         61 | time-series
-⠏ |          0 | type-checking                                                                                                                                                                ✖ | 1       50 | type-checking
-──────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
-Failure ('test-type-checking.R:165:5'): iaw$is.inrange rejects inverted range
-Expected `iaw$is.inrange(5, c(10, 1))` to throw a error.
-──────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
-⠏ |          0 | utilities                                                                                                                                                                    test⠇ | 1       38 | utilities                                                                                                                                                                    ⠙ | 1       41 | utilities                                                                                                                                                                    ⠴ | 1       45 | utilities                                                                                                                                                                    ⠹ | 1       62 | utilities                                                                                                                                                                    ✖ | 1       69 | utilities
-──────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
-Failure ('test-utilities.R:68:5'): iaw$chatter handles multiple arguments
-Expected output from `iaw$chatter("a", "b", "c", verbose = TRUE)` to match regexp "abc".
-Actual output:
-✖ │ a b c
-──────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
-
-══ Results ═══════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════
-Duration: 3.5 s
-
-── Failed tests ──────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
-Failure ('test-data-manipulation.R:43:5'): iaw$recode handles factor-like recoding
-Expected `result` to equal `c(1, 2, 3, 1)`.
-Differences:
-Types not compatible: character is not double
-
-Failure ('test-data-manipulation.R:56:5'): iaw$recode rejects empty from/to
-Expected `iaw$recode(1:3, c(), c())` to throw a error.
-
-Failure ('test-data-manipulation.R:115:5'): iaw$rename.columns rejects NULL input
-Expected `iaw$rename.columns(NULL, c(a = "x"))` to throw a error.
-
-Failure ('test-data-manipulation.R:351:5'): iaw$multimerge rejects empty list
-Expected `iaw$multimerge(list(), by = "a")` to throw a error.
-
-Error ('test-misc.R:56:5'): iaw$tabular returns data frame
-Error in `eval(code, test_env)`: attempt to apply non-function
-
-Error ('test-misc.R:62:5'): iaw$tabular counts correctly
-Error in `eval(code, test_env)`: attempt to apply non-function
-
-Error ('test-misc.R:68:5'): iaw$tabular includes percentages
-Error in `eval(code, test_env)`: attempt to apply non-function
-
-Error ('test-misc.R:74:5'): iaw$tabular sorts by count
-Error in `eval(code, test_env)`: attempt to apply non-function
-
-Error ('test-misc.R:80:5'): iaw$tabular unsorted option
-Error in `eval(code, test_env)`: attempt to apply non-function
-
-Error ('test-misc.R:86:5'): iaw$tabular handles NA
-Error in `eval(code, test_env)`: attempt to apply non-function
-
-Error ('test-misc.R:92:5'): iaw$tabular has value column
-Error in `eval(code, test_env)`: attempt to apply non-function
-
-Error ('test-misc.R:98:5'): iaw$tabular has count column
-Error in `eval(code, test_env)`: attempt to apply non-function
-
-Error ('test-misc.R:104:5'): iaw$tabular percentages sum to 100
-Error in `eval(code, test_env)`: attempt to apply non-function
-
-Error ('test-misc.R:110:5'): iaw$tabular handles numeric input
-Error in `eval(code, test_env)`: attempt to apply non-function
-
-Failure ('test-misc.R:260:5'): iaw$colN returns integer
-Expected `result` to have type "integer".
-Actual type: "double"
-
-Failure ('test-misc.R:267:5'): iaw$colSds computes column SDs
-Expected `result[1]` to equal `sd(c(1, 2, 3))`.
-Differences:
-names for target but not for current
+Failure ('test-misc.R:242:5'): iaw$colN handles no NA
+result["a"] not equal to c(a = 5).
+names for current but not for target
 
 Failure ('test-misc.R:285:5'): iaw$colSds constant column
-Expected `result[1]` to equal 0.
-Differences:
+result[1] not equal to 0.
 names for target but not for current
 
 Failure ('test-operators.R:28:5'): %and% handles NA correctly
@@ -453,168 +117,16 @@ Backtrace:
  6. └─(NA) %and% stop("test")
  7.   └─base::stopifnot(is.logical(e1), length(e1) == 1L, !is.na(e1)) at src/Riaw/%and%.R:24:5
 
-Failure ('test-parallel.R:61:5'): iaw$mc.by rejects mismatched lengths
-Expected `iaw$mc.by(df, 1:3, mean)` to throw a error.
+Failure ('test-operators.R:127:5'): %inrange% rejects non-numeric x
+`"a" %inrange% c(1, 10)` did not throw an error.
 
-Failure ('test-parallel.R:121:5'): iaw$oc.by rejects mismatched lengths
-Expected `iaw$oc.by(df, 1:3, mean)` to throw a error.
+Failure ('test-operators.R:131:5'): %inrange% rejects wrong length range
+`5 %inrange% c(1, 5, 10)` did not throw an error.
 
-Failure ('test-parallel.R:181:5'): iaw$rbind.oc.by rejects non-df returning function
-Expected `is.null(result) || is.data.frame(result)` to be TRUE.
-Differences:
-`actual`:   FALSE
-`expected`: TRUE 
-
+Failure ('test-operators.R:135:5'): %inrange% rejects non-numeric range
+`5 %inrange% c("a", "b")` did not throw an error.
 
 Error ('test-parallel.R:264:5'): iaw$mcsapply alias mc.sapply works
 Error in `eval(code, test_env)`: attempt to apply non-function
 
-Error ('test-plotting.R:271:5'): iaw$MixColor returns color
-Error in `eval(code, test_env)`: attempt to apply non-function
-
-Error ('test-plotting.R:276:5'): iaw$MixColor mixes colors
-Error in `eval(code, test_env)`: attempt to apply non-function
-
-Error ('test-plotting.R:281:5'): iaw$MixColor handles named colors
-Error in `eval(code, test_env)`: attempt to apply non-function
-
-Error ('test-plotting.R:286:5'): iaw$MixColor single color output
-Error in `eval(code, test_env)`: attempt to apply non-function
-
-Error ('test-plotting.R:291:5'): iaw$MixColor with ratio
-Error in `eval(code, test_env)`: attempt to apply non-function
-
-Error ('test-plotting.R:296:5'): iaw$MixColor same colors
-Error in `eval(code, test_env)`: attempt to apply non-function
-
-Error ('test-plotting.R:301:5'): iaw$MixColor returns valid color
-Error in `eval(code, test_env)`: attempt to apply non-function
-
-Failure ('test-plotting.R:381:5'): iaw$plot.native.slope rejects vector
-Expected `iaw$plot.native.slope(c(1, 2))` to throw a error.
-
-Error ('test-regression.R:6:5'): iaw$ols returns coefficients
-Error in `iaw$ols.nona(y.or.f[!one.bad], as.matrix(data[!one.bad, ]), detail)`: length(y) == length(w) is not TRUE
-Backtrace:
-    ▆
- 1. └─iaw$ols(y ~ x, data = d) at test-regression.R:6:5
- 2.   └─iaw$ols.nona(y.or.f[!one.bad], as.matrix(data[!one.bad, ]), detail) at src/Riaw/ols.R:37:5
- 3.     └─base::stopifnot(length(y) == length(w)) at src/Riaw/ols.nona.R:31:9
-
-Error ('test-regression.R:12:5'): iaw$ols finds perfect fit
-Error in `iaw$ols.nona(y.or.f[!one.bad], as.matrix(data[!one.bad, ]), detail)`: length(y) == length(w) is not TRUE
-Backtrace:
-    ▆
- 1. └─iaw$ols(y ~ x, data = d, detail = 2) at test-regression.R:12:5
- 2.   └─iaw$ols.nona(y.or.f[!one.bad], as.matrix(data[!one.bad, ]), detail) at src/Riaw/ols.R:37:5
- 3.     └─base::stopifnot(length(y) == length(w)) at src/Riaw/ols.nona.R:31:9
-
-Error ('test-regression.R:18:5'): iaw$ols includes intercept by default
-Error in `iaw$ols.nona(y.or.f[!one.bad], as.matrix(data[!one.bad, ]), detail)`: length(y) == length(w) is not TRUE
-Backtrace:
-    ▆
- 1. └─iaw$ols(y ~ x, data = d) at test-regression.R:18:5
- 2.   └─iaw$ols.nona(y.or.f[!one.bad], as.matrix(data[!one.bad, ]), detail) at src/Riaw/ols.R:37:5
- 3.     └─base::stopifnot(length(y) == length(w)) at src/Riaw/ols.nona.R:31:9
-
-Error ('test-regression.R:24:5'): iaw$ols handles no intercept
-Error in `iaw$ols(y ~ x - 1, data = d)`: is.matrix(data) || is.data.frame(data) is not TRUE
-Backtrace:
-    ▆
- 1. └─iaw$ols(y ~ x - 1, data = d) at test-regression.R:24:5
- 2.   └─base::stopifnot(is.matrix(data) || is.data.frame(data)) at src/Riaw/ols.R:34:5
-
-Error ('test-regression.R:30:5'): iaw$ols handles multiple regressors
-Error in `iaw$ols.nona(y.or.f[!one.bad], as.matrix(data[!one.bad, ]), detail)`: length(y) == length(w) is not TRUE
-Backtrace:
-    ▆
- 1. └─iaw$ols(y ~ x1 + x2, data = d) at test-regression.R:30:5
- 2.   └─iaw$ols.nona(y.or.f[!one.bad], as.matrix(data[!one.bad, ]), detail) at src/Riaw/ols.R:37:5
- 3.     └─base::stopifnot(length(y) == length(w)) at src/Riaw/ols.nona.R:31:9
-
-Error ('test-regression.R:36:5'): iaw$ols handles NA values
-Error in `iaw$ols.nona(y.or.f[!one.bad], as.matrix(data[!one.bad, ]), detail)`: length(y) == length(w) is not TRUE
-Backtrace:
-     ▆
-  1. ├─testthat::expect_silent(iaw$ols(y ~ x, data = d)) at test-regression.R:36:5
-  2. │ └─testthat:::quasi_capture(enquo(object), NULL, evaluate_promise)
-  3. │   ├─testthat (local) .capture(...)
-  4. │   │ ├─withr::with_output_sink(...)
-  5. │   │ │ └─base::force(code)
-  6. │   │ ├─base::withCallingHandlers(...)
-  7. │   │ └─base::withVisible(code)
-  8. │   └─rlang::eval_bare(quo_get_expr(.quo), quo_get_env(.quo))
-  9. └─iaw$ols(y ~ x, data = d)
- 10.   └─iaw$ols.nona(y.or.f[!one.bad], as.matrix(data[!one.bad, ]), detail) at src/Riaw/ols.R:37:5
- 11.     └─base::stopifnot(length(y) == length(w)) at src/Riaw/ols.nona.R:31:9
-
-Error ('test-regression.R:41:5'): iaw$ols detail 2 returns rsq
-Error in `iaw$ols.nona(y.or.f[!one.bad], as.matrix(data[!one.bad, ]), detail)`: length(y) == length(w) is not TRUE
-Backtrace:
-    ▆
- 1. └─iaw$ols(y ~ x, data = d, detail = 2) at test-regression.R:41:5
- 2.   └─iaw$ols.nona(y.or.f[!one.bad], as.matrix(data[!one.bad, ]), detail) at src/Riaw/ols.R:37:5
- 3.     └─base::stopifnot(length(y) == length(w)) at src/Riaw/ols.nona.R:31:9
-
-Failure ('test-regression.R:293:5'): fitted + residuals = y
-Expected `iaw$fitted(model) + iaw$residuals(model)` to equal `mtcars$mpg`.
-Differences:
-names for target but not for current
-
-Failure ('test-statistics.R:59:5'): iaw$summary rejects empty data frame
-Expected `iaw$summary(df, "p")` to throw a error.
-
-Failure ('test-statistics.R:81:5'): iaw$autocorrel highest at lag 0 for identical series
-Expected `which.max(result)` to equal 4.
-Differences:
-names for target but not for current
-
-Failure ('test-statistics.R:88:5'): iaw$autocorrel detects shift
-Expected `result["cor1"] > result["cor-1"]` to be TRUE.
-Differences:
-`actual`:   FALSE
-`expected`: TRUE 
-
-
-Failure ('test-statistics.R:109:5'): iaw$autocorrel returns correlation values
-Expected `result["cor0"]` to equal 1.
-Differences:
-names for target but not for current
-
-Failure ('test-statistics.R:185:5'): iaw$winsorize.percentile clips at percentiles
-Expected `max(result) < 100` to be TRUE.
-Differences:
-`actual`:   FALSE
-`expected`: TRUE 
-
-
-Failure ('test-statistics.R:186:5'): iaw$winsorize.percentile clips at percentiles
-Expected `min(result) > -100` to be TRUE.
-Differences:
-`actual`:   FALSE
-`expected`: TRUE 
-
-
-Failure ('test-statistics.R:210:5'): iaw$winsorize.percentile clips extreme values
-Expected `abs(result[1]) < 1000` to be TRUE.
-Differences:
-`actual`:   FALSE
-`expected`: TRUE 
-
-
-Failure ('test-statistics.R:211:5'): iaw$winsorize.percentile clips extreme values
-Expected `abs(result[100]) < 1000` to be TRUE.
-Differences:
-`actual`:   FALSE
-`expected`: TRUE 
-
-
-Failure ('test-type-checking.R:165:5'): iaw$is.inrange rejects inverted range
-Expected `iaw$is.inrange(5, c(10, 1))` to throw a error.
-
-Failure ('test-utilities.R:68:5'): iaw$chatter handles multiple arguments
-Expected output from `iaw$chatter("a", "b", "c", verbose = TRUE)` to match regexp "abc".
-Actual output:
-✖ │ a b c
-
-[ FAIL 48 | WARN 8 | SKIP 0 | PASS 796 ]
+[ FAIL 10 | WARN 0 | SKIP 0 | PASS 790 ]
