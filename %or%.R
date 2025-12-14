@@ -20,7 +20,7 @@
 #' (is.character(x)) %or% stop("x must be a character")
 
 `%or%` <- function(e1, e2) {
-    stopifnot(is.logical(e1), length(e1) == 1L)
+    stopifnot(is.logical(e1), length(e1) == 1L, !is.na(e1))
     if (!e1)  eval(e2)
     invisible(NULL)
 }

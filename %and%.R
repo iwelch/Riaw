@@ -21,7 +21,7 @@
 #' (x > 3) %and% message("x is greater than 3")
 
 `%and%` <- function(e1, e2) {
-    stopifnot(is.logical(e1), length(e1) == 1L)
+    stopifnot(is.logical(e1), length(e1) == 1L, !is.na(e1))
     if (e1) eval(e2)
     invisible(NULL)
 }
