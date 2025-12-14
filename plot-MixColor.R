@@ -13,6 +13,6 @@
 #' @family plotting
 #' @export
 
-iaw$MixColor <- function(col1, col2, ratio = 0.5) {
+iaw$mixcolor <- function(col1, col2, ratio = 0.5) {
     colorRampPalette(c(col1, col2))(3)[2]
 }
