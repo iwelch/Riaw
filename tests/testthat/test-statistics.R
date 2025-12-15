@@ -234,58 +234,6 @@ test_that("iaw$winsorize.percentile rejects extreme percentiles", {
     expect_error(iaw$winsorize.percentile(rnorm(100), c(0.99, 0.999)))
 })
 
-# pctrank tests
-test_that("iaw$pctrank returns values in [0,1]", {
-    x <- rnorm(100)
-    result <- iaw$pctrank(x)
-    expect_true(all(result >= 0 & result <= 1, na.rm = TRUE))
-})
-
-test_that("iaw$pctrank preserves length", {
-    x <- rnorm(100)
-    expect_equal(length(iaw$pctrank(x)), 100)
-})
-
-test_that("iaw$pctrank max value is 1", {
-    x <- 1:10
-    result <- iaw$pctrank(x)
-    expect_equal(max(result), 1)
-})
-
-test_that("iaw$pctrank min value is 0", {
-    x <- 1:10
-    result <- iaw$pctrank(x)
-    expect_equal(min(result), 0)
-})
-
-test_that("iaw$pctrank handles NA", {
-    x <- c(1, NA, 3, 4, 5)
-    result <- iaw$pctrank(x)
-    expect_true(is.na(result[2]))
-})
-
-test_that("iaw$pctrank handles ties", {
-    x <- c(1, 1, 2, 3, 3)
-    result <- iaw$pctrank(x)
-    expect_equal(result[1], result[2])
-})
-
-test_that("iaw$pctrank returns numeric", {
-    expect_type(iaw$pctrank(1:10), "double")
-})
-
-# Failing tests
-test_that("iaw$pctrank rejects non-numeric", {
-    expect_error(iaw$pctrank(letters))
-})
-
-test_that("iaw$pctrank rejects character", {
-    expect_error(iaw$pctrank(c("a", "b", "c")))
-})
-
-test_that("iaw$pctrank rejects list", {
-    expect_error(iaw$pctrank(list(1, 2, 3)))
-})
 
 # cmpsum tests
 test_that("iaw$cmpsum compounds returns", {

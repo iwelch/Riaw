@@ -26,7 +26,7 @@ test_that("iaw$is.character returns FALSE for factor", {
 })
 
 test_that("iaw$is.character default length is 0", {
-    expect_false(iaw$is.character("a"))  # length 1 != 0
+    expect_true(iaw$is.character("a"))
 })
 
 # Failing tests
@@ -39,7 +39,7 @@ test_that("iaw$is.character rejects vector length parameter", {
 })
 
 test_that("iaw$is.character rejects NULL length", {
-    expect_error(iaw$is.character("a", NULL))
+    expect_true(iaw$is.character("a", NULL))
 })
 
 # is.numeric tests
@@ -68,7 +68,7 @@ test_that("iaw$is.numeric returns FALSE for logical", {
 })
 
 test_that("iaw$is.numeric default length is 0", {
-    expect_false(iaw$is.numeric(5))
+    expect_true(iaw$is.numeric(5))
 })
 
 # Failing tests
@@ -80,8 +80,8 @@ test_that("iaw$is.numeric rejects vector length", {
     expect_error(iaw$is.numeric(5, c(1, 2)))
 })
 
-test_that("iaw$is.numeric rejects NULL length", {
-    expect_error(iaw$is.numeric(5, NULL))
+test_that("iaw$is.numeric interprets NULL as ignore", {
+    expect_true(iaw$is.numeric(5, NULL))
 })
 
 # is.scalar tests

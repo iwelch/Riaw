@@ -16,9 +16,9 @@
 #' iaw$is.numeric(5, 1)
 #' iaw$is.numeric(c(1, 2, 3), 3)
 
-iaw$is.numeric <- function(nvec, required.length.of.nvec = 0) {
+iaw$is.numeric <- function(nvec, required.length.of.nvec = NULL) {
 
-    c1 <- .Primitive("is.numeric")(nvec)
+    c1 <- is.numeric(nvec)
     if (is.null(required.length.of.nvec)) return(c1)
 
     stopifnot(is.numeric(required.length.of.nvec), length(required.length.of.nvec) == 1L)

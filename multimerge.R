@@ -15,7 +15,7 @@
 
 iaw$multimerge <- function(dflist, by, ...) {
     stopifnot(is.list(dflist))  ## list of data frames
-    stopifnot(length(dflist) >= 1)
+    stopifnot(length(dflist) > 1)
 
     stopifnot(all(sapply(dflist, is.data.frame)))
 

@@ -18,7 +18,6 @@
 
 iaw$abort <- function(errstring) {
     stopifnot(is.character(errstring), length(errstring) == 1L)
-    errstring <- paste(iaw$estring(errstring), "\n")
-    if (interactive()) message(errstring) else cat(errstring)
-    stop(simpleError("see debug advice on start or iaw$debug.advice()"))
+    message("iaw$abort")
+    browser()
 }

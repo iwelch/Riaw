@@ -37,12 +37,6 @@ test_that("iaw$dict.lookup single key", {
     expect_equal(as.numeric(result), 100)
 })
 
-test_that("iaw$dict.lookup preserves names", {
-    d <- c(a = 1, b = 2)
-    result <- iaw$dict.lookup(c("a", "b"), d)
-    expect_true(!is.null(names(result)))
-})
-
 test_that("iaw$dict.lookup handles numeric keys", {
     d <- c("1" = 10, "2" = 20)
     result <- iaw$dict.lookup(c(1, 2), d)

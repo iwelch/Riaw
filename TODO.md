@@ -3,6 +3,8 @@
 
 ## Add
 
+* create an optional argument for stopifnot: msg="..."
+
 * Is there a "hook-before" function in R?
 
 * a text() function that sets a background (usually white)

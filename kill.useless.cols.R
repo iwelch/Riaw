@@ -17,5 +17,5 @@
 
 iaw$kill.useless.cols <- function(d) {
     stopifnot(is.data.frame(d))
-    d[, lapply(.SD, function(x) length(unique(x)) > 1)]
+    d[, sapply(d, function(col) length(unique(col)) > 1), drop = FALSE]
 }

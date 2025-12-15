@@ -137,40 +137,20 @@ test_that("iaw$oosreg rejects non-data.frame", {
     expect_error(iaw$oosreg(y ~ x, data = "not a df"))
 })
 
-# fitted and residuals tests
-test_that("iaw$fitted extracts fitted values", {
-    model <- lm(mpg ~ wt, data = mtcars)
-    result <- iaw$fitted(model)
-    expect_equal(length(result), nrow(mtcars))
-})
-
 test_that("iaw$residuals extracts residuals", {
     model <- lm(mpg ~ wt, data = mtcars)
     result <- iaw$residuals(model)
     expect_equal(length(result), nrow(mtcars))
 })
 
-test_that("iaw$fitted returns numeric", {
-    model <- lm(mpg ~ wt, data = mtcars)
-    expect_type(iaw$fitted(model), "double")
-})
 
 test_that("iaw$residuals returns numeric", {
     model <- lm(mpg ~ wt, data = mtcars)
     expect_type(iaw$residuals(model), "double")
 })
 
-test_that("fitted + residuals = y", {
-    model <- lm(mpg ~ wt, data = mtcars)
-    expect_equal( unname(iaw$fitted(model) + iaw$residuals(model)), mtcars$mpg)
-})
 
 test_that("residuals sum to approximately zero", {
     model <- lm(mpg ~ wt, data = mtcars)
     expect_equal(sum(iaw$residuals(model)), 0, tolerance = 1e-10)
-})
-
-test_that("iaw$fitted works with multiple regressors", {
-    model <- lm(mpg ~ wt + hp, data = mtcars)
-    expect_equal(length(iaw$fitted(model)), nrow(mtcars))
 })

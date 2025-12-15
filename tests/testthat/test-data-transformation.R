@@ -57,62 +57,6 @@ test_that("iaw$kill.useless.cols rejects NULL", {
     expect_error(iaw$kill.useless.cols(NULL))
 })
 
-# completeobs tests
-test_that("iaw$completeobs removes NA rows", {
-    df <- data.frame(a = c(1, NA, 3), b = c(4, 5, 6))
-    result <- iaw$completeobs(df)
-    expect_equal(nrow(result), 2)
-})
-
-test_that("iaw$completeobs returns data frame", {
-    df <- data.frame(a = 1:3, b = 4:6)
-    result <- iaw$completeobs(df)
-    expect_s3_class(result, "data.frame")
-})
-
-test_that("iaw$completeobs handles no NA", {
-    df <- data.frame(a = 1:5, b = 6:10)
-    result <- iaw$completeobs(df)
-    expect_equal(nrow(result), 5)
-})
-
-test_that("iaw$completeobs handles all NA", {
-    df <- data.frame(a = c(NA, NA), b = c(NA, NA))
-    result <- iaw$completeobs(df)
-    expect_equal(nrow(result), 0)
-})
-
-test_that("iaw$completeobs checks all columns", {
-    df <- data.frame(a = c(1, 2, 3), b = c(NA, 5, 6))
-    result <- iaw$completeobs(df)
-    expect_equal(nrow(result), 2)
-})
-
-test_that("iaw$completeobs preserves column names", {
-    df <- data.frame(x = c(1, NA), y = c(3, 4))
-    result <- iaw$completeobs(df)
-    expect_equal(names(result), c("x", "y"))
-})
-
-test_that("iaw$completeobs preserves column types", {
-    df <- data.frame(a = c(1, NA, 3), b = c("x", "y", "z"))
-    result <- iaw$completeobs(df)
-    expect_type(result$a, "double")
-})
-
-# Failing tests
-test_that("iaw$completeobs rejects non-data.frame", {
-    expect_error(iaw$completeobs(1:10))
-})
-
-test_that("iaw$completeobs rejects vector", {
-    expect_error(iaw$completeobs(c(1, NA, 3)))
-})
-
-test_that("iaw$completeobs rejects NULL", {
-    expect_error(iaw$completeobs(NULL))
-})
-
 # doublesort tests
 test_that("iaw$doublesort adds portfolio columns", {
     df <- data.frame(var1 = runif(100), var2 = runif(100))

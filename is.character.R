@@ -16,9 +16,9 @@
 #' iaw$is.character("hello", 1)
 #' iaw$is.character(c("a", "b"), 2)
 
-iaw$is.character <- function(cvec, required.length.of.cvec = 0) {
+iaw$is.character <- function(cvec, required.length.of.cvec = NULL) {
 
-    c1 <- .Primitive("is.character")(cvec)
+    c1 <- is.character(cvec)
     if (is.null(required.length.of.cvec)) return(c1)
 
     stopifnot(is.numeric(required.length.of.cvec), length(required.length.of.cvec) == 1L)
