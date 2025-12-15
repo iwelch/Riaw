@@ -1,38 +1,50 @@
 ################################################################################
-##  Rprofile.R - Personal R Configuration for Riaw
+##
+##  Rprofile.R - Initialization and Configuration for Riaw
+##
 ################################################################################
 
 
 ################################################################################
-## Section 1: Set Options
+## Section 1: Set System Options
 ################################################################################
 
 Sys.setenv('R_MAX_VSIZE' = 64 * 1024 * 1024 * 1024)
 
 Sys.setenv(C_INCLUDE_PATH = "/opt/X11/include")  ## Cairo Installation
 
-options(hostname = as.character(Sys.info()["nodename"]))
+options(
+
+    hostname = as.character(Sys.info()["nodename"]),
+
+    os = switch(Sys.info()["sysname"],
+                "Darwin"  = "macos",
+                "Linux"   = "linux",
+                "Windows" = "windows",
+                tolower(sysname)
+                ),  # fallback
+
+
+    scipen = 1000, ## Tilt away from scientific notation
+
+    digits = 4,
+
+    max.print = 500,
+
+    stringsAsFactors = FALSE,
+
+    editor = "emacs",
+
+    keep.source = TRUE, keep.source.pkgs = TRUE,
+
+    show.error.locations = TRUE,
+
+    Rscriptname = NULL
+
+)
 
 message(libdir, "/Rprofile.R on ", getOption("hostname"))
 
-options(os = switch(Sys.info()["sysname"],
-    "Darwin"  = "macos",
-    "Linux"   = "linux",
-    "Windows" = "windows",
-    tolower(sysname)  # fallback
-))
-
-options(scipen = 1000) ## Tilt away from scientific notation
-
-options(digits = 4, max.print = 500)
-
-options(stringsAsFactors = FALSE)
-
-options(editor = "emacs")
-
-options(keep.source = TRUE, keep.source.pkgs = TRUE)
-
-options(show.error.locations = TRUE)
 
 
 ################################################################################
@@ -42,13 +54,11 @@ options(show.error.locations = TRUE)
 addlibraries <- c("Cairo", "data.table", "R.utils", "inline", "knitr", "MASS",
                   "sandwich", "bit64", "glue", "RcppArmadillo", "dplyr")
 
-## fails on intel, usually with ctest  "Rcpp", "fixest", "lmtest", "fst"
+addlibraries <- c(addlibraries, "fst", "fixest", "lmtest", "Rcpp")  ## maybe fails
 
 addlibraries.notinstalled <- (!addlibraries %in% .packages(TRUE))
+
 if (any(addlibraries.notinstalled)) {
-    cat(" install.packages(c(\"")
-    cat(addlibraries[addlibraries.notinstalled], sep = "\",\"")
-    cat("\"))\n")
     message("\n\nPlease download all from cran first. Missing: ")
     message(paste(addlibraries[addlibraries.notinstalled], collapse = ", "))
     stop(".Rprofile: FAIL - required packages not installed")
@@ -59,18 +69,8 @@ if (any(addlibraries.notinstalled)) {
 ## Section 3: Load Libraries
 ################################################################################
 
-## in case we later need other functions from a loaded library
-useplus <- function(package, include.only) {
-    loaded <- ls(sprintf("package:%s", package), all.names = TRUE)
-    unloadNamespace(package)
-    if (missing(include.only)) {
-        use(package)
-    } else {
-        use(package, union(loaded, include.only))
-    }
-}
-
-library("parallel")  ## we need the whole thing, mostly in iaw::mclapply, rbind.mc.by, ..options(mc.cores = max(1, detectCores() - 2))
+library("parallel")  ## we need the whole thing, mostly in iaw$mclapply, iaw$rbind.mc.by, ...
+options(mc.cores = max(1, detectCores() - 2))
 
 library("knitr")
 
@@ -83,19 +83,26 @@ options(datatable.fread.input.cmd.message = FALSE)
 
 use("MASS")
 
-# use("Rcpp"); use("inline")
+use("dplyr", "ntile")
+
+use("tools", "md5sum")
+
+## use 'useplus' to add further
+
+
+
+# use("Rcpp");
+# use("inline")
 # use("fst")
 # use("sandwich")
 # use("lmtest")
-
-use("dplyr", "ntile")
 
 ### would be nice to be able to use "install.packages("devtools"); devtools::install_github("hadley/strict")
 
 
 
 ################################################################################
-## Section 7: Universal Common Function
+## Section 4: Universal Common Function
 ################################################################################
 
 msgboth <- function(..., msgcat = "") {
@@ -104,10 +111,48 @@ msgboth <- function(..., msgcat = "") {
     cat("\n", ..., "\n")
 }
 
+## in case we later need other functions from a loaded library
+useplus <- function(package, include.only) {
+    loaded <- ls(sprintf("package:%s", package), all.names = TRUE)
+    unloadNamespace(package)
+    if (missing(include.only)) {
+        use(package)
+    } else {
+        use(package, union(loaded, include.only))
+    }
+}
+
+
+ARGV <- commandArgs(trailingOnly = TRUE)
+
+source <- function(file, verbose = FALSE, ...) {
+    stopifnot(grepl("\\.R$", file))
+    Routfilename <- paste0(file, "out")
+    ## cannot be called before iaw$ has been created and read
+    iaw$sink(Routfilename, split = TRUE, verbose)
+
+    options( Rscriptname= paste(getwd(), file) )  ## so programs can access it
+    try( base::source(file, keep.source = TRUE, ...) )
+    options( Rscriptname= NULL )  ## so programs can access it
+
+    iaw$sink(NULL, verbose)
+    if (verbose) iaw$msg("[automatic source sinking into ", Routfilename, "was closed]")
+}
+
+# if invoked via CMD BATCH:
+# args <- commandArgs(trailingOnly = FALSE)
+# script_path <- sub("--file=", "", args[grep("--file=", args)])
+# If you just want the filename without the path:
+# script_name <- basename(script_path)
+
+
+if (!exists('%and%')) base::source(paste0(libdir, "/%and%.R"))
+if (!exists('%or%'))  base::source(paste0(libdir, "/%or%.R"))
+if (!exists('%inrange%')) base::source(paste0(libdir, "/%inrange%.R"))
 
 
 ################################################################################
-## Section 7: TeX and Font Configuration
+## Section 5: TeX and Font Configuration
 ################################################################################
 
 # Find most recent texlive installation
@@ -118,25 +163,13 @@ if (length(texlive_dirs) > 0) {
     options(texfonts = paste0(getOption("texlive"), "/texmf-dist/fonts/"))
     options(pfbdir = paste0(getOption("texfonts"), "type1/public/bera/"))
 } else {
-    message("Warning: No texlive installation found in /usr/local/texlive/")
+    message("Warning: No texlive installation found in /usr/local/texlive/ --- plotting will suck")
 }
 
 
-################################################################################
-## Section 8: Parallel Processing
-################################################################################
-
-## This includes threads. The computer becomes unresponsive if we use more than these
 
 ################################################################################
-## Section 9: Command Line Arguments
-################################################################################
-
-ARGV <- commandArgs(trailingOnly = TRUE)
-ARGALL <- commandArgs()
-
-################################################################################
-## Section 10: Interactive vs Non-Interactive Setup
+## Section 6: Interactive vs Non-Interactive Setup
 ################################################################################
 
 if (interactive()) {
@@ -162,24 +195,24 @@ if (interactive()) {
 } else {
 
     options(width = 1024)
-    cat("[Non-Interactive: 1024 terminal widths]\n", file = stderr())
+    message("[Non-Interactive: 1024 terminal widths]\n", file = stderr())
 
-    use("tools", "md5sum")
-    cat("#CommandArgs: ", paste(ARGALL, collapse = " "), "\n")
+    ARGALL <- commandArgs()
+    message("#CommandArgs: ", paste(ARGALL, collapse = " "), "\n")
 
     if (grepl("--file=", ARGALL[4])) {
         Rfilename <- substr(ARGALL[4], 8, 100)
         md5sumval <- md5sum(Rfilename)
         Rscriptname <- paste("Script: ", R.home(), "//", Rfilename, " ", md5sumval, "\n")
-        cat("#     ", Rscriptname)
-        cat("#----------------\n")
-        print(file.info(Rfilename))
-        cat("#----------------\n")
+        message("#     ", Rscriptname, "#----------------")
+        print(file.info(Rfilename), file=stderr())
+        message("#----------------\n")
     }
 }
 
+
 ################################################################
-## try to improve error handling
+## Section 7: try to improve error handling (depends on interactive)
 ################################################################
 
 if (requireNamespace("rlang", quietly = TRUE)) {
@@ -201,65 +234,57 @@ if (requireNamespace("rlang", quietly = TRUE)) {
                         "."
                     }
                 })
-                cat("Current call stack locations:\n")
-                cat(srcrefs, sep = " ")
-                cat("\n")
+                message("Current call stack locations:")
+                message(srcrefs, sep = " ")
             }
 
             lineno()
             message("\nRun traceback() for full stack trace")
             message("Tip: Install rlang for better error traces: install.packages('rlang')")
+            browser()
         })
     } else {
         options(error = traceback)
     }
 }
 
-################################################################################
-## Section 11: Load Core Operators (needed before iaw environment)
-################################################################################
-
-if (!exists('%and%')) base::source(paste0(libdir, "/%and%.R"))
-if (!exists('%or%'))  base::source(paste0(libdir, "/%or%.R"))
-if (!exists('%inrange%')) base::source(paste0(libdir, "/%inrange%.R"))
 
 ################################################################################
-## Section 12: iaw Environment - Loading & Compilation
+## Section 8: Rebuild Riaw - Loading & Compilation of 'iaw$'
 ################################################################################
 
 fname.lib.cached <- paste0(libdir, "/library.Rdata")
 iawRsourcefilenames <- c(Sys.glob(paste0(libdir, "/*.R")))
 
-if (!exists("docs")) docs <- NULL
-
-if (file.exists(fname.lib.cached) &&
-    all(file.info(fname.lib.cached)$mtime > file.info(iawRsourcefilenames)$mtime)) {
+if (file.exists(fname.lib.cached) && all(file.info(fname.lib.cached)$mtime > file.info(iawRsourcefilenames)$mtime)) {
 
     ## Load from cache if up to date
-    load(fname.lib.cached)
+    load(fname.lib.cached)   ## populates list iaw$
     message("[loaded cached library ", fname.lib.cached, "]")
 
 } else {
-    ## Compile from source
+    ## Recompile all the .R functions from source and store them"
 
     ## The functions can depend on one another, so first load all from source
+
     iaw <- new.env()
+
     for (Rfile in iawRsourcefilenames) {
         if (grepl("Rprofile.R", Rfile)) next  ## skip yourself!
-        base::source(Rfile)
+        base::source(Rfile)  ## depends on iaw as list existing
     }
 
-    message("NOW COMPILING")
-
+    message("[Compiling:", appendLF = FALSE)
     for (Rfunc in ls(envir = iaw)) {
         if (is.function(iaw[[Rfunc]])) {
-            cat("[Compiling '", Rfunc, "']\n", sep = "")
+            message(" '", Rfunc, "'", appendLF = FALSE)
             iaw[[Rfunc]] <- cmpfun(iaw[[Rfunc]])
         }
     }
+    message("]")
 
     save(iaw, file = fname.lib.cached)
-    cat("[Compiled and Saved ", fname.lib.cached, "]\n\n", file = stderr())
+    message("[Compiled and Saved ", fname.lib.cached, "]\n")
 
     rm(Rfile, Rfunc)
 }
@@ -268,7 +293,7 @@ rm(fname.lib.cached, iawRsourcefilenames)
 
 
 ################################################################################
-## Section 13: iaw Environment - Helper Functions
+## Section 9: iaw Environment - Helper Functions
 ################################################################################
 #
 # iaw$list <- function() {
@@ -295,31 +320,12 @@ rm(fname.lib.cached, iawRsourcefilenames)
 #     }
 # }
 #
-################################################################################
-## Section 14: Base Function Enhancements
-################################################################################
-
-## --- Enhanced source() with automatic sink to .Rout in interactive mode
-
-iaw$ARGV0 <- NULL
-base_source <- base::source  # Keep base::source available for internal use
-
-source <- function(file = file, verbose = FALSE, ...) {
-    iaw$sink(paste0(file, "out"), split = TRUE, verbose)
-    if (Rscriptname == "Rscriptname unknown") Rscriptname <<- paste(getwd(), file)
-    iaw$ARGV0 <<- file
-    try(base_source(file, keep.source = TRUE, ...))
-    iaw$ARGV0 <<- NULL
-    iaw$sink(NULL, verbose)
-    if (verbose) iaw$msg("[automatic source sinking into ", file, "out was closed]")
-}
-
-
 
 
 ################################################################
-## --- Enhanced subset.data.frame with better error messages ---
+## Section 10: Enhanced subset.data.frame with better error messages ---
 ################################################################
+
 
 ns <- getNamespace("base")
 unlockBinding("subset.data.frame", ns)
@@ -329,9 +335,8 @@ lockBinding("subset.data.frame", ns)
 
 
 ################################################################
-## Protection
+## Section 11: Protection against common errors
 ################################################################
-
 
 ## Protect against accidental misuse of T for "time-end" vs. TRUE
 T <- TRUE
@@ -345,13 +350,13 @@ suppressWarnings({ rmf("d"); rmf("lh"); rmf("lag"); rmf("rmf"); })
 
 
 #################################################################
-## Section 16: Cleanup & Final Message
+## Section 12: Cleanup & Final Message
 #################################################################
 
 message(libdir, "/Rprofile.R on ", getOption("hostname"), " completely loaded")
 
 
-
+################################################################
 
 ## Tips & Reminders:
 ## new : my_url = config$url %||% "https://www.jumpingrivers.com/blog"
