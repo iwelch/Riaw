@@ -221,9 +221,7 @@ if (requireNamespace("rlang", quietly = TRUE)) {
 
 if (!exists('%and%')) base::source(paste0(libdir, "/%and%.R"))
 if (!exists('%or%'))  base::source(paste0(libdir, "/%or%.R"))
-if (!exists('%inrange%')) '%inrange%' <- function(x, range_vector) {
-    (x >= range_vector[1]) & (x <= range_vector[2])
-}
+if (!exists('%inrange%')) base::source(paste0(libdir, "/%inrange%.R"))
 
 ################################################################################
 ## Section 12: iaw Environment - Loading & Compilation
