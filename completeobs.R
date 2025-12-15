@@ -16,6 +16,7 @@
 #' iaw$completeobs(df)
 
 iaw$completeobs <- function(d) {
+    .Defunct("use na.omit(d)")
     stopifnot(is.data.frame(d))
     d[complete.cases(d), ]
 }

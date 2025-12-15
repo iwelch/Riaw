@@ -19,7 +19,10 @@
 
 iaw$dict.lookup <- function(keys, dict, default = NA) {
     stopifnot(is.character(keys) || is.numeric(keys))
-    result <- dict[as.character(keys)]
-    result[is.na(result)] <- default
-    result
+
+    ifelse(keys %in% names(dict), dict[keys], default)
+
+    # result <- dict[as.character(keys)]
+    # result[is.na(result)] <- default
+    # result
 }

@@ -17,8 +17,11 @@
 #' iaw$is.numeric(c(1, 2, 3), 3)
 
 iaw$is.numeric <- function(nvec, required.length.of.nvec = 0) {
-    stopifnot(is.numeric(required.length.of.nvec), length(required.length.of.nvec) == 1L)
+
     c1 <- .Primitive("is.numeric")(nvec)
-    c2 <- (length(nvec) == required.length.of.nvec)
-    c1 && c2
+    if (is.null(required.length.of.nvec)) return(c1)
+
+    stopifnot(is.numeric(required.length.of.nvec), length(required.length.of.nvec) == 1L)
+    c1 && (length(nvec) == required.length.of.nvec)
+
 }

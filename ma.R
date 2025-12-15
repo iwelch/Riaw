@@ -18,6 +18,7 @@
 iaw$ma <- function(x, n) {
     stopifnot(is.numeric(x))
     stopifnot(is.numeric(n), length(n) == 1L, n >= 1)
-    
-    stats::filter(x, rep(1/n, n), sides = 1)
+
+    zoo::rollmean(x, n, fill = NA, align = "right")
+    ## stats::filter(x, rep(1/n, n), sides = 1)
 }

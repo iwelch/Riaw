@@ -14,6 +14,8 @@
 #' @family data-reshaping
 #' @export
 #'
+#' @seealso tidyr::pivot_wider(d, names_from = id.time, values_from = id.val)
+#'
 #' @examples
 #' df <- data.frame(firm = c("A","A","B","B"), year = c(1,2,1,2), val = 1:4)
 #' iaw$long2wide(df, "year", "firm", "val")
@@ -26,7 +28,7 @@ iaw$long2wide <- function(d, id.time, id.firm, id.val) {
     stopifnot(id.time %in% names(d))
     stopifnot(id.firm %in% names(d))
     stopifnot(id.val %in% names(d))
-    
+
     rv <- reshape(
         subset(d, TRUE, select = c(id.firm, id.time, id.val)),
         idvar = id.firm,

@@ -16,15 +16,17 @@
 #' iaw$estring("The value is x={{x}}")
 
 iaw$estring <- function(es) {
+    .Defunct("use glue::glue(es) instead")
+
     stopifnot(is.character(es), length(es) == 1L)
-    
+
     rx <- "(?<=\\{\\{).*?(?=\\}\\})"
     match <- gregexpr(rx, es, perl = TRUE)
     toeval <- regmatches(es, match)[[1]]
-    
+
     subback <- rep(NA, length(toeval))
     if (length(toeval) == 0) return(es)
-    
+
     for (i in seq_along(toeval)) {
         for (en in sys.nframe():0) {
             subback[i] <- tryCatch(
@@ -37,6 +39,6 @@ iaw$estring <- function(es) {
         subback[i] <- paste(toeval[i], "=", subback[i], sep = "")
     }
     regmatches(es, match) <- "%s"
-    
+
     do.call("sprintf", c(fmt = es, as.list(subback)))
 }

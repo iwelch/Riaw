@@ -15,6 +15,11 @@
 #' @examples
 #' iaw$colSds(matrix(rnorm(20), ncol = 4))
 
+# Better - use matrixStats (10-100x faster)
 iaw$colSds <- function(x, na.rm = TRUE) {
-    apply(x, 2, sd, na.rm = na.rm)
+    if (requireNamespace("matrixStats", quietly = TRUE)) {
+        matrixStats::colSds(as.matrix(x), na.rm = na.rm)
+    } else {
+        apply(x, 2, sd, na.rm = na.rm)
+    }
 }

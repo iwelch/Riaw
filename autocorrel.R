@@ -8,7 +8,7 @@
 #'
 #' @param series.x First numeric vector.
 #' @param series.y Second numeric vector.
-#' @param around Number of leads/lags (default 5).
+#' @param leadlagss Number of leads/lags (default 5).
 #'
 #' @return Named numeric vector of correlations.
 #'
@@ -20,7 +20,7 @@
 #' y <- sin(2:101)
 #' iaw$autocorrel(x, y, leadlags = 3)
 
-autocorrel <- function(series.x, series.y, leadlags = 5) {
+iaw$autocorrel <- function(series.x, series.y, leadlags = 5) {
     stopifnot(is.numeric(series.x), is.vector(series.x))
     stopifnot(is.numeric(series.y), is.vector(series.y))
     stopifnot(length(series.x) > 1L, length(series.y) > 1L)
@@ -33,5 +33,3 @@ autocorrel <- function(series.x, series.y, leadlags = 5) {
     }
     v
 }
-
-iaw$autocorrel <- autocorrel

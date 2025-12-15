@@ -15,8 +15,8 @@ message(libdir, "/Rprofile.R on ", hostname())
 options(show.error.locations = TRUE)
 
 ## Clean up commonly misused variables
-rmf <- function(n) { 
-    if (exists(n, envir = .GlobalEnv)) rm(list = n, envir = .GlobalEnv) 
+rmf <- function(n) {
+    if (exists(n, envir = .GlobalEnv)) rm(list = n, envir = .GlobalEnv)
 }
 suppressWarnings({ rmf("d"); rmf("lh") })
 
@@ -29,7 +29,7 @@ msgboth <- function(..., msgcat = "") {
 ################################################################
 ## base::source("~/lib/R/chatter.R")
 
-addlibraries <- c("Cairo", "data.table", "R.utils", "inline", "knitr", "MASS", "sandwich", "bit64")
+addlibraries <- c("Cairo", "data.table", "R.utils", "inline", "knitr", "MASS", "sandwich", "bit64", "glue", "RcppArmadillo")
 ## fails on intel, usually with ctest  "Rcpp", "fixest", "lmtest", "fst"
 
 addlibraries.notinstalled <- (!addlibraries %in% .packages(TRUE))
@@ -71,6 +71,9 @@ use("MASS")
 # use("sandwich")
 # use("lmtest")
 
+
+
+
 ### would be nice to be able to use "install.packages("devtools"); devtools::install_github("hadley/strict")
 
 message("[loaded all libraries]")
@@ -79,7 +82,7 @@ ARGV <- commandArgs(trailingOnly = TRUE)
 ARGALL <- commandArgs()
 
 if (!interactive()) {
-    
+
     options(width = 1024)
     use("tools", "md5sum")
     cat("#CommandArgs: ", paste(ARGALL, collapse = " "), "\n")
@@ -94,7 +97,7 @@ if (!interactive()) {
     }
     options(width = 1024)
     cat("[Non-Interactive: 1024 terminal widths]\n", file = stderr())
-    
+
     if (requireNamespace("rlang", quietly = TRUE)) {
         library(rlang)
         options(
@@ -105,25 +108,25 @@ if (!interactive()) {
     } else {
         options(error = traceback)
     }
-    
+
 } else {
-    
+
     Rscriptname <- "Rscriptname unknown (interactive)"
     utils::loadhistory("~/.Rhistory")
-    
+
     tty.setcols <- iaw.autosetcols <- function( rightmargin= 8) {
         cols <- system('tput cols', intern = TRUE)
         if (is.character(cols)) options(width = as.integer(cols) - rightmargin)  ## default
         message("[iaw.autosetcols: Col Widths of Terminal now ", getOption("width"), " characters]\n")
     }
-    
+
     iaw.autosetcols()
-    
+
     .Last <- function() {
         if (interactive()) try(savehistory("~/.Rhistory"))
         try(system("rm -rf .RData ; echo '[removed any .RData]'"))
     }
-    
+
     if (requireNamespace("rlang", quietly = TRUE)) {
         library(rlang)
         options(
@@ -174,7 +177,7 @@ if (length(texlive_dirs) > 0) {
     message("Warning: No texlive installation found in /usr/local/texlive/")
 }
 
-### note: you can also use the Cairo package for charter: 
+### note: you can also use the Cairo package for charter:
 ### https://stat.ethz.ch/pipermail/r-help/2011-August/286508.html
 
 ## library(grDevices)  ## "graphics devices and support for colours and fonts"
@@ -183,10 +186,10 @@ if (length(texlive_dirs) > 0) {
 ## must have: install.packages("extrafont"); library(extrafont); font_import(); loadfonts()
 ## library(extrafont)
 
-# pdfFonts(Bera = Type1Font("Bera", paste0(getOption("texfonts"), "afm/public/bera/", 
+# pdfFonts(Bera = Type1Font("Bera", paste0(getOption("texfonts"), "afm/public/bera/",
 #          c("fvsr8a","fvsb8a","fvsro8a","fvsbo8a"), ".afm")))
 
-## if (getOption("os") == "osx") pdf <- CairoPDF  
+## if (getOption("os") == "osx") pdf <- CairoPDF
 ## <-- now use 'cairo_pdf' as a device, gets you better fonts, but may drop vector graphics for bitmaps
 
 ################################################################
@@ -209,49 +212,49 @@ if (!exists('%inrange%')) '%inrange%' <- function(x, range_vector) ( (x >= range
 ## library(compiler)
 
 fname.lib.cached <- paste0(libdir, "/library.Rdata")
-iawRsourcefilenames <- c(Sys.glob(paste0(libdir, "/*.R")), 
+iawRsourcefilenames <- c(Sys.glob(paste0(libdir, "/*.R")),
                          Sys.glob(paste0(libdir, "/plotsupport/*.R")))
 
 if (!exists("docs")) docs <- NULL
 
-if (file.exists(fname.lib.cached) && 
+if (file.exists(fname.lib.cached) &&
     all(file.info(fname.lib.cached)$mtime > file.info(iawRsourcefilenames)$mtime)) {
-    
+
     load(fname.lib.cached)
     cat("Loaded cached library ", fname.lib.cached, "\n", file = stderr())
-    
+
 } else {
-    
+
     ## libraries needed to be able to compile
     # library(utils)
     # library(parallel)
     # library(stats)
     # library(graphics)
     # library(grDevices)
-    
+
     ## the functions can depend on one another, so first load all from source into the current environment
     iaw <- new.env()
     for (Rfile in iawRsourcefilenames) {
         if (grepl("Rprofile.R", Rfile)) next  ## skip yourself!
         base::source(Rfile)
     }
-    
+
     message("NOW COMPILING")
-    
+
     for (Rfunc in ls(envir = iaw)) {
         if (is.function(iaw[[Rfunc]])) {
             cat("[Compiling '", Rfunc, "']\n", sep = "")
             iaw[[Rfunc]] <- cmpfun(iaw[[Rfunc]])
         }
     }
-    
+
     save(iaw, file = fname.lib.cached)
     cat("[Compiled and Saved ", fname.lib.cached, "]\n\n", file = stderr())
-    
+
     # attr(iaw, "Rfiles") <- iawRsourcefilenames  ## in addition to containing the files, we also have a list of source files
     # attr(iaw, "libloc") <- fname.lib.cached
     ## quit()
-    
+
     rm(Rfile, Rfunc)
 }
 

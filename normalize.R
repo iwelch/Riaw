@@ -16,5 +16,7 @@
 
 iaw$normalize <- function(x) {
     stopifnot(is.numeric(x))
-    (x - min(x, na.rm = TRUE)) / (max(x, na.rm = TRUE) - min(x, na.rm = TRUE))
+    rng <- max(x, na.rm = TRUE) - min(x, na.rm = TRUE)
+    if (rng == 0) return(rep(0.5, length(x)))  # or NA
+    (x - min(x, na.rm = TRUE)) / rng
 }

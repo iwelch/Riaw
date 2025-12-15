@@ -16,6 +16,8 @@
 #' @export
 
 iaw$plot.p.arrows <- function(x0, y0, x1, y1, ...) {
-    arrows(x0, y0, x1, y1, ...)
+    Defunct("use Arrows() from the shape library")
+
+    shape::arrows(x0, y0, x1, y1, ...)
     invisible(NULL)
 }
