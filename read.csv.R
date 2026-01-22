@@ -24,17 +24,17 @@
 
 iaw$searchdir <- c(".")
 
-iaw$read.csv <- function(filename, ..., search = NULL, 
-                          allow.fst.cache = TRUE, verbose = 1) {
+iaw$read.csv <- function(filename, ..., search = NULL,
+                          allow.fst.cache = TRUE, verbose = FALSE) {
     stopifnot(is.character(filename), length(filename) == 1L)
     stopifnot(grepl("sv$", filename) | grepl("sv.gz$", filename) | grepl(".fst$", filename))
-    
+
     if (!is.null(search)) {
-        search <- ifelse(substr(search, nchar(search), nchar(search)) == "/", 
+        search <- ifelse(substr(search, nchar(search), nchar(search)) == "/",
                          search, paste0(search, "/"))
         iaw$searchdir <<- unique(c(iaw$searchdir, search))
     }
-    
+
     basic.filename <- filename
     if (!file.exists(filename)) {
         for (nm in paste0(iaw$searchdir, basic.filename)) {
@@ -45,9 +45,9 @@ iaw$read.csv <- function(filename, ..., search = NULL,
         }
     }
     stopifnot(file.exists(filename))
-    
+
     cachefilename <- sub(".csv.gz", ".fst", filename)
-    
+
     if (grepl(".fst$", filename)) {
         if (!requireNamespace("fst", quietly = TRUE)) stop("Package 'fst' required")
         object <- fst::read.fst(filename)
@@ -62,11 +62,13 @@ iaw$read.csv <- function(filename, ..., search = NULL,
         object <- data.table::fread(filename, nThread = 8, data.table = FALSE,
                                      integer64 = "numeric", ...)
     }
-    
+
     if (verbose) {
         cat("\n[read from", filename, ":", nrow(object), "rows,", ncol(object), "cols]\n")
+    } else {
+        message("\n[read from ", filename, ": ", nrow(object), " rows, ", ncol(object), " cols]\n")
     }
-    
+
     invisible(as.data.frame(object))
 }
 

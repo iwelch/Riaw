@@ -1,86 +1,95 @@
-#' Enhanced OLS with Newey-West Standard Errors
+
+#' OLM
 #'
 #' @name olm
 #'
-#' OLS regression with Newey-West HAC standard errors.
+#' Run an ordinary-least-squares model with enhanced output.
 #'
 #' @param ... Arguments passed to lm().
-#' @param newey.west Lag for Newey-West SE. Default 0.
-#' @param stdcoefs Include standardized coefficients.
-#' @param include.anova Include ANOVA decomposition.
-#' @param keep.pval Keep p-values.
-#' @param truncate.T Truncate t-statistics.
-#' @param digits Rounding digits.
+#' @param newey.west Lag for Newey-West standard errors. Default 0.
+#' @param stdcoefs Include standardized coefficients. Default TRUE.
+#' @param include.anova Include ANOVA sum of squares decomposition. Default TRUE.
+#' @param keep.pval Keep p-values in output. Default FALSE.
+#' @param truncate.T Truncate t-statistics to +/-99.99. Default TRUE.
+#' @param digits Rounding digits. Default 4.
 #'
-#' @return Modified summary.lm object.
+#' @return An object of class "olm" inheriting from "summary.lm".
 #'
 #' @family regression
 #' @export
 #'
-#' @importFrom lmtest coeftest
-#' @importFrom sandwich NeweyWest
-#'
-#' @examples
-#' df <- data.frame(y = rnorm(100), x = rnorm(100))
-#' iaw$olm(y ~ x, data = df)
+#' @seealso print.olm
 
-iaw$olm <- function(..., newey.west = 0, stdcoefs = TRUE, include.anova = TRUE,
-                    keep.pval = FALSE, truncate.T = TRUE, digits = 4) {
-    stopifnot(is.numeric(newey.west), length(newey.west) == 1L)
-    stopifnot(is.logical(stdcoefs), length(stdcoefs) == 1L)
-    stopifnot(is.logical(include.anova), length(include.anova) == 1L)
-    stopifnot(is.logical(keep.pval), length(keep.pval) == 1L)
-    stopifnot(is.logical(truncate.T), length(truncate.T) == 1L)
-    stopifnot(is.numeric(digits), length(digits) == 1L)
-    
-    if (!requireNamespace("lmtest", quietly = TRUE)) {
-        stop("Package 'lmtest' required")
-    }
-    if (!requireNamespace("sandwich", quietly = TRUE)) {
-        stop("Package 'sandwich' required")
-    }
-    
-    lmo <- stats::lm(..., x = TRUE, na.action = na.exclude)
-    
+iaw$olm <- function (..., newey.west = 0, stdcoefs = TRUE, include.anova = TRUE,
+                     keep.pval = FALSE, truncate.T = TRUE, digits = 4) {
+
+    if (!requireNamespace("lmtest", quietly = TRUE)) stop("Package 'lmtest' required")
+    if (!requireNamespace("sandwich", quietly = TRUE)) stop("Package 'sandwich' required")
+
+    ## R is painfully error-tolerant. I prefer reasonable and immediate error warnings.
+    stopifnot( (is.vector(newey.west))&(length(newey.west)==1)|(is.numeric(newey.west)) )
+    stopifnot( (is.vector(stdcoefs))&(length(stdcoefs)==1)|(is.logical(stdcoefs)) )
+    ## stopifnot( (is.vector(keepx))&(length(keepx)==1)|(is.logical(keepx)) )
+    ## I wish I could check lm()'s argument, but I cannot.
+
+    lmo <- stats:::lm(..., x=TRUE, na.action=na.exclude)  ## keep NA values
+    ## note that both the lmo$x matrix and residuals(lmo) omit all NA observations
+
+    ## following two statements need to come early to apply to lmo (before we add stuff to it)
+
     if (newey.west >= 0) {
-        nw.se <- lmtest::coeftest(lmo, 
-            vcov = sandwich::NeweyWest(lmo, lag = newey.west, prewhite = FALSE))[, 2]
+        nw.se <- lmtest::coeftest(lmo, vcov = sandwich::NeweyWest(lmo, lag = newey.west, prewhite = FALSE))[, 2]
     }
-    
     if (stdcoefs) {
-        lmo.sx <- apply(lmo$x[, -1, drop = FALSE], 2, sd, na.rm = TRUE)
-        lmo.sy <- sd(lmo$model[[1]], na.rm = TRUE)
-        scoef <- coef(lmo)[-1] * lmo.sx / lmo.sy
+        xsd <- apply( lmo$x, 2, sd)
+        ysd <- sd( lmo$model[,1] )
+        stdcoefs.v <- lmo$coefficients*xsd/ysd
     }
-    
-    slmo <- summary(lmo)
-    coeftable <- coef(slmo)
-    colnames(coeftable) <- c("coefest", "se.ols", "T.ols", "pval.ols")
-    
-    if (newey.west >= 0) {
-        coeftable <- cbind(coeftable, "se.nw" = nw.se)
-        coeftable <- cbind(coeftable, "T.nw" = coeftable[, 1] / nw.se)
+
+    basesigma <- sigma(lmo)
+
+    full.x.matrix <- lmo$x
+    lmo <- stats:::summary.lm( lmo )  ## add the summary.lm object; changes contents of lmo
+    lmo$x <- full.x.matrix
+
+    ## 3 is the T stat
+    lmo$coefficients[,3] <-round(lmo$coefficients[,3],2)
+    if (truncate.T) lmo$coefficients[,3] <- iaw$winsorize.level( lmo$coefficients[,3], c(-99.99, 99.99) )
+
+    if (!keep.pval) lmo$coefficients <- lmo$coefficients[,1:3]
+
+    if (newey.west>=0) {
+        lmo$coefficients <- cbind(lmo$coefficients, nw.se)
+        colnames(lmo$coefficients)[ncol(lmo$coefficients)] <- paste0(" se.nw(",newey.west,")")
+        lmo$coefficients <- cbind(lmo$coefficients, round(lmo$coefficients[,1]/nw.se,2))
+        K <- ncol(lmo$coefficients)
+        if (truncate.T) lmo$coefficients[,K] <- iaw$winsorize.level( lmo$coefficients[,K], c(-99.99, 99.99) )
+        colnames(lmo$coefficients)[K] <- paste0("T.nw(",newey.west,")")
     }
-    
+
     if (stdcoefs) {
-        coeftable <- cbind(coeftable, "stdcoefs" = c(NA, scoef))
+        lmo$coefficients <- cbind(lmo$coefficients, stdcoefs.v )
+        colnames(lmo$coefficients)[ncol(lmo$coefficients)] <- " stdcoefs"
     }
-    
-    if (!keep.pval) {
-        coeftable <- coeftable[, !grepl("pval", colnames(coeftable)), drop = FALSE]
-    }
-    
-    if (truncate.T) {
-        tcols <- grep("^T\\.", colnames(coeftable))
-        coeftable[, tcols] <- pmin(pmax(coeftable[, tcols], -99.99), 99.99)
-    }
-    
-    slmo$coefficients <- round(coeftable, digits)
-    
+
     if (include.anova) {
-        a <- anova(lmo)
-        slmo$residssq <- round(100 * a[nrow(a), 2] / sum(a[, 2]), 1)
+        aa <- (data.frame( summary(aov(...))[[1]])[,2, drop=FALSE])[,1]
+        sumaa <- sum(aa)  ## includes residuals!!
+        aa <- aa/sumaa
+        lmo$residssq <- round(aa[length(aa)], digits)
+        aa <- c(0.0, aa[1:(length(aa)-1)])  ## chops them off
+        lmo$coefficients <- cbind(lmo$coefficients, aa )
+        colnames(lmo$coefficients)[ncol(lmo$coefficients)] <- "pctsumsq"
+    } else {
+        lmo$residssq <- NA
     }
-    
-    slmo
+
+    lmo$coefficients <- round(lmo$coefficients,digits)
+    colnames(lmo$coefficients)[1:3] <- c("coefest", "  se.ols", "T.ols")
+    lmo$sigma <- round(basesigma,8)
+
+    ## Assign class: "olm" first, then inherit from "summary.lm"
+    class(lmo) <- c("olm", "summary.lm")
+
+    lmo
 }

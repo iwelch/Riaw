@@ -9,7 +9,9 @@
 #' @family plotting
 #' @export
 
-iaw$plot.pdf.end <- function() {
+iaw$pdf.end <- function(verbose = 1) {
     grDevices::dev.off()
+    if (verbose) iaw$cat.stderr("[pdf.end]\n")
+    options(pdf.openfile = NULL)
     invisible(NULL)
 }

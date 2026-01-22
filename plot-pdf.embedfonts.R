@@ -11,7 +11,7 @@
 #' @family plotting
 #' @export
 
-iaw$plot.pdf.embedfonts <- function(filename) {
+iaw$pdf.embedfonts <- function(filename) {
     stopifnot(is.character(filename), length(filename) == 1L)
     grDevices::embedFonts(filename)
     invisible(NULL)

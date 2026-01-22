@@ -4,11 +4,11 @@
 #'
 #' Renames columns using from/to mapping or named vector.
 #'
-#' @param df Data frame or character vector.
+#' @param df Data frame or list.
 #' @param from Current names or named vector (old=new).
 #' @param to New names (ignored if from is named).
 #'
-#' @return Modified data frame or character vector.
+#' @return Modified data frame or list.
 #'
 #' @family data-manipulation
 #' @export
@@ -18,8 +18,8 @@
 #' iaw$rename.columns(df, c(a = "x", b = "y"))
 
 iaw$rename.columns <- function(df, from, to = NULL) {
-    nms <- if (is.data.frame(df)) names(df) else df
-   stopifnot( is.list(df) )
+    stopifnot(is.list(df))
+    nms <- names(df)
 
     if (is.null(to)) {
         to <- as.character(from)
@@ -32,12 +32,8 @@ iaw$rename.columns <- function(df, from, to = NULL) {
         nms[nms == from[i]] <- to[i]
     }
 
-    if (is.data.frame(df)) {
-        names(df) <- as.character(nms)
-        return(df)
-    } else {
-        return(as.character(nms))
-    }
+    names(df) <- as.character(nms)
+    df
 }
 
 iaw$rename.column <- iaw$rename.columns

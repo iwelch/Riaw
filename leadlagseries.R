@@ -17,7 +17,7 @@
 
 iaw$panelcheck <- function(seriesin, panelid, timeid, errormsg = "unused") {
     if (is.null(panelid)) return(0)
-    
+
     stopifnot(!is.null(timeid))
     stopifnot(!is.null(seriesin))
     stopifnot(length(seriesin) > 1L)
@@ -28,25 +28,25 @@ iaw$panelcheck <- function(seriesin, panelid, timeid, errormsg = "unused") {
     stopifnot(is.numeric(timeid))
     stopifnot(!any(is.na(panelid)))
     stopifnot(!any(is.na(timeid)))
-    
+
     if (!(all(panelid >= iaw$lagseries(panelid), na.rm = TRUE))) {
         problemids <- head(which(panelid < iaw$lagseries(panelid)), na.rm = TRUE)
         message("Panel not sorted by panel id. Problem IDs: ")
         print(problemids)
     }
-    
+
     (all(panelid >= iaw$lagseries(panelid), na.rm = TRUE)) %or%
-        "Panel is not sorted by panel id"
-    
+      stop("Panel is not sorted by panel id")
+
     noproblem <- (panelid != iaw$lagseries(panelid)) | (timeid > iaw$lagseries(timeid))
-    
+
     if (!all(noproblem, na.rm = TRUE)) {
         noproblem <- ifelse(is.na(noproblem), TRUE, noproblem)
         problems <- which(!noproblem, arr.ind = TRUE)
         cat("First problem at index", problems[1], "\n")
         d <- data.frame(seriesin, panelid, timeid)
         print(d[problems[1] + (-1:0), ])
-        (FALSE) %or% "Panel not sorted by time within panel"
+        (FALSE) %or% stop("Panel not sorted by time within panel")
     }
 }
 

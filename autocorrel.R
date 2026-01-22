@@ -8,7 +8,7 @@
 #'
 #' @param series.x First numeric vector.
 #' @param series.y Second numeric vector.
-#' @param leadlagss Number of leads/lags (default 5).
+#' @param leadlags Number of leads/lags (default 5).
 #'
 #' @return Named numeric vector of correlations.
 #'

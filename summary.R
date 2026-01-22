@@ -35,7 +35,7 @@ iaw$summary <- function(df, verbose = "X", digits = 4) {
 
     nok <- function(x, na.rm = FALSE) sum(!is.na(x))
     pctna <- function(x, na.rm = FALSE) {
-        if (sum(is.na(x)) == 0) -1 else as.integer(100 * sum(is.na(x)) / length(x))
+        if (sum(is.na(x)) == 0) NA else as.integer(100 * sum(is.na(x)) / length(x))
     }
     pall <- function(x, na.rm = TRUE) {
         quantile(x, c(0, 0.01, 0.05, 0.25, 0.50, 0.75, 0.95, 0.99, 1), na.rm = na.rm)
@@ -65,6 +65,8 @@ iaw$summary <- function(df, verbose = "X", digits = 4) {
         suppressWarnings(cor(x[2:length(x)], x[1:(length(x) - 1)], use = "pair"))
     }
 
+    stat_env <- environment()
+
     df <- as.data.frame(lapply(df, function(x) if (is.logical(x)) as.integer(x) else x))
     nums <- unlist(lapply(df, is.numeric))
     if (all(!nums)) stop("No numeric columns found")
@@ -75,7 +77,7 @@ iaw$summary <- function(df, verbose = "X", digits = 4) {
         if (!is.numeric(x)) return(NULL)
         s <- c()
         for (sw1 in statswanted) {
-            s <- c(s, get(sw1)(x, na.rm = TRUE))
+            s <- c(s, get(sw1, envir = stat_env)(x, na.rm = TRUE))
             if (sw1 != "pall") names(s)[length(s)] <- sw1
         }
         s

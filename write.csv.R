@@ -28,12 +28,12 @@
 iaw$write.csv <- function(object, filename, ...,
                            allow.overwrite = TRUE,
                            abort.on.overwrite = FALSE,
-                           verbose = TRUE,
+                           verbose = FALSE,
                            use.data.table = TRUE,
                            gzip.in.background = FALSE) {
     stopifnot(is.data.frame(object))
     stopifnot(is.character(filename), length(filename) == 1L)
-    
+
     if (file.exists(filename)) {
         if (abort.on.overwrite) stop("File exists: ", filename)
         if (!allow.overwrite) {
@@ -41,17 +41,19 @@ iaw$write.csv <- function(object, filename, ...,
             return(invisible(object))
         }
     }
-    
+
     stopifnot(grepl(".csv$", filename) | grepl("sv.gz$", filename))
-    
-    if (verbose) cat("[write.csv: saving", filename, "]\n")
-    
+
+    # if (verbose) cat("[write.csv: saving", filename, "]\n")
+
     data.table::fwrite(object, file = filename, ...)
-    
+
     if (verbose) {
-        cat("[wrote:", nrow(object), "rows,", ncol(object), "cols to", filename, "]\n")
+        cat("[wrote:", nrow(object), "rows & ", ncol(object), "cols to", filename, "]\n")
+    } else {
+        message("[iaw$write.csv: wrote: ", nrow(object), " rows & ", ncol(object), " cols to ", filename, "]\n")
     }
-    
+
     invisible(object)
 }
 

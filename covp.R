@@ -18,6 +18,13 @@
 
 iaw$covp <- function(x, y, na.rm = TRUE) {
     stopifnot(is.numeric(x), is.numeric(y))
+    stopifnot(length(x) == length(y))
+    if (na.rm) {
+        complete <- !is.na(x) & !is.na(y)
+        x <- x[complete]
+        y <- y[complete]
+    }
     n <- length(x)
-    cov(x, y, use = if (na.rm) "complete.obs" else "everything") * (n - 1) / n
+    if (n == 0) return(NA_real_)
+    cov(x, y) * (n - 1) / n
 }

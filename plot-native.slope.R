@@ -11,7 +11,7 @@
 #' @family plotting
 #' @export
 
-iaw$plot.native.slope <- function(slope) {
+iaw$native.slope <- function(slope) {
     stopifnot(is.numeric(slope), length(slope)==1)
     usr <- par("usr")
     pin <- par("pin")

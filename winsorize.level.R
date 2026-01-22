@@ -5,7 +5,7 @@
 #' Clips values to specified min/max.
 #'
 #' @param x Numeric vector.
-#' @param lvlminmax Minimum and Maximum value
+#' @param lvlminmax Numeric vector of length 2: c(min, max).
 #' @param name Variable name for verbose output.
 #' @param verbose Print summary.
 #'
@@ -16,7 +16,7 @@
 #'
 #' @examples
 #' x <- c(-100, 1, 2, 3, 100)
-#' iaw$winsorize.level(x, 0, 10)
+#' iaw$winsorize.level(x, c(0, 10))
 
 iaw$winsorize.level <- function(x, lvlminmax, name = NULL, verbose = FALSE) {
     stopifnot(is.numeric(x), length(lvlminmax)==2L)

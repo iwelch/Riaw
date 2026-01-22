@@ -17,5 +17,9 @@
 iaw$rbind.oc.by <- function(indata, INDICES, FUNIN, ...) {
     stopifnot(is.data.frame(indata))
     result <- iaw$oc.by(indata, INDICES, FUNIN, ...)
-    do.call(rbind, result)
+    result <- Filter(Negate(is.null), result)
+    if (length(result) == 0L) return(indata[0L, , drop = FALSE])
+    out <- data.table::rbindlist(result)
+    if (!inherits(indata, "data.table")) out <- as.data.frame(out)
+    out
 }

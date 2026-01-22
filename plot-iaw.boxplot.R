@@ -12,6 +12,7 @@
 #' @family plotting
 #' @export
 
-iaw$iaw.boxplot <- function(x, ...) {
+iaw$boxplot <- function(x, ...) {
+    stop("LOOK UP WHAT I WANTED")
     boxplot(x, ...)
 }

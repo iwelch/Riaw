@@ -12,6 +12,6 @@
 #' @family plotting
 #' @keywords internal
 
-iaw$plot.pdf.start.bera <- function(filename, ...) {
+iaw$pdf.start.bera <- function(filename, ...) {
     iaw$plot.pdf.start(filename, ...)
 }

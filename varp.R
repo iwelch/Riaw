@@ -17,6 +17,8 @@
 
 iaw$varp <- function(x, na.rm = TRUE) {
     stopifnot(is.numeric(x))
+    if (na.rm) x <- x[!is.na(x)]
     n <- length(x)
-    var(x, na.rm = na.rm) * (n - 1) / n
+    if (n == 0) return(NA_real_)
+    var(x) * (n - 1) / n
 }
