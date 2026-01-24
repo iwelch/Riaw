@@ -189,7 +189,14 @@ source <- function(file, verbose = FALSE, ...) {
     options(Rscriptname = NULL)
 
     iaw$sink(NULL, verbose)
-    if (verbose) iaw$msg("[automatic source sinking into ", Routfilename, " was closed]")
+
+    ## Remove empty output files (<=1 byte) - we don't need them
+    if (file.exists(Routfilename) && file.info(Routfilename)$size <= 1) {
+        file.remove(Routfilename)
+        if (verbose) iaw$msg("[empty output file ", Routfilename, " was removed]")
+    } else {
+        if (verbose) iaw$msg("[automatic source sinking into ", Routfilename, " was closed]")
+    }
 }
 
 # if invoked via CMD BATCH:
