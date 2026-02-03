@@ -170,19 +170,26 @@ ARGV <- commandArgs(trailingOnly = TRUE)
 source <- function(file, ...) {
     if (grepl("\\.Rinclude$", file)) return(base::source(file, ...))
 
+    ## Pass through if file doesn't exist (let base::source handle resolution)
+    if (!file.exists(file)) {
+        return(base::source(file, ...))
+    }
+
+    ## Normalize to absolute path for reliable checks
+    file_abs <- normalizePath(file, mustWork = FALSE)
+
     ## Pass through to base::source for system directories (quarto, etc.)
-    if (grepl("^/(Applications|Library|usr|opt)/", file)) {
+    if (grepl("^/(Applications|Library|usr|opt)/", file_abs)) {
         return(base::source(file, ...))
     }
 
     ## Also pass through if output directory is not writable
-    outdir <- dirname(file)
+    outdir <- dirname(file_abs)
     if (!file.access(outdir, 2) == 0) {
         return(base::source(file, ...))
     }
 
     stopifnot(grepl("\\.R$", file))
-    stopifnot(file.exists(file))
 
     ## Detect nested sinking - Rscriptname is set only when we're inside a sinking source
     if (!is.null(getOption("Rscriptname"))) {
