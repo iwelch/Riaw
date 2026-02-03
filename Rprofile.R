@@ -321,9 +321,16 @@ if (requireNamespace("rlang", quietly = TRUE)) {
 ################################################################################
 
 fname.lib.cached <- paste0(libdir, "/library.Rdata")
+fname.rprofile <- paste0(libdir, "/Rprofile.R")
 iawRsourcefilenames <- c(Sys.glob(paste0(libdir, "/*.R")))
 
-if (file.exists(fname.lib.cached) && all(file.info(fname.lib.cached)$mtime > file.info(iawRsourcefilenames)$mtime)) {
+cache.mtime <- file.info(fname.lib.cached)$mtime
+rprofile.mtime <- file.info(fname.rprofile)$mtime
+sources.mtime <- file.info(iawRsourcefilenames)$mtime
+
+if (file.exists(fname.lib.cached) &&
+    all(cache.mtime > sources.mtime) &&
+    cache.mtime > rprofile.mtime) {
 
     ## Load from cache if up to date
     load(fname.lib.cached)   ## populates list iaw$
@@ -356,7 +363,7 @@ if (file.exists(fname.lib.cached) && all(file.info(fname.lib.cached)$mtime > fil
     rm(Rfile, Rfunc)
 }
 
-rm(fname.lib.cached, iawRsourcefilenames)
+rm(fname.lib.cached, fname.rprofile, iawRsourcefilenames, cache.mtime, rprofile.mtime, sources.mtime)
 
 
 ################################################################################
