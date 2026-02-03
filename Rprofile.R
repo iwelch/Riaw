@@ -167,42 +167,43 @@ object.size <- function( x ) {
 
 ARGV <- commandArgs(trailingOnly = TRUE)
 
-source <- function(file, verbose = FALSE, ...) {
-    if (grepl("\\.Rinclude$", file)) return(base::source(file, echo = verbose, ...))
+source <- function(file, ...) {
+    if (grepl("\\.Rinclude$", file)) return(base::source(file, ...))
+
+    ## Pass through to base::source for system directories (quarto, etc.)
+    if (grepl("^/(Applications|Library|usr|opt)/", file)) {
+        return(base::source(file, ...))
+    }
+
+    ## Also pass through if output directory is not writable
+    outdir <- dirname(file)
+    if (!file.access(outdir, 2) == 0) {
+        return(base::source(file, ...))
+    }
 
     stopifnot(grepl("\\.R$", file))
     stopifnot(file.exists(file))
 
-    ## Check if output directory is writable; if not, fall back to base::source
-    outdir <- dirname(file)
-    if (!file.access(outdir, 2) == 0) {
-        if (verbose) message("[skipping sink: directory not writable: ", outdir, "]")
-        return(base::source(file, keep.source = TRUE, ...))
-    }
-
     ## Detect nested sinking - Rscriptname is set only when we're inside a sinking source
     if (!is.null(getOption("Rscriptname"))) {
-        iaw$sink(NULL, verbose)
+        iaw$sink(NULL)
         options(Rscriptname = NULL)
         stop("Sinking R source files cannot be nested. Use 'base::source(\"", file, "\")' instead.")
     }
 
     Routfilename <- paste0(file, "out")
     ## cannot be called before iaw$ has been created and read
-    iaw$sink(Routfilename, split = TRUE, verbose)
+    iaw$sink(Routfilename, split = TRUE)
 
     options(Rscriptname = paste(getwd(), file))  ## so programs can access it
     try(base::source(file, keep.source = TRUE, ...))
     options(Rscriptname = NULL)
 
-    iaw$sink(NULL, verbose)
+    iaw$sink(NULL)
 
     ## Remove empty output files (<=1 byte) - we don't need them
     if (file.exists(Routfilename) && file.info(Routfilename)$size <= 1) {
         file.remove(Routfilename)
-        if (verbose) iaw$msg("[empty output file ", Routfilename, " was removed]")
-    } else {
-        if (verbose) iaw$msg("[automatic source sinking into ", Routfilename, " was closed]")
     }
 }
 
