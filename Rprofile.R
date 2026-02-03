@@ -168,6 +168,11 @@ object.size <- function( x ) {
 ARGV <- commandArgs(trailingOnly = TRUE)
 
 source <- function(file, ...) {
+    ## In non-interactive mode (quarto, scripts, etc.), always use base::source
+    if (!interactive()) {
+        return(base::source(file, ...))
+    }
+
     if (grepl("\\.Rinclude$", file)) return(base::source(file, ...))
 
     ## Pass through if file doesn't exist (let base::source handle resolution)
