@@ -173,6 +173,13 @@ source <- function(file, verbose = FALSE, ...) {
     stopifnot(grepl("\\.R$", file))
     stopifnot(file.exists(file))
 
+    ## Check if output directory is writable; if not, fall back to base::source
+    outdir <- dirname(file)
+    if (!file.access(outdir, 2) == 0) {
+        if (verbose) message("[skipping sink: directory not writable: ", outdir, "]")
+        return(base::source(file, keep.source = TRUE, ...))
+    }
+
     ## Detect nested sinking - Rscriptname is set only when we're inside a sinking source
     if (!is.null(getOption("Rscriptname"))) {
         iaw$sink(NULL, verbose)
