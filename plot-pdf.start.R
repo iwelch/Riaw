@@ -72,7 +72,7 @@ iaw$pdf.start <- function (pdffilename,
         width = width, height = height, pointsize = pointsize, version = 1.4,
         title = title_text,
         ...)
-    if (file.exists("Rio.log")) cat("[P]", filename, "\t<-\t", getOption(Rscriptname), "\n", file= "Rio.log")
+    if (file.exists("Rio.log")) cat("[P]\t", filename, "\t<-\t", getOption(Rscriptname), "\t", Sys.time(), "\n", file= "Rio.log", append=TRUE)
 
     # Set plot parameters
     par(las = 1)
