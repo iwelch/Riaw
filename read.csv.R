@@ -62,7 +62,7 @@ iaw$read.csv <- function(filename, ..., select = NULL, search = NULL,
         object <- data.table::fread(filename, nThread = 8, data.table = FALSE, integer64 = "numeric", select = select, ...)
     }
 
-    if (file.exists("Rio.log")) cat("[I]\t", filename, "\t->\t", getOption("Rscriptname"), "\t", format(Sys.time(), "%Y-%m-%d %H:%M:%S"), "\n", file= "Rio.log", append=TRUE)
+    iaw$.Riolog("I", filename)
 
     if (verbose) {
         cat("\n[read from", filename, ":", nrow(object), "rows,", ncol(object), "cols]\n")
