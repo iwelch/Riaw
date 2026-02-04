@@ -215,6 +215,8 @@ if (interactive() || !.running_under_quarto_knitr) {
         if (file.exists(Routfilename) && file.info(Routfilename)$size <= 1) {
             file.remove(Routfilename)
         }
+
+        invisible(NULL)
     }
 }
 rm(.running_under_quarto_knitr)
