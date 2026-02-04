@@ -207,7 +207,7 @@ if (interactive() || !.running_under_quarto) {
 
         options(Rscriptname = normalizePath(file, mustWork = FALSE))  ## so programs can access it
         try(base::source(file, keep.source = TRUE, ...))
-        ## Note: Rscriptname option persists so functions can access it
+        options(Rscriptname = NULL)
 
         iaw$sink(NULL)
 
