@@ -168,10 +168,10 @@ object.size <- function( x ) {
 ARGV <- commandArgs(trailingOnly = TRUE)
 
 ## Detect if running under quarto (or similar tools that need pristine base::source)
-.running_under_quarto <- any(grepl("quarto|knitr\\.R$", commandArgs()))
+.running_under_quarto_knitr <- any(grepl("quarto|knitr\\.R$", commandArgs()))
 
 ## Custom source() with auto-sinking - interactive or CLI, but not quarto
-if (interactive() || !.running_under_quarto) {
+if (interactive() || !.running_under_quarto_knitr) {
     source <- function(file, ...) {
         if (grepl("\\.Rinclude$", file)) return(base::source(file, ...))
 
@@ -219,7 +219,7 @@ if (interactive() || !.running_under_quarto) {
         }
     }
 }
-rm(.running_under_quarto)
+rm(.running_under_quarto_knitr)
 
 # if invoked via CMD BATCH:
 # args <- commandArgs(trailingOnly = FALSE)

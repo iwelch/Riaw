@@ -59,9 +59,10 @@ iaw$read.csv <- function(filename, ..., search = NULL,
         object <- fst::read.fst(cachefilename)
         filename <- cachefilename
     } else {
-        object <- data.table::fread(filename, nThread = 8, data.table = FALSE,
-                                     integer64 = "numeric", ...)
+        object <- data.table::fread(filename, nThread = 8, data.table = FALSE, integer64 = "numeric", ...)
     }
+
+    if (file.exists("Rio.log")) cat("[I]\t", filename, "\t->\t", getOption(Rscriptname), "\n", file= "Rio.log")
 
     if (verbose) {
         cat("\n[read from", filename, ":", nrow(object), "rows,", ncol(object), "cols]\n")
