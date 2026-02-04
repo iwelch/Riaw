@@ -196,10 +196,8 @@ if (interactive() || !.running_under_quarto) {
 
         stopifnot(grepl("\\.R$", file))
 
-        ## Detect nested sinking - Rscriptname is set only when we're inside a sinking source
-        if (!is.null(getOption("Rscriptname"))) {
-            iaw$sink(NULL)
-            options(Rscriptname = NULL)
+        ## Detect nested sinking - check if already sinking
+        if (sink.number() > 0) {
             stop("Sinking R source files cannot be nested. Use 'base::source(\"", file, "\")' instead.")
         }
 
@@ -207,9 +205,9 @@ if (interactive() || !.running_under_quarto) {
         ## cannot be called before iaw$ has been created and read
         iaw$sink(Routfilename, split = TRUE)
 
-        options(Rscriptname = paste(getwd(), file))  ## so programs can access it
+        options(Rscriptname = normalizePath(file, mustWork = FALSE))  ## so programs can access it
         try(base::source(file, keep.source = TRUE, ...))
-        options(Rscriptname = NULL)
+        ## Note: Rscriptname option persists so functions can access it
 
         iaw$sink(NULL)
 
@@ -285,6 +283,7 @@ if (interactive()) {
     if (grepl("--file=", ARGALL[4])) {
         Rfilename <- substr(ARGALL[4], 8, 100)
         md5sumval <- md5sum(Rfilename)
+        options(Rscriptname = normalizePath(Rfilename, mustWork = FALSE))
         Rscriptname <- paste("Script: ", R.home(), "//", Rfilename, " ", md5sumval, "\n")
         message("#     ", Rscriptname, "#----------------")
         print(file.info(Rfilename), file=stderr())
