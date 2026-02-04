@@ -24,7 +24,7 @@
 
 iaw$searchdir <- c(".")
 
-iaw$read.csv <- function(filename, ..., search = NULL,
+iaw$read.csv <- function(filename, ..., select = NULL, search = NULL,
                           allow.fst.cache = TRUE, verbose = FALSE) {
     stopifnot(is.character(filename), length(filename) == 1L)
     stopifnot(grepl("sv$", filename) | grepl("sv.gz$", filename) | grepl(".fst$", filename))
@@ -50,16 +50,16 @@ iaw$read.csv <- function(filename, ..., search = NULL,
 
     if (grepl(".fst$", filename)) {
         if (!requireNamespace("fst", quietly = TRUE)) stop("Package 'fst' required")
-        object <- fst::read.fst(filename)
+        object <- fst::read.fst(filename, columns = select)
     } else if ((cachefilename != filename) && file.exists(cachefilename) && allow.fst.cache) {
         if (file.info(cachefilename)$mtime < file.info(filename)$mtime) {
             stop("FST cache older than source")
         }
         if (!requireNamespace("fst", quietly = TRUE)) stop("Package 'fst' required")
-        object <- fst::read.fst(cachefilename)
+        object <- fst::read.fst(cachefilename, columns = select)
         filename <- cachefilename
     } else {
-        object <- data.table::fread(filename, nThread = 8, data.table = FALSE, integer64 = "numeric", ...)
+        object <- data.table::fread(filename, nThread = 8, data.table = FALSE, integer64 = "numeric", select = select, ...)
     }
 
     if (file.exists("Rio.log")) cat("[I]\t", filename, "\t->\t", getOption("Rscriptname"), "\t", Sys.time(), "\n", file= "Rio.log", append=TRUE)
