@@ -47,7 +47,7 @@ iaw$write.csv <- function(object, filename, ...,
     # if (verbose) cat("[write.csv: saving", filename, "]\n")
 
     data.table::fwrite(object, file = filename, ...)
-    if (file.exists("Rio.log")) cat("[O]\t", filename, "\t->\t", getOption(Rscriptname), "\t", as.character(Sys.time()), "\n", file= "Rio.log", append=TRUE)
+    if (file.exists("Rio.log")) cat("[O]\t", filename, "\t->\t", getOption("Rscriptname"), "\t", Sys.time(), "\n", file= "Rio.log", append=TRUE)
 
     if (verbose) {
         cat("[wrote:", nrow(object), "rows & ", ncol(object), "cols to", filename, "]\n")
