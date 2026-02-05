@@ -20,8 +20,14 @@
 iaw$.Riolog <- function(code, msg) {
     if (!file.exists("Rio.log")) return(invisible(NULL))
     now <- Sys.time()
+    scriptname <- getOption("Rscriptname")
+    ## Strip current directory prefix if present
+    wd_prefix <- paste0(getwd(), "/")
+    if (!is.null(scriptname) && startsWith(scriptname, wd_prefix)) {
+        scriptname <- substring(scriptname, nchar(wd_prefix) + 1)
+    }
     cat(as.integer(now), "\t",
-        getOption("Rscriptname"), "\t",
+        scriptname, "\t",
         code, "\t",
         msg, "\t",
         format(now, "%Y-%m-%d %H:%M:%S"), "\n",
