@@ -39,7 +39,8 @@ options(
 
     show.error.locations = TRUE,
 
-    Rscriptname = NULL
+    Rscriptname = NULL,
+    Rscriptstarttime = NULL
 
 )
 
@@ -205,9 +206,10 @@ if (interactive() || !.running_under_quarto_knitr) {
         ## cannot be called before iaw$ has been created and read
         iaw$sink(Routfilename, split = TRUE)
 
-        options(Rscriptname = normalizePath(file, mustWork = FALSE))  ## so programs can access it
+        options(Rscriptname = normalizePath(file, mustWork = FALSE),
+                Rscriptstarttime = Sys.time())  ## so programs can access it
         try(base::source(file, keep.source = TRUE, ...))
-        options(Rscriptname = NULL)
+        options(Rscriptname = NULL, Rscriptstarttime = NULL)
 
         iaw$sink(NULL)
 
@@ -285,7 +287,8 @@ if (interactive()) {
     if (grepl("--file=", ARGALL[4])) {
         Rfilename <- substr(ARGALL[4], 8, 100)
         md5sumval <- md5sum(Rfilename)
-        options(Rscriptname = normalizePath(Rfilename, mustWork = FALSE))
+        options(Rscriptname = normalizePath(Rfilename, mustWork = FALSE),
+                Rscriptstarttime = Sys.time())
         Rscriptname <- paste("Script: ", R.home(), "//", Rfilename, " ", md5sumval, "\n")
         message("#     ", Rscriptname, "#----------------")
         print(file.info(Rfilename), file=stderr())
