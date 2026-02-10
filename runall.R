@@ -4,23 +4,23 @@
 #'
 
 iaw$runall <- function() {
-  message( getwd() )
+  message( "iaw$runall: ", getwd() )
   rfiles <- Sys.glob("[0-9]*.R")
   plfiles <- Sys.glob("[0-9]*.pl")
-  
+
   if (length(plfiles) > 0) {
     warning("Some scripts are external (Perl): ", paste(plfiles, collapse = ", "))
   }
-  
+
   ## Combine and sort by numeric prefix
   allfiles <- c(rfiles, plfiles)
   allfiles <- allfiles[order(as.numeric(sub("^([0-9]+).*", "\\1", allfiles)))]
-  
-  message( paste(allfiles, collapse = " ") )
-  
+
+  message( "iaw$runall: executing ", paste(allfiles, collapse = " ") )
+
   for (fnm in allfiles) {
     msgboth("Running ", fnm)
-    
+
     if (grepl("\\.pl$", fnm)) {
       ## Perl script
       result <- tryCatch({
@@ -35,7 +35,7 @@ iaw$runall <- function() {
         NULL
       }, error = function(e) e)
     }
-    
+
     if (inherits(result, "error")) {
       message("\n*** FAILED: ", fnm, " ***")
       message("Error: ", conditionMessage(result))
