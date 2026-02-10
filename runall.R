@@ -9,7 +9,15 @@ iaw$runall <- function() {
   message( paste(filenames) )
   for (fnm in filenames) {
     msgboth("Running ", fnm)
-    source(fnm)
+    result <- tryCatch({
+      base::source(fnm)
+      NULL
+    }, error = function(e) e)
+    if (inherits(result, "error")) {
+      message("\n*** FAILED: ", fnm, " ***")
+      message("Error: ", conditionMessage(result))
+      stop("Aborting runall due to error in ", fnm, call. = FALSE)
+    }
     msgboth("Done ", fnm, "\n")
   }
 
