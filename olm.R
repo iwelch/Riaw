@@ -91,5 +91,9 @@ iaw$olm <- function (..., newey.west = 0, stdcoefs = TRUE, include.anova = TRUE,
     ## Assign class: "olm" first, then inherit from "summary.lm"
     class(lmo) <- c("olm", "summary.lm")
 
+    ## Ensure print.olm is registered for S3 dispatch (survives cache load)
+    if (!exists("print.olm", envir = globalenv(), inherits = FALSE))
+        assign("print.olm", iaw$print.olm, envir = globalenv())
+
     lmo
 }

@@ -37,24 +37,28 @@ iaw$print.olm <- function(x, yname = NULL, xnames = NULL,
 
     if (!is.null(description)) cat("---- Model:", description, "\n")
     if (is.null(yname)) yname <- as.character(formula(x))[2]
-    cat("--- Explaining '", yname, "':\n", sep = "")
+    cat("Dependent: ", yname, "\n", sep = "")
     print(ccc)
+
+    ## Missing observations (from na.exclude)
+    nmissing <- length(x$na.action)
+    miss.str <- if (nmissing > 0) paste0(". Missing: ", nmissing, " obs") else ""
+
+    ## Summary line: R2, df, sigma, F-stat, missing count
     cat("--- R2=", round(x$r.squared, 4),
         " adj.R2=", round(x$adj.r.squared, 4),
         " df=", x$df[2],
         " N=", x$df[2] + x$df[1],
-        " sigma=", csigma, "\n", sep = "")
+        " sigma=", csigma, sep = "")
 
-    ## F-statistic
     if (!is.null(x$fstatistic)) {
         fstat <- x$fstatistic
         pval <- pf(fstat[1], fstat[2], fstat[3], lower.tail = FALSE)
-        cat("--- F=", round(fstat[1], 2),
+        cat(" F=", round(fstat[1], 2),
             " on ", fstat[2], " and ", fstat[3], " DF",
-            "  p=", format.pval(pval, digits = 3), "\n\n", sep = "")
-    } else {
-        cat("\n")
+            "  p=", format.pval(pval, digits = 3), sep = "")
     }
+    cat(miss.str, "\n\n", sep = "")
 
     invisible(x)
 }
