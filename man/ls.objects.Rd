@@ -37,5 +37,14 @@ e <- new.env()
 e$x <- rnorm(1000)
 e$y <- "hello"
 iaw$ls.objects(envir = e)
+
+# Quick sanity check: are any objects unreasonably large?
+objs <- iaw$ls.objects(n = 3)
+objs[objs$size_MB > 100, ]  # flag anything over 100 MB
+
+# Compare memory before and after loading data
+before <- iaw$ls.objects()
+raw <- data.frame(x = rnorm(1e5))
+after <- iaw$ls.objects()
 }
 }

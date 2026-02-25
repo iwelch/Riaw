@@ -14,6 +14,17 @@
 #' # Prints: Done at 2025-01-15 14:32:07
 #' }
 #'
+#' \dontrun{
+#' # Typical batch script ending: write results, then done()
+#' write.csv(results, "output.csv")
+#' iaw$done()  # prints timestamp and exits
+#' }
+#'
+#' \dontrun{
+#' # In interactive mode, done() prints but does not quit
+#' iaw$done()  # safe to call -- only quits in non-interactive sessions
+#' }
+#'
 #' @family utilities
 #' @export
 

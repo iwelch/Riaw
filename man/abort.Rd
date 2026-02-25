@@ -38,4 +38,27 @@ load_data("/no/such/file.rds")
 \dontrun{
 (is.numeric(x)) \%or\% iaw$abort("x must be numeric")
 }
+
+# Abort is caught by tryCatch, enabling structured error handling
+result <- tryCatch(
+  iaw$abort("invalid configuration"),
+  error = function(e) paste("caught:", e$message)
+)
+result   # "caught: invalid configuration"
+
+# Abort with formatted context from financial data validation
+\dontrun{
+validate_returns <- function(ret) {
+  if (any(ret < -1))
+    iaw$abort(sprintf("return below -100\%\% at index \%d", which.min(ret)))
+}
+validate_returns(c(0.05, -0.02, -1.5))  # aborts with index 3
+}
+
+# Abort inside a pipeline to stop on unexpected NA counts
+\dontrun{
+df <- data.frame(price = c(100, NA, 102, NA, NA))
+na_pct <- mean(is.na(df$price))
+if (na_pct > 0.5) iaw$abort(sprintf("\%.0f\%\% NAs in price column", na_pct * 100))
+}
 }

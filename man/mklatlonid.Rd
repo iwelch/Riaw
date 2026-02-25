@@ -29,5 +29,11 @@ iaw$mklatlonid(c(51, -0))   # London (integer degrees)
 
 # Vectorised: create IDs for several cities at once
 iaw$mklatlonid(c(40, 51, 35), c(-74, 0, 139))   # NYC, London, Tokyo
+
+# Equator / prime meridian intersection
+iaw$mklatlonid(0, 0)                # grid cell near (0.5, 0.5)
+
+# Southern hemisphere location: Buenos Aires
+iaw$mklatlonid(-34, -58)
 }
 }

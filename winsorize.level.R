@@ -29,6 +29,19 @@
 #' # verbose = TRUE shows how many values were clipped
 #' iaw$winsorize.level(c(-10, 1, 2, 3, 10), c(0, 5),
 #'                     name = "myvar", verbose = TRUE)
+#'
+#' # Cap daily returns at +/-10%
+#' set.seed(1)
+#' daily_ret <- rnorm(500, 0, 0.05)
+#' capped <- iaw$winsorize.level(daily_ret, c(-0.10, 0.10))
+#' range(capped)   # exactly [-0.10, 0.10]
+#'
+#' # Clip temperature sensor readings to valid range
+#' temps <- c(-40, 15, 22, 35, 999)
+#' iaw$winsorize.level(temps, c(-30, 50))   # c(-30, 15, 22, 35, 50)
+#'
+#' # All values inside bounds -- no change
+#' iaw$winsorize.level(c(1, 2, 3), c(0, 10))   # c(1, 2, 3)
 
 iaw$winsorize.level <- function(x, lvlminmax, name = NULL, verbose = FALSE) {
     stopifnot(is.numeric(x), length(lvlminmax)==2L)

@@ -20,6 +20,19 @@
 #' rm(m); gc()
 #' iaw$meminfo()$used_MB   # lower after removal
 #' }
+#'
+#' # Access individual components of the memory report
+#' info <- iaw$meminfo()
+#' info$used_MB   # current heap usage in MB
+#' info$max_MB    # peak heap usage since session start
+#'
+#' # Log memory at checkpoints during a long pipeline
+#' \dontrun{
+#' for (step in c("load", "transform", "model")) {
+#'   # ... processing ...
+#'   message(step, ": ", iaw$meminfo()$used_MB, " MB")
+#' }
+#' }
 
 iaw$meminfo <- function() {
     gc_result <- gc()

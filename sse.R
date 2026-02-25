@@ -22,6 +22,22 @@
 #' # NA values are dropped automatically
 #' iaw$sse(c(1, NA, 3), c(1, 2, 4))   # (3-4)^2 = 1
 #'
+#' # Regression residual SSE matches sum of squared residuals
+#' set.seed(42)
+#' y <- 1:20 + rnorm(20)
+#' fit <- lm(y ~ seq_along(y))
+#' iaw$sse(y, fitted(fit))   # same as sum(resid(fit)^2)
+#'
+#' # Compare two competing forecasts
+#' actual <- c(100, 102, 105, 103, 108)
+#' model_a <- c(101, 101, 106, 104, 107)
+#' model_b <- c(99, 103, 104, 102, 110)
+#' iaw$sse(actual, model_a)   # 4
+#' iaw$sse(actual, model_b)   # 10 -- model A is better
+#'
+#' # Single observation
+#' iaw$sse(5, 3)   # 4
+#'
 #' @family statistics
 #' @export
 

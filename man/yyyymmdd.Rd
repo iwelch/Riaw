@@ -33,5 +33,16 @@ iaw$yyyymmdd(20240104, output = "weeknum")
 
 # Convert a Gregorian day number back to YYYYMMDD integer
 iaw$yyyymmdd(19358, output = "yyyymmdd")   # days since 1970-01-01
+
+# Determine day of week for a vector of trade dates
+trade_dates <- c(20240102, 20240103, 20240104)
+iaw$yyyymmdd(trade_dates, output = "weekday")   # "Tue", "Wed", "Thu"
+
+# Convert POSIXct timestamp to YYYYMMDD integer
+iaw$yyyymmdd(as.POSIXct("2024-06-15 14:30:00"), output = "yyyymmdd")
+
+# Week number useful for weekly aggregation
+iaw$yyyymmdd(20240101, output = "weeknum")
+iaw$yyyymmdd(20240108, output = "weeknum")   # one week later
 }
 }

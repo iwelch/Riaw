@@ -24,6 +24,19 @@
 #' )
 #' tryCatch(iaw$by.check.rectangular(bad), error = function(e) message(e$message))
 #'
+#' # Validate output from a split-apply on financial panel data
+#' panel <- data.frame(firm = rep(c("A","B"), each = 3), ret = rnorm(6))
+#' result <- by(panel, panel$firm, function(d) data.frame(mean_ret = mean(d$ret)))
+#' iaw$by.check.rectangular(result)  # passes: both groups return 1 column
+#'
+#' # NULL elements are silently skipped (common when some groups are empty)
+#' mixed <- list(data.frame(x = 1), NULL, data.frame(x = 2))
+#' iaw$by.check.rectangular(mixed)   # returns invisible TRUE
+#'
+#' # Non-data-frame elements are caught with a clear error
+#' bad2 <- list(data.frame(x = 1), c(1, 2, 3))
+#' tryCatch(iaw$by.check.rectangular(bad2), error = function(e) message(e$message))
+#'
 #' @family utilities
 #' @export
 

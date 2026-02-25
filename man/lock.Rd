@@ -36,6 +36,21 @@ if (iaw$lock(lockfile)) {
 # Short timeout for non-blocking attempt
 acquired <- iaw$lock(lockfile, timeout = 1)
 if (acquired) iaw$unlock(lockfile)
+
+# Guard a shared cache file during parallel writes
+cache_lock <- "/tmp/model_cache.lock"
+if (iaw$lock(cache_lock, timeout = 30)) {
+  saveRDS(results, "/tmp/model_cache.rds")
+  iaw$unlock(cache_lock)
+}
+
+# Use tryCatch to guarantee unlock even if work fails
+lf <- tempfile(fileext = ".lock")
+if (iaw$lock(lf, timeout = 10)) {
+  tryCatch({
+    # ... critical section ...
+  }, finally = iaw$unlock(lf))
+}
 }
 
 }

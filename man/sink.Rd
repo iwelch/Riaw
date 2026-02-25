@@ -41,5 +41,19 @@ iaw$sink(verbose = TRUE)   # prints elapsed time
 iaw$sink("log.Rout", append = TRUE)
 cat("run 2 results\n")
 iaw$sink()
+
+# Safety: sinking to a .R file is an error (prevents accidental overwrites)
+tryCatch(iaw$sink("script.R"), error = function(e) message(e$message))
+
+# Auto-close: opening a new sink file closes any previously open sink
+iaw$sink("first.Rout")
+iaw$sink("second.Rout")  # warns, closes first.Rout, opens second.Rout
+iaw$sink()                # closes second.Rout
+
+# Useful pattern for logging a batch script's output
+iaw$sink("analysis.Rout", verbose = TRUE)
+cat("=== Portfolio Analysis ===\n")
+print(summary(mtcars[, 1:3]))
+iaw$sink(verbose = TRUE)  # prints elapsed wall-clock time
 }
 }

@@ -25,6 +25,19 @@
 #'
 #' # Boundary values are inclusive
 #' c(0, 5, 10) %inrange% c(0, 10)   # all TRUE
+#'
+#' # Screen stocks by P/E ratio within a reasonable range
+#' pe_ratios <- c(5, 12, 18, 25, 42, 60)
+#' pe_ratios[pe_ratios %inrange% c(10, 30)]   # 12, 18, 25
+#'
+#' # Flag trading days with extreme returns (outside +/- 5%)
+#' daily_ret <- c(0.01, -0.06, 0.03, 0.08, -0.02)
+#' normal <- daily_ret %inrange% c(-0.05, 0.05)  # TRUE FALSE TRUE FALSE TRUE
+#' daily_ret[!normal]   # -0.06, 0.08 (the outliers)
+#'
+#' # Date range filtering (works with numeric year representation)
+#' years <- 2015:2025
+#' years[years %inrange% c(2019, 2022)]   # 2019 2020 2021 2022
 
 `%inrange%` <- function(x, range_vector) {
     stopifnot(is.numeric(x))

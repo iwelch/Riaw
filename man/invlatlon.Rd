@@ -27,5 +27,9 @@ iaw$invlatlon(id)   # lat ~= 40.5, lon ~= -73.5
 # Round-trip: mklatlonid -> invlatlon -> mklatlonid
 id2 <- iaw$mklatlonid(iaw$invlatlon(id))
 stopifnot(id == id2)
+
+# Vectorised inverse: recover coordinates for multiple IDs
+ids <- iaw$mklatlonid(c(40, 51, -34), c(-74, 0, -58))
+iaw$invlatlon(ids)
 }
 }

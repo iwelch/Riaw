@@ -29,6 +29,21 @@
 #'
 #' # NA values pass through unchanged
 #' iaw$winsorize.percentile(c(NA, 1:10, NA))
+#'
+#' # Winsorize cross-sectional asset returns at 2.5%/97.5%
+#' set.seed(42)
+#' asset_returns <- rnorm(1000, mean = 0.005, sd = 0.03)
+#' cleaned <- iaw$winsorize.percentile(asset_returns, c(0.025, 0.975))
+#' range(cleaned)   # tails trimmed
+#'
+#' # Symmetric 5th/95th clip for robust regression inputs
+#' x <- c(rnorm(98), -50, 50)
+#' w <- iaw$winsorize.percentile(x, c(0.05, 0.95))
+#' max(abs(w)) < 50   # TRUE, outliers capped
+#'
+#' # Median is unaffected by winsorization
+#' set.seed(1); v <- rnorm(200)
+#' median(v) == median(iaw$winsorize.percentile(v))   # TRUE (or very close)
 
 
 iaw$winsorize.percentile <- function(x, xperc = c(0.01, 0.99), verbose = FALSE, name = "") {

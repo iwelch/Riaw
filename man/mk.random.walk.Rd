@@ -39,5 +39,18 @@ set.seed(7)
 p1 <- iaw$mk.random.walk(50, start = 100, sd = 1)
 p2 <- iaw$mk.random.walk(50, start = 100, sd = 2)
 cor(p1, p2)   # near zero for independent walks
+
+# Walk of length 1 is just the starting value
+iaw$mk.random.walk(1, start = 42)  # 42
+
+# Simulate a stylized stock price over 252 trading days
+set.seed(2024)
+daily_price <- iaw$mk.random.walk(252, start = 100, sd = 1.5)
+range(daily_price)  # approximate price range over one year
+
+# Multiple walks for a Monte Carlo fan chart
+set.seed(99)
+paths <- replicate(50, iaw$mk.random.walk(100, start = 0, sd = 0.5))
+dim(paths)  # 100 x 50 matrix of simulated paths
 }
 }

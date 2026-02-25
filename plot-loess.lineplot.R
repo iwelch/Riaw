@@ -30,6 +30,22 @@
 #' # Tighter span for less smoothing
 #' plot(x, y, pch = 16, col = "gray70")
 #' iaw$plot.loess.lineplot(x, y, span = 0.3, col = "darkgreen", lwd = 2)
+#'
+#' # Smooth a noisy exponential growth trend (e.g., asset prices)
+#' set.seed(7)
+#' days <- 1:250
+#' prices <- 100 * exp(cumsum(rnorm(250, 0.001, 0.02)))
+#' plot(days, prices, pch = ".", col = "gray50", main = "Smoothed price trend")
+#' sm <- iaw$plot.loess.lineplot(days, prices, span = 0.4, col = "navy", lwd = 2)
+#' str(sm)  # data.frame with xnew and ynew columns
+#'
+#' # Overlay two loess curves with different smoothing spans for comparison
+#' x <- runif(150, 0, 10)
+#' y <- sin(x) + rnorm(150, sd = 0.5)
+#' plot(x, y, pch = 16, col = "gray70", main = "Span comparison")
+#' iaw$plot.loess.lineplot(x, y, span = 0.3, col = "red", lwd = 2)
+#' iaw$plot.loess.lineplot(x, y, span = 0.9, col = "blue", lwd = 2)
+#' legend("topright", c("span=0.3", "span=0.9"), col = c("red", "blue"), lwd = 2)
 #' }
 #'
 #' @family plotting

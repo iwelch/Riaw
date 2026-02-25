@@ -37,5 +37,18 @@ iaw$is.numeric(c(1, 2, 3), 2)  # FALSE (iaw: wrong length)
 
 # A character vector is not numeric
 iaw$is.numeric(c("1", "2", "3"))
+
+# Validate a single portfolio weight
+iaw$is.numeric(0.25, 1)              # TRUE
+iaw$is.numeric(c(0.25, 0.75), 1)    # FALSE (length 2)
+
+# Check that return vector has expected length
+rets <- c(0.01, -0.02, 0.03, 0.00, -0.01)
+iaw$is.numeric(rets, 5)              # TRUE
+iaw$is.numeric(rets, 4)              # FALSE
+
+# Integers pass the numeric check
+iaw$is.numeric(1L)                   # TRUE
+iaw$is.numeric(1L, 1)               # TRUE
 }
 }

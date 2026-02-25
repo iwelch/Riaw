@@ -32,5 +32,17 @@ iaw$normalize(c(7, 7, 7))
 # Normalize each column of a matrix
 m <- matrix(c(10, 20, 30, 100, 200, 300), nrow = 3)
 apply(m, 2, iaw$normalize)
+
+# Normalize stock prices to compare relative performance
+aapl <- c(150, 155, 148, 160, 165)
+msft <- c(300, 310, 305, 320, 330)
+iaw$normalize(aapl)  # 0.000 0.294 ... 1.000
+iaw$normalize(msft)  # 0.000 0.333 ... 1.000
+
+# Edge case: single element maps to 0.5
+iaw$normalize(42)  # 0.5
+
+# All-NA input returns all NA
+iaw$normalize(c(NA, NA, NA))  # NA NA NA
 }
 }

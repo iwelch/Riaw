@@ -45,5 +45,27 @@ iaw$famamacbeth(ret ~ beta + size, data = panel)
 # Get the per-period gammas directly
 gs <- iaw$famamacbeth.gammas(ret ~ beta + size, data = panel)
 gs
+
+# Single-factor CAPM-style Fama-MacBeth test
+set.seed(7)
+capm <- data.frame(
+  yyyymm = rep(201901:201912, each = 10),
+  stock  = rep(1:10, 12),
+  excess_ret = rnorm(120, 0.005, 0.04),
+  mkt_beta   = runif(120, 0.5, 1.5)
+)
+iaw$famamacbeth(excess_ret ~ mkt_beta, data = capm)
+
+# Three-factor model with custom time identifier
+set.seed(99)
+ff3 <- data.frame(
+  qtr   = rep(1:8, each = 20),
+  firm  = rep(1:20, 8),
+  ret   = rnorm(160, 0.02, 0.06),
+  mkt   = rnorm(160, 1, 0.3),
+  smb   = rnorm(160, 0, 0.2),
+  hml   = rnorm(160, 0, 0.2)
+)
+iaw$famamacbeth(ret ~ mkt + smb + hml, data = ff3, timeid = "qtr")
 }
 }

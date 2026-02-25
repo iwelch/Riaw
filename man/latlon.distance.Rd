@@ -35,5 +35,14 @@ iaw$latlon.distance(
   c(34.0522, 41.8781, 29.7604),    # LA, Chicago, Houston
   c(-118.2437, -87.6298, -95.3698)
 )
+
+# Same point yields zero distance
+iaw$latlon.distance(51.5, -0.1, 51.5, -0.1)  # 0
+
+# Antipodal points: maximum possible distance (~20015 km)
+iaw$latlon.distance(0, 0, 0, 180)
+
+# Cross-hemisphere: Sydney to San Francisco (~11945 km)
+iaw$latlon.distance(-33.8688, 151.2093, 37.7749, -122.4194)
 }
 }

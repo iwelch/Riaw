@@ -32,5 +32,16 @@ iaw$nearest(grid, 0.37)        # returns 0.25
 
 # Equidistant: returns the first candidate (lower)
 iaw$nearest(c(1, 3, 5), 2)     # returns 1
+
+# Snap a trade price to the nearest tick
+tick_grid <- seq(100, 105, by = 0.25)
+iaw$nearest(tick_grid, 102.33)  # 102.25
+
+# Find the closest standard maturity for a bond
+maturities <- c(0.25, 0.5, 1, 2, 3, 5, 7, 10, 20, 30)
+iaw$nearest(maturities, 4.2)   # 5
+
+# Works with negative values
+iaw$nearest(c(-10, -5, 0, 5, 10), -3)  # -5
 }
 }

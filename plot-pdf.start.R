@@ -31,6 +31,19 @@
 #' iaw$pdf.start("narrow", wd = 5, ht = 4)
 #' hist(rnorm(200))
 #' iaw$pdf.end()
+#'
+#' # Publication-quality figure with tight margins
+#' iaw$pdf.start("pub_fig", wd = 7, ht = 5,
+#'               mar = c(3.5, 3.5, 0.5, 0.5), mgp = c(2, 0.6, 0))
+#' plot(1:20, cumsum(rnorm(20)), type = "l", lwd = 2,
+#'      xlab = "Trading day", ylab = "Cumulative return")
+#' iaw$pdf.end()
+#'
+#' # Larger pointsize for presentation slides
+#' iaw$pdf.start("slides/overview", wd = 12, ht = 8, pointsize = 18)
+#' barplot(c(2.1, 3.5, 4.8), names.arg = c("2023", "2024", "2025"),
+#'         col = "steelblue", main = "Annual revenue ($B)")
+#' iaw$pdf.end()
 #' }
 #'
 #' @family plotting

@@ -10,6 +10,13 @@
 #' # Print R debugging tips to the console
 #' iaw$debug.advice()
 #'
+#' \dontrun{
+#' # Call at the start of an interactive debugging session
+#' iaw$debug.advice()
+#' # Then follow the tips, e.g.:
+#' options(error = recover)
+#' }
+#'
 #' @family utilities
 #' @export
 

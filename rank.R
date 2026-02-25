@@ -32,6 +32,17 @@
 #'
 #' # Assign to 3 groups (portfolio formation)
 #' iaw$rank(c(10, 20, 30, 40, 50, 60), ngroups = 3)
+#'
+#' # Rank with NAs preserved in their original positions
+#' iaw$rank(c(5, NA, 3, NA, 1))  # c(3, NA, 2, NA, 1)
+#'
+#' # Quintile portfolios from market-cap data
+#' mktcap <- c(100, 500, 50, 2000, 800, 300, 1500, 75, 900, 1200)
+#' iaw$rank(mktcap, ngroups = 5)  # assigns each stock to quintile 1-5
+#'
+#' # Quantile ranks for CDF approximation
+#' returns <- c(-0.05, 0.02, 0.10, -0.01, 0.03)
+#' iaw$rank(returns, ngroups = 0)  # values in (0, 1]
 
 iaw$rank <- function(x, ties.method = "average", ngroups = NULL) {
     stopifnot(is.numeric(x))

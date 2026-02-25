@@ -32,6 +32,23 @@
 #' validate(data.frame(x = 1:5))   # passes silently
 #' validate(data.frame())           # aborts
 #' }
+#'
+#' # Chain multiple guard checks in a validation pipeline
+#' x <- 10
+#' (x > 100) %and% message("x exceeds threshold")   # silent: condition FALSE
+#' (x > 5)   %and% message("x is moderate")          # prints: x is moderate
+#'
+#' # Use with is.na to flag missing data in financial series
+#' price <- 42.5
+#' (is.na(price)) %and% message("price is missing")  # silent: price exists
+#'
+#' # Conditional logging during batch processing
+#' \dontrun{
+#' for (ticker in c("AAPL", "GOOG", "MSFT")) {
+#'   df <- load_returns(ticker)
+#'   (any(is.na(df$ret))) %and% iaw$cat.stderr(paste(ticker, "has NA returns\n"))
+#' }
+#' }
 
 `%and%` <- function(e1, e2) {
     e2 <- substitute(e2)

@@ -36,5 +36,17 @@ pc   # pcor-1 should be largest, showing GDP leads inflation by 1 period
 # Compare partial correlations to simple cross-correlations
 cc <- iaw$autocorrel(gdp, inf, leadlags = 4)
 rbind(partial = pc[-1], simple = cc)  # partial controls for other lags
+
+# Partial autocorrelation of an AR(1) process (self vs self)
+set.seed(10)
+ar1 <- as.numeric(filter(rnorm(150), 0.6, method = "recursive"))
+pac <- iaw$autopcorrel(ar1, ar1, around = 3)
+pac   # pcor0 dominates; higher-order partial correlations near zero
+
+# Volume vs returns: isolate the direct lag-0 relationship
+set.seed(55)
+ret <- rnorm(100, sd = 0.02)
+vol <- 1e6 + 3e7 * abs(ret) + rnorm(100, sd = 5e3)
+iaw$autopcorrel(abs(ret), vol, around = 2)  # pcor0 strongest
 }
 }

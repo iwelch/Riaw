@@ -30,6 +30,20 @@
 #' newx <- iaw$diffid.for.fixed.effects(X, id)
 #' iaw$olm(newy ~ newx)
 #' }
+#'
+#' # Demeaned values within each group sum to zero
+#' vals <- c(10, 20, 30, 100, 200)
+#' grp  <- c("A", "A", "A", "B", "B")
+#' dm <- iaw$diffid.for.fixed.effects(vals, grp)
+#' tapply(dm, grp, sum)  # A=0, B=0 (within-group sums)
+#'
+#' # Data frame input: demean multiple columns at once
+#' df <- data.frame(revenue = c(5, 10, 15, 50, 60),
+#'                  cost    = c(3, 7, 12, 40, 55))
+#' iaw$diffid.for.fixed.effects(df, grp)
+#'
+#' # Numeric group IDs work too (coerced to factor)
+#' iaw$diffid.for.fixed.effects(c(1, 3, 2, 8, 6), c(1, 1, 1, 2, 2))
 
 iaw$diffid.for.fixed.effects <- function(h, id) {
     id <- droplevels(as.factor(id))

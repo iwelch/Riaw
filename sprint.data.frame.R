@@ -18,6 +18,21 @@
 #' big <- data.frame(x = 1:10, y = letters[1:10])
 #' cat(iaw$sprint.data.frame(big, n = 2), "\n")
 #'
+#' # Capture a summary snapshot for logging
+#' trades <- data.frame(ticker = c("AAPL", "MSFT", "GOOG"),
+#'                      qty = c(100, 200, 50),
+#'                      price = c(175.3, 415.2, 141.8))
+#' msg <- iaw$sprint.data.frame(trades)
+#' nchar(msg) > 0   # TRUE
+#'
+#' # Single-row data frame
+#' iaw$sprint.data.frame(data.frame(a = 1, b = "x"), n = 1)
+#'
+#' # Combine with strcat for composite log messages
+#' header <- "=== Portfolio ==="
+#' body <- iaw$sprint.data.frame(trades, n = 2)
+#' paste(header, body, sep = "\n")
+#'
 #' @family utilities
 #' @export
 

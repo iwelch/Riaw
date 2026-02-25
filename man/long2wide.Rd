@@ -35,5 +35,19 @@ panel <- data.frame(
   ret    = c(0.05, -0.02, 0.03, 0.01, 0.04, -0.01)
 )
 iaw$long2wide(panel, "yyyymm", "ticker", "ret")
+
+# Single entity: result is a 1-row data frame
+solo <- data.frame(firm = rep("X", 3), year = 1:3, val = c(0.1, 0.2, 0.3))
+iaw$long2wide(solo, "year", "firm", "val")
+
+# Compute correlation matrix from wide panel of returns
+panel2 <- data.frame(
+  stock = rep(c("AAPL","MSFT","GOOG"), each = 4),
+  qtr   = rep(1:4, 3),
+  ret   = c(0.05, -0.02, 0.03, 0.01, 0.02, 0.04, -0.01, 0.03,
+            0.01, 0.03, 0.02, -0.02)
+)
+wide <- iaw$long2wide(panel2, "qtr", "stock", "ret")
+cor(t(wide))  # pairwise return correlations
 }
 }

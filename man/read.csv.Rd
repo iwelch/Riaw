@@ -40,5 +40,14 @@ df <- iaw$read.csv("data.csv.gz", quiet = TRUE)
 
 # Add a search directory so relative filenames resolve automatically
 df <- iaw$read.csv("prices.csv", search = "~/data/")
+
+# Read a gzipped CSV directly (auto-detected by extension)
+df <- iaw$read.csv("monthly_returns.csv.gz")
+
+# Read an FST file for columnar speed
+df <- iaw$read.csv("panel.fst", select = c("permno", "date", "ret"))
+
+# Override FST cache to force reading from original CSV
+df <- iaw$read.csv("data.csv.gz", allow.fst.cache = FALSE)
 }
 }

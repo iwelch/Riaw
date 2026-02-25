@@ -23,6 +23,12 @@
 #'
 #' # Allow multiple matches (returns most recently modified)
 #' iaw$locate("README.md", strict = FALSE)
+#'
+#' # Find a configuration file scoped to a project
+#' iaw$locate("settings.json", restrict.pattern = "/analytics/")
+#'
+#' # Include backup directories in search results
+#' iaw$locate("archive.csv", omit.backup = FALSE)
 #' }
 #'
 #' @family io

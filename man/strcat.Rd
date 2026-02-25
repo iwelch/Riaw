@@ -32,5 +32,15 @@ iaw$strcat("a", "b", "c", sep = "-")
 
 # Build a file path from parts
 iaw$strcat("/data", "/raw", "/prices.csv")
+
+# Build a SQL WHERE clause dynamically
+tickers <- c("AAPL", "MSFT", "GOOG")
+iaw$strcat("'", tickers, "'", sep = ", ")   # "'AAPL', 'MSFT', 'GOOG'"
+
+# Join column names for a header line
+iaw$strcat(names(iris), sep = "|")   # "Sepal.Length|Sepal.Width|..."
+
+# Single argument returns it unchanged
+iaw$strcat("hello")   # "hello"
 }
 }

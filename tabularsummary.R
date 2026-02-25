@@ -22,6 +22,18 @@
 #'
 #' # Unsorted output preserves original level order
 #' iaw$tabularsummary(c("low", "high", "med", "low", "low"), sort = FALSE)
+#'
+#' # Frequency breakdown of trade directions
+#' trades <- c("buy", "sell", "buy", "buy", "sell", "hold", "buy")
+#' tab <- iaw$tabularsummary(trades)
+#' tab$count[1]   # 4 (buy is most frequent)
+#'
+#' # Rating distribution with percentages
+#' ratings <- sample(c("AAA", "AA", "A", "BBB", "BB"), 200, replace = TRUE)
+#' iaw$tabularsummary(ratings)
+#'
+#' # Single unique value
+#' iaw$tabularsummary(rep("constant", 10))   # one row, count=10, pct=100
 
 iaw$tabularsummary <- function(x, sort = TRUE) {
     tb <- table(x, useNA = "ifany")

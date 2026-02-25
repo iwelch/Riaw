@@ -28,6 +28,27 @@
 #'   sub
 #' })
 #'
+#' # Cross-sectional z-scores within each year (finance panel)
+#' panel <- data.frame(
+#'   year = c(2020, 2020, 2020, 2021, 2021, 2021),
+#'   ret  = c(0.05, -0.02, 0.10, 0.03, -0.01, 0.07)
+#' )
+#' result <- iaw$oc.by(panel, panel$year, function(sub) {
+#'   sub$zscore <- (sub$ret - mean(sub$ret)) / sd(sub$ret)
+#'   sub
+#' })
+#' do.call(rbind, result)
+#'
+#' # Summarise each group into a single row (like dplyr::summarise)
+#' sales <- data.frame(
+#'   region = c("East", "East", "West", "West", "West"),
+#'   revenue = c(100, 200, 150, 250, 300)
+#' )
+#' summ <- iaw$oc.by(sales, sales$region, function(sub) {
+#'   c(mean_rev = mean(sub$revenue), n = nrow(sub))
+#' })
+#' do.call(rbind, summ)  # data.frame with mean_rev and n per region
+#'
 #' @family parallel
 #' @export
 

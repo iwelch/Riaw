@@ -21,6 +21,16 @@
 #' r2 <- iaw$residuals(fit2)
 #' length(r2)  # 4: NA row silently dropped
 #'
+#' # Residuals align with original data when na.exclude is used
+#' prices <- data.frame(y = c(10, NA, 12, 14, 16), x = 1:5)
+#' m <- lm(y ~ x, data = prices, na.action = na.exclude)
+#' resid <- iaw$residuals(m)
+#' is.na(resid[2])  # TRUE -- position 2 preserved as NA
+#'
+#' # Useful for adding residuals back to a data frame
+#' prices$resid <- iaw$residuals(m)
+#' prices  # column aligns row-by-row with original data
+#'
 #' @family regression
 #' @export
 

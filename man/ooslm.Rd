@@ -41,5 +41,23 @@ n <- 60
 df2 <- data.frame(y = rnorm(n), x1 = rnorm(n), x2 = rnorm(n))
 res2 <- iaw$ooslm(y ~ x1 + x2, df2)
 summary(res2$delta.abserr)
+
+# Evaluate an equity risk-premium model out-of-sample
+set.seed(42)
+n <- 120  # 10 years of monthly data
+mkt <- data.frame(
+  excess_ret = rnorm(n, 0.005, 0.04),
+  dp_ratio   = cumsum(rnorm(n, 0, 0.01))
+)
+oos <- iaw$ooslm(excess_ret ~ dp_ratio, mkt)
+mean(oos$delta.abserr > 0, na.rm = TRUE)  # fraction model wins OOS
+
+# Compare output columns
+names(oos)  # "delta.abserr" "uncondesterr" "condesterr" "to.predict"
+
+# Visualise cumulative OOS performance advantage
+plot(cumsum(ifelse(is.na(oos$delta.abserr), 0, oos$delta.abserr)),
+     type = "l", ylab = "Cumulative advantage", xlab = "Period")
+abline(h = 0, lty = 2)
 }
 }

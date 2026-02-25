@@ -21,6 +21,19 @@
 #'   error = function(e) message(e$message)
 #' )
 #'
+#' # Guard at the start of a data pipeline
+#' panel <- data.frame(permno = 1:5, date = 1:5, ret = rnorm(5))
+#' iaw$require.variables(c("permno", "date", "ret"), panel)  # silent, TRUE
+#'
+#' # Check a single required column
+#' iaw$require.variables("ret", panel)  # invisible TRUE
+#'
+#' # Multiple missing variables listed in error message
+#' tryCatch(
+#'   iaw$require.variables(c("alpha", "beta", "gamma"), panel),
+#'   error = function(e) message(e$message)
+#' )  # "Missing variables: alpha, beta, gamma"
+#'
 #' @family utilities
 #' @export
 

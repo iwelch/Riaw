@@ -27,6 +27,15 @@
 #'   c(34.0522, 41.8781, 29.7604),    # LA, Chicago, Houston
 #'   c(-118.2437, -87.6298, -95.3698)
 #' )
+#'
+#' # Same point yields zero distance
+#' iaw$latlon.distance(51.5, -0.1, 51.5, -0.1)  # 0
+#'
+#' # Antipodal points: maximum possible distance (~20015 km)
+#' iaw$latlon.distance(0, 0, 0, 180)
+#'
+#' # Cross-hemisphere: Sydney to San Francisco (~11945 km)
+#' iaw$latlon.distance(-33.8688, 151.2093, 37.7749, -122.4194)
 
 iaw$latlon.distance <- function(lat1, lon1, lat2, lon2) {
     stopifnot(is.numeric(lat1), is.numeric(lon1))
@@ -72,6 +81,10 @@ iaw$latlon.distance <- function(lat1, lon1, lat2, lon2) {
 #'
 #' # Inverse: single integer ID back to lat/lon
 #' iaw$latlonx(iaw$latlonx(40, -74))
+#'
+#' # Round-trip preserves the grid cell
+#' id <- iaw$latlonx(35, 139)       # Tokyo grid cell
+#' iaw$latlonx(id)                  # returns approximate lat/lon
 
 iaw$latlonx <- function( lat1, lon2=NULL ) {
     if (!is.null( ncol(lat1) )) {
@@ -115,6 +128,12 @@ iaw$latlonx <- function( lat1, lon2=NULL ) {
 #'
 #' # Vectorised: create IDs for several cities at once
 #' iaw$mklatlonid(c(40, 51, 35), c(-74, 0, 139))   # NYC, London, Tokyo
+#'
+#' # Equator / prime meridian intersection
+#' iaw$mklatlonid(0, 0)                # grid cell near (0.5, 0.5)
+#'
+#' # Southern hemisphere location: Buenos Aires
+#' iaw$mklatlonid(-34, -58)
 
 iaw$mklatlonid <- function( lat, lon=NULL ) {
     if ((is.null(lon)) & (length(lat) == 2)) { lon <- lat[2]; lat <- lat[1] } ## mklatlonid( c(30,-140) ) -> mklatlonid( 30, -140 )
@@ -149,6 +168,10 @@ iaw$mklatlonid <- function( lat, lon=NULL ) {
 #' # Round-trip: mklatlonid -> invlatlon -> mklatlonid
 #' id2 <- iaw$mklatlonid(iaw$invlatlon(id))
 #' stopifnot(id == id2)
+#'
+#' # Vectorised inverse: recover coordinates for multiple IDs
+#' ids <- iaw$mklatlonid(c(40, 51, -34), c(-74, 0, -58))
+#' iaw$invlatlon(ids)
 
 ## note that (0,0) is interpreted as (0.5,0.5).  thus GMT = 0,0 = 0.5,0.5 = id 32581
 iaw$invlatlon <- function( latlonid ) {

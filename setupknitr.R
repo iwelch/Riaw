@@ -15,6 +15,15 @@
 #' # ```{r, fig.width=10}
 #' # ... wider plot ...
 #' # ```
+#'
+#' # Typical Rmd setup chunk:
+#' # ```{r setup, include=FALSE}
+#' # library(iaw)
+#' # iaw$setupknitr()
+#' # ```
+#'
+#' # Sets echo=TRUE, message=FALSE, warning=FALSE, fig.width=7, fig.height=5
+#' # These are sensible defaults for financial reports and data analysis
 #' }
 #'
 #' @family utilities

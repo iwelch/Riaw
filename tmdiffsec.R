@@ -21,6 +21,19 @@
 #' Sys.sleep(0.1)
 #' iaw$tmdiffsec(start, Sys.time())   # approximately 0.1
 #'
+#' # Difference across midnight
+#' t_before <- as.POSIXct("2024-06-15 23:59:50")
+#' t_after  <- as.POSIXct("2024-06-16 00:00:10")
+#' iaw$tmdiffsec(t_before, t_after)   # 20
+#'
+#' # Negative result when t2 is earlier than t1
+#' iaw$tmdiffsec(t_after, t_before)   # -20
+#'
+#' # Convert to minutes by dividing
+#' t1 <- as.POSIXct("2024-01-01 09:00:00")
+#' t2 <- as.POSIXct("2024-01-01 10:30:00")
+#' iaw$tmdiffsec(t1, t2) / 60   # 90 minutes
+#'
 #' @family datetime
 #' @export
 

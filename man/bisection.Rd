@@ -40,5 +40,27 @@ res3 <- iaw$bisection(function(x, t) x^2 - t,
                        lower = c(0, 0, 0), upper = c(2, 2, 2),
                        t = targets)
 res3$mid  # approx sqrt(2), sqrt(3), sqrt(4)
+
+# Find the implied volatility that prices a call at $5
+# Black-Scholes vega search: C(sigma) - 5 = 0
+bs_call <- function(sigma) {
+  d1 <- (log(100/100) + (0.05 + sigma^2/2)) / sigma
+  d2 <- d1 - sigma
+  100 * pnorm(d1) - 100 * exp(-0.05) * pnorm(d2) - 5
+}
+iv <- iaw$bisection(bs_call, lower = 0.01, upper = 2.0)
+iv$mid   # implied volatility solving C(sigma) = 5
+
+# Find the break-even growth rate: PV of cashflows = initial investment
+pv_func <- function(g) {
+  cf <- 10 * (1 + g)^(1:10)
+  sum(cf / (1.08)^(1:10)) - 80
+}
+be <- iaw$bisection(pv_func, lower = -0.05, upper = 0.20)
+be$mid   # break-even growth rate
+
+# Check convergence: number of iterations used
+res <- iaw$bisection(function(x) x^3 - 1, 0, 2)
+res$n    # iterations needed to converge
 }
 }

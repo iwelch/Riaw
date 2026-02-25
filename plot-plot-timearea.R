@@ -21,6 +21,23 @@
 #' # Highlight positive area in green, overlap with a line
 #' iaw$plot.timearea(t, y, col = adjustcolor("green", alpha.f = 0.4))
 #' lines(t, y, lwd = 2)
+#'
+#' # Area chart of cumulative portfolio returns over trading days
+#' set.seed(42)
+#' days <- 1:252
+#' cum_ret <- cumsum(rnorm(252, mean = 0.0004, sd = 0.01))
+#' iaw$plot.timearea(days, cum_ret, col = "lightblue",
+#'                   main = "Cumulative daily returns (1 year)",
+#'                   xlab = "Day", ylab = "Return")
+#' lines(days, cum_ret, lwd = 1.5)
+#'
+#' # GDP quarterly time series as a filled area
+#' quarters <- seq(2010, 2024, by = 0.25)
+#' gdp <- 15000 + cumsum(rnorm(length(quarters), 50, 80))
+#' iaw$plot.timearea(quarters, gdp,
+#'                   col = adjustcolor("steelblue", alpha.f = 0.5),
+#'                   main = "Quarterly GDP ($B)")
+#' lines(quarters, gdp, col = "navy", lwd = 2)
 #' }
 #'
 #' @family plotting

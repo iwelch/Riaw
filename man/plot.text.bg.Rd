@@ -33,6 +33,18 @@ x <- 1:10
 y <- x^2
 plot(x, y, type = "b")
 iaw$plot.text.bg(5, 25, "peak zone", bg = "yellow", col = "darkred", font = 2)
+
+# Label a regression line on a busy scatter plot
+set.seed(8)
+x <- rnorm(300); y <- 0.6 * x + rnorm(300, sd = 0.8)
+plot(x, y, pch = 16, col = "gray60", main = "Labeled regression")
+abline(lm(y ~ x), col = "red", lwd = 2)
+iaw$plot.text.bg(1.5, 0.6 * 1.5, "y = 0.6x", bg = "white", col = "red")
+
+# Annotate an outlier in financial return data
+returns <- c(rnorm(49, 0, 0.02), 0.15)
+plot(seq_along(returns), returns, pch = 16, xlab = "Day", ylab = "Return")
+iaw$plot.text.bg(50, 0.15, "Flash rally", bg = "lightyellow", col = "red", cex = 0.9)
 }
 
 }

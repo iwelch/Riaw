@@ -46,5 +46,18 @@ iaw$cmpsum(monthly_rets, MPY = 12)
 # geomean is shorthand for cmpsum(x, MPY = 1)
 iaw$geomean(c(0.05, 0.10, -0.02))
 iaw$cmpsum(c(0.05, 0.10, -0.02), MPY = 1)  # same
+
+# Total return of the S&P 500 over 4 quarters
+sp500_q <- c(0.07, -0.03, 0.05, 0.04)
+iaw$cmpsum(sp500_q)   # 0.1342 (compound total return)
+
+# Annualized return from daily data (MPY = 252 trading days)
+set.seed(42)
+daily <- rnorm(252, mean = 0.0004, sd = 0.01)
+iaw$cmpsum(daily, MPY = 252)   # annualized compound return
+
+# Geometric mean of annual returns over a decade
+annual <- c(0.12, -0.08, 0.15, 0.06, -0.03, 0.10, 0.09, -0.12, 0.18, 0.07)
+iaw$geomean(annual)   # geometric average annual return
 }
 }

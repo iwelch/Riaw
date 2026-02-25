@@ -25,6 +25,15 @@ iaw$beep()
 
 # Three beeps to signal an error condition
 iaw$beep(3)
+
+# Alert after a long-running backtest completes
+results <- Sys.sleep(0.1)  # placeholder for long computation
+iaw$beep(2)
+
+# Beep once after overnight data download finishes
+download_data <- function() Sys.sleep(0.1)
+download_data()
+iaw$beep()
 }
 
 }

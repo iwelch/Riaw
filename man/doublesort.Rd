@@ -32,5 +32,16 @@ iaw$doublesort(size, value, NUMPERGROUP = 3)
 crit1 <- c(4, 9, 13, 11, 5, 7, 10, 1, 12, 8, 3, 6, 2)
 crit2 <- c(-1, 10, 104, 103, 22, -99, 102, 1, 105, 11, 2, 33, -2)
 iaw$doublesort(crit1, crit2, NUMPERGROUP = 4)  # NA = excluded middle obs
+
+# Fama-French style: sort by market cap, then by book-to-market
+mktcap <- c(100, 500, 200, 800, 50, 300, 700, 150, 400, 600)
+bm     <- c(0.8, 0.3, 1.2, 0.1, 1.5, 0.6, 0.2, 0.9, 0.4, 0.7)
+iaw$doublesort(mktcap, bm, NUMPERGROUP = 5)
+
+# Even split: 8 obs, 4 per group, no exclusions
+iaw$doublesort(1:8, 8:1, NUMPERGROUP = 4)
+
+# Minimum NUMPERGROUP is 2
+iaw$doublesort(c(5, 3, 1, 4, 2), c(1, 2, 3, 4, 5), NUMPERGROUP = 2)
 }
 }

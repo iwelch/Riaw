@@ -24,6 +24,16 @@
 #' # Vectorised: convert a column of dates
 #' dates <- c(20200101, 20201231, 20210630)
 #' iaw$yyyymmdd.toggle(dates)
+#'
+#' # Count business days between two dates (weekdays only)
+#' g1 <- iaw$yyyymmdd.toggle(20240101)
+#' g2 <- iaw$yyyymmdd.toggle(20240131)
+#' all_days <- seq(g1, g2)
+#' weekdays <- iaw$yyyymmdd.toggle(all_days)
+#' # (use with yyyymmdd(..., output="weekday") for further filtering)
+#'
+#' # NA values pass through
+#' iaw$yyyymmdd.toggle(c(20240101, NA, 20240301))   # NA preserved in middle
 
 iaw$yyyymmdd.toggle <- function( yyyymmdd_or_int ) {
     if (all( is.na(yyyymmdd_or_int) )) return(yyyymmdd_or_int)
@@ -70,6 +80,17 @@ iaw$yyyymmdd.toggle <- function( yyyymmdd_or_int ) {
 #'
 #' # Convert a Gregorian day number back to YYYYMMDD integer
 #' iaw$yyyymmdd(19358, output = "yyyymmdd")   # days since 1970-01-01
+#'
+#' # Determine day of week for a vector of trade dates
+#' trade_dates <- c(20240102, 20240103, 20240104)
+#' iaw$yyyymmdd(trade_dates, output = "weekday")   # "Tue", "Wed", "Thu"
+#'
+#' # Convert POSIXct timestamp to YYYYMMDD integer
+#' iaw$yyyymmdd(as.POSIXct("2024-06-15 14:30:00"), output = "yyyymmdd")
+#'
+#' # Week number useful for weekly aggregation
+#' iaw$yyyymmdd(20240101, output = "weeknum")
+#' iaw$yyyymmdd(20240108, output = "weeknum")   # one week later
 
 iaw$yyyymmdd <- function( anything, output=c("posix", "gregorian", "yyyymmdd", "weeknum", "weekday") ) {
 

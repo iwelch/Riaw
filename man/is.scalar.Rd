@@ -32,5 +32,20 @@ iaw$is.scalar(integer(0)) # FALSE
 
 # Lists are not atomic, so not scalar
 iaw$is.scalar(list(1))    # FALSE
+
+# A single logical is scalar
+iaw$is.scalar(TRUE)       # TRUE
+
+# NA is atomic length-1, so it is scalar
+iaw$is.scalar(NA)         # TRUE
+iaw$is.scalar(NA_real_)   # TRUE
+
+# Validate that a threshold parameter is a single number
+threshold <- 0.05
+stopifnot(iaw$is.scalar(threshold))  # passes
+
+# Data frames and matrices are not scalar
+iaw$is.scalar(data.frame(x = 1))  # FALSE
+iaw$is.scalar(matrix(1))          # TRUE (atomic length 1)
 }
 }

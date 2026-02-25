@@ -20,6 +20,13 @@
 #' # Source the instrumented version to see line-by-line progress messages
 #' iaw$instrumentR("myscript.R")
 #' source("debug-myscript.R")
+#'
+#' # Instrument a long ETL pipeline to find where it stalls
+#' iaw$instrumentR("etl_pipeline.R")
+#' source("debug-etl_pipeline.R")  # each top-level line prints "Line N"
+#'
+#' # Save debug version alongside the original for comparison
+#' iaw$instrumentR("model.R", output_file = "model-instrumented.R")
 #' }
 #'
 #' @family utilities

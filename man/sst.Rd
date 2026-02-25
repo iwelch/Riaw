@@ -34,5 +34,16 @@ iaw$sst(x)
 y <- c(1.2, 2.1, 3.0, 4.2, 5.1)
 fit <- lm(y ~ c(1:5))
 1 - sum(resid(fit)^2) / iaw$sst(y)   # equals summary(fit)$r.squared
+
+# Two-element vector: SST = (x1-mean)^2 + (x2-mean)^2
+iaw$sst(c(10, 20))   # 50
+
+# SST of daily stock returns measures total variability
+set.seed(1)
+returns <- rnorm(252, mean = 0.0004, sd = 0.01)
+iaw$sst(returns)   # total variation to be explained by a model
+
+# NA values are handled gracefully
+iaw$sst(c(1, 2, NA, 4, 5))   # computed on non-NA values only
 }
 }

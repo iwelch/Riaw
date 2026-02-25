@@ -29,6 +29,17 @@ iaw$pdf.embedfonts("myplot.pdf")
 
 # Embed fonts in an existing PDF file
 iaw$pdf.embedfonts("results/figure1.pdf")
+
+# Embed fonts after batch-generating multiple PDFs
+for (f in list.files("figs/", pattern = "\\.pdf$", full.names = TRUE)) {
+  iaw$pdf.embedfonts(f)
+}
+
+# Typical publication workflow: create, close, then embed
+pdf("draft_figure.pdf", width = 6, height = 4)
+hist(rnorm(500), main = "Simulation draws", col = "steelblue")
+dev.off()
+iaw$pdf.embedfonts("draft_figure.pdf")
 }
 
 }

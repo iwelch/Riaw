@@ -108,12 +108,24 @@ iaw$align_kable <- function(kable_output) {
 #'
 #' # HTML output (skips alignment post-processing)
 #' cat(iaw$kable(df, format = "html"))
+#'
+#' # Summary statistics table for a regression
+#' coefs <- data.frame(
+#'   Estimate = c(0.012, -0.034, 0.005),
+#'   StdErr   = c(0.003, 0.011, 0.002),
+#'   tstat    = c(4.00, -3.09, 2.50),
+#'   row.names = c("alpha", "beta", "size")
+#' )
+#' cat(iaw$kable(coefs))
+#'
+#' # Produce a table with custom column alignment
+#' cat(iaw$kable(df, align = c("l", "r", "r")))
 #' }
 #'
 #' @export
 iaw$kable <- function( df, both=FALSE, format="latex", booktabs=TRUE, linesep="", ... ) {
     if (both) print( df )
-    o <- kable( df, format=format,  booktabs=booktabs, linesep=linesep, ... )
+    o <- knitr::kable( df, format=format,  booktabs=booktabs, linesep=linesep, ... )
     if (format=="latex") iaw$align_kable(o) else o
 
 }

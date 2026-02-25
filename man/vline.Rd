@@ -33,5 +33,18 @@ iaw$vline(c(25, 50, 75), col = "red", lty = 2)
 x <- rnorm(50)
 plot(x, rnorm(50))
 iaw$vline(mean(x), col = "darkgreen", lwd = 2)
+
+# Mark recession start dates on an economic time series
+years <- 2000:2025
+gdp_growth <- rnorm(length(years), 2, 1.5)
+plot(years, gdp_growth, type = "l", lwd = 2, main = "GDP growth (\%)")
+abline(h = 0, lty = 3)
+iaw$vline(c(2001, 2008, 2020), col = "gray70", lty = 2)
+text(c(2001, 2008, 2020), rep(max(gdp_growth), 3),
+     c("2001", "GFC", "COVID"), pos = 4, cex = 0.7)
+
+# Vertical line with restricted y-range (partial line)
+plot(1:20, rnorm(20), ylim = c(-3, 3))
+iaw$vline(10, yrange = c(-1, 1), col = "purple", lwd = 3)
 }
 }

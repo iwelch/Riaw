@@ -31,6 +31,23 @@
 #' fit3 <- iaw$olm(y ~ x1 + x2, data = df3, stdcoefs = FALSE)
 #' print(fit3)
 #'
+#' # Fama-MacBeth style cross-sectional regression
+#' set.seed(99)
+#' cs <- data.frame(ret = rnorm(30, 0.01, 0.03), beta = runif(30, 0.5, 1.5))
+#' fit4 <- iaw$olm(ret ~ beta, data = cs)
+#' fit4$coefficients[, "coefest"]  # intercept and risk premium
+#'
+#' # Newey-West standard errors for autocorrelated time-series residuals
+#' set.seed(7)
+#' ts_df <- data.frame(y = cumsum(rnorm(100)), x = 1:100)
+#' fit5 <- iaw$olm(y ~ x, data = ts_df, newey.west = 3)
+#' print(fit5)  # shows both OLS and NW t-statistics
+#'
+#' # Access R-squared and residual standard error programmatically
+#' fit6 <- iaw$olm(y ~ x, data = data.frame(y = c(2, 4, 6), x = c(1, 2, 3)))
+#' fit6$r.squared   # 1 (perfect fit)
+#' fit6$sigma        # residual std error
+#'
 #' @family regression
 #' @export
 #'

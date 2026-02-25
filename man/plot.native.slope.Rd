@@ -34,6 +34,22 @@ plot(x, y)
 abline(fit)
 srt <- iaw$native.slope(coef(fit)[["x"]])
 text(10, predict(fit, data.frame(x = 10)), "fit", srt = srt, pos = 3)
+
+# Label a security's beta on a return scatter (finance)
+set.seed(3)
+mkt <- rnorm(60, 0.005, 0.03)
+stock <- 1.2 * mkt + rnorm(60, 0, 0.015)
+fit2 <- lm(stock ~ mkt)
+plot(mkt, stock, pch = 16, xlab = "Market", ylab = "Stock")
+abline(fit2, col = "steelblue", lwd = 2)
+angle2 <- iaw$native.slope(coef(fit2)[["mkt"]])
+text(0.02, predict(fit2, data.frame(mkt = 0.02)),
+     paste("beta =", round(coef(fit2)[2], 2)),
+     srt = angle2, pos = 3, col = "steelblue")
+
+# Horizontal line has zero angle, vertical approaches +/-90
+plot(0:10, 0:10)
+iaw$native.slope(0)   # 0 degrees (horizontal)
 }
 
 }

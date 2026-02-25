@@ -31,6 +31,18 @@
 #'
 #' # Pass fwrite options: use tab separator
 #' iaw$write.csv(df, "output.csv", sep = "\t")
+#'
+#' # Write daily returns to a dated file
+#' ret <- data.frame(date = 20240101:20240105, ret = rnorm(5, 0, 0.01))
+#' iaw$write.csv(ret, file.path(tempdir(), "daily_returns.csv"))
+#'
+#' # Use the alias iaw$fwrite (same function)
+#' iaw$fwrite(ret, file.path(tempdir(), "returns_copy.csv"), quiet = TRUE)
+#'
+#' # Prevent accidental overwrite of a production file
+#' iaw$write.csv(ret, file.path(tempdir(), "prod.csv"))
+#' iaw$write.csv(ret, file.path(tempdir(), "prod.csv"),
+#'               allow.overwrite = FALSE)   # silently skips
 #' }
 
 iaw$write.csv <- function(object, filename, ...,

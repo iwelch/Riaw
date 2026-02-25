@@ -26,6 +26,14 @@
 #' # Explicit call with a description header
 #' iaw$print.olm(fit, description = "Baseline OLS")
 #'
+#' # Show only first 4 columns of the coefficient table
+#' print(fit, wantedcols = 1:4)
+#'
+#' # Multiple regression with custom labels
+#' df2 <- data.frame(y = rnorm(50), x1 = rnorm(50), x2 = rnorm(50))
+#' fit2 <- iaw$olm(y ~ x1 + x2, data = df2)
+#' print(fit2, yname = "Excess Return", xnames = c("MKT", "SMB"))
+#'
 #' @family regression
 #' @export
 

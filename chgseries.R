@@ -25,6 +25,18 @@
 #' prices <- c(100, 102, 105, 200, 198, 203)
 #' firm   <- c("A",  "A",  "A", "B",  "B",  "B")
 #' iaw$chgseries(prices, panelid = firm)  # no cross-firm differencing
+#'
+#' # Daily P&L changes from a cumulative equity curve
+#' equity <- c(1000, 1015, 1008, 1025, 1040)
+#' iaw$chgseries(equity)   # NA  15  -7  17  15
+#'
+#' # Compute quarterly GDP growth (change from previous quarter)
+#' gdp <- c(21000, 21200, 21150, 21400, 21600)
+#' iaw$chgseries(gdp)   # NA 200 -50 250 200
+#'
+#' # Year-over-year change with numlags = 4 (quarterly data)
+#' quarterly <- c(100, 102, 105, 108, 112, 115, 120, 125)
+#' iaw$chgseries(quarterly, numlags = 4)  # first 4 are NA, then YoY diffs
 
 iaw$chgseries <- function(seriesin, numlags = 1, panelid = NULL, timeid = NULL) {
     stopifnot(is.numeric(seriesin))

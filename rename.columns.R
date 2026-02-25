@@ -24,6 +24,19 @@
 #' # Rename multiple columns in a pipeline-friendly way
 #' df <- data.frame(ret = c(0.01, -0.02), vol = c(0.1, 0.2), id = 1:2)
 #' iaw$rename.columns(df, c(ret = "return", vol = "volatility"))
+#'
+#' # Rename using paired from/to vectors
+#' df <- data.frame(mktcap = 1:3, bm = 4:6, permno = 7:9)
+#' iaw$rename.columns(df, c("mktcap", "bm"), c("size", "book_to_market"))
+#' # columns: size, book_to_market, permno
+#'
+#' # Only matched names change; unmatched are left alone
+#' df <- data.frame(x = 1, y = 2, z = 3)
+#' names(iaw$rename.columns(df, c(x = "a")))  # c("a", "y", "z")
+#'
+#' # Works on lists too (e.g., renaming list elements)
+#' lst <- list(old1 = 10, old2 = 20)
+#' iaw$rename.columns(lst, c(old1 = "new1", old2 = "new2"))
 
 iaw$rename.columns <- function(df, from, to = NULL) {
     stopifnot(is.list(df))

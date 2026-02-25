@@ -25,6 +25,23 @@
 #'
 #' # NA values are preserved in their positions
 #' iaw$standardize(c(1, NA, 3, 4, 5))
+#'
+#' # Standardize asset returns for cross-sectional comparison
+#' set.seed(1)
+#' returns_A <- rnorm(100, mean = 0.001, sd = 0.02)
+#' returns_B <- rnorm(100, mean = 0.05, sd = 0.10)
+#' z_A <- iaw$standardize(returns_A)
+#' z_B <- iaw$standardize(returns_B)
+#' mean(z_A)   # 0 (both now comparable)
+#' sd(z_B)     # 1
+#'
+#' # Identical values yield NaN (sd = 0)
+#' iaw$standardize(rep(5, 10))   # all NaN
+#'
+#' # Round-trip: recover original from z-scores
+#' x <- c(10, 20, 30, 40, 50)
+#' z <- iaw$standardize(x)
+#' all.equal(x, z * sd(x) + mean(x))   # TRUE
 
 iaw$standardize <- function(x) {
     stopifnot(is.numeric(x))

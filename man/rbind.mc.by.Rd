@@ -33,6 +33,23 @@ result <- iaw$rbind.mc.by(df, df$group, function(sub) {
   sub
 })
 result  # all rows combined into one data frame, preserving columns
+
+# Compute rolling z-scores within each sector (parallel)
+stocks <- data.frame(
+  sector = rep(c("Tech", "Fin"), each = 4),
+  ret    = c(0.01, 0.03, -0.02, 0.05, 0.02, -0.01, 0.01, 0.04)
+)
+result <- iaw$rbind.mc.by(stocks, stocks$sector, function(sub) {
+  sub$z <- scale(sub$ret)
+  sub
+})
+result  # 8-row data frame with z-score column added
+
+# Filter within groups in parallel, then combine survivors
+result <- iaw$rbind.mc.by(stocks, stocks$sector, function(sub) {
+  sub[sub$ret > median(sub$ret), ]
+})
+nrow(result)  # only rows above within-group median
 }
 
 }

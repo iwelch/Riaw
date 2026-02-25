@@ -35,6 +35,22 @@ plot(x, sin(x), type = "l", ylim = c(-1.5, 1.5))
 lines(x, cos(x), col = "blue")
 iaw$plot.labelcurve(x, sin(x),  xval = 1.0,      label = "sin", col = "black")
 iaw$plot.labelcurve(x, cos(x),  xval = pi / 4,   label = "cos", col = "blue")
+
+# Label cumulative return series for two portfolios
+t <- 1:250
+growth <- cumsum(rnorm(250, 0.0004, 0.01))
+value  <- cumsum(rnorm(250, 0.0003, 0.008))
+plot(t, growth, type = "l", col = "darkgreen", ylim = range(c(growth, value)),
+     xlab = "Trading day", ylab = "Cumulative return")
+lines(t, value, col = "darkred")
+iaw$plot.labelcurve(t, growth, xval = 180, label = "Growth", col = "darkgreen")
+iaw$plot.labelcurve(t, value,  xval = 180, label = "Value",  col = "darkred")
+
+# Label a yield curve at a specific maturity
+maturities <- c(0.25, 0.5, 1, 2, 3, 5, 7, 10, 20, 30)
+yields <- c(5.2, 5.0, 4.7, 4.3, 4.1, 4.0, 4.1, 4.2, 4.5, 4.6)
+plot(maturities, yields, type = "l", xlab = "Maturity (yr)", ylab = "Yield (\%)")
+iaw$plot.labelcurve(maturities, yields, xval = 5, label = "Belly")
 }
 
 }

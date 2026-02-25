@@ -28,6 +28,19 @@
 #'   iaw$check.names(c("date", "price", "volume"), df2),
 #'   error = function(e) message(e$message)
 #' )
+#'
+#' # Validate a CRSP-style returns data frame
+#' crsp <- data.frame(permno = 1, date = 20200101, ret = 0.02, prc = 50)
+#' iaw$check.names(c("permno", "date", "ret"), crsp)   # passes silently
+#'
+#' # Check a single required column
+#' iaw$check.names("ret", crsp)   # TRUE (invisible)
+#'
+#' # Catch multiple missing columns at once
+#' tryCatch(
+#'   iaw$check.names(c("mktcap", "bm", "ret"), crsp),
+#'   error = function(e) message(e$message)  # "Names do not exist: mktcap, bm"
+#' )
 
 iaw$check.names <- function(wanted, df) {
     stopifnot(is.data.frame(df))

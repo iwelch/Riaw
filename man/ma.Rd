@@ -32,5 +32,15 @@ iaw$ma(prices, 5)   # first 4 values are NA (right-aligned)
 x <- sin(seq(0, 2 * pi, length.out = 50)) + rnorm(50, sd = 0.2)
 smooth <- iaw$ma(x, 7, around = TRUE)
 cor(smooth, sin(seq(0, 2 * pi, length.out = 50)), use = "complete.obs")
+
+# 3-period moving average: leading NAs for right-aligned
+iaw$ma(c(2, 4, 6, 8, 10), 3)  # NA, NA, 4, 6, 8
+
+# Centered MA preserves timing better for seasonal decomposition
+quarterly <- c(100, 120, 80, 110, 105, 125, 85, 115)
+iaw$ma(quarterly, 4, around = TRUE)
+
+# Window of 1 returns the original series unchanged
+iaw$ma(c(5, 10, 15), 1)  # 5, 10, 15
 }
 }

@@ -36,5 +36,15 @@ iaw$lagdataframe(df, vars = "ret", nlags = 2)
 df2 <- data.frame(t = 1:4, ret = 1:4, vol = 10:13)
 iaw$lagdataframe(df2, vars = c("ret", "vol"))
 
+# Prepare lagged predictors for a return forecasting regression
+monthly <- data.frame(t = 1:6, ret = c(0.02, -0.01, 0.03, 0.01, -0.02, 0.04),
+                      bm = c(0.5, 0.6, 0.55, 0.58, 0.62, 0.59))
+monthly <- iaw$lagdataframe(monthly, vars = c("ret", "bm"), nlags = 1)
+names(monthly)  # "t" "ret" "bm" "ret.L1" "bm.L1"
+
+# Three-period lag for quarterly data
+qtr <- data.frame(t = 1:8, earnings = rnorm(8))
+iaw$lagdataframe(qtr, vars = "earnings", nlags = 3)
+
 }
 }

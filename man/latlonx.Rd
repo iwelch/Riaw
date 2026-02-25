@@ -29,5 +29,9 @@ iaw$latlonx(c(40, -74))
 
 # Inverse: single integer ID back to lat/lon
 iaw$latlonx(iaw$latlonx(40, -74))
+
+# Round-trip preserves the grid cell
+id <- iaw$latlonx(35, 139)       # Tokyo grid cell
+iaw$latlonx(id)                  # returns approximate lat/lon
 }
 }

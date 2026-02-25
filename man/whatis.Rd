@@ -33,5 +33,18 @@ iaw$whatis(c(TRUE, FALSE, TRUE))        # "logical (logical) length=3"
 # Useful for quick inspection inside scripts
 x <- rnorm(50)
 message(iaw$whatis(x))                  # "numeric (double) length=50"
+
+# NULL and empty vector
+iaw$whatis(NULL)                         # "NULL (NULL) length=0"
+iaw$whatis(integer(0))                   # "integer (integer) length=0"
+
+# Functions are described too
+iaw$whatis(mean)                         # "function (builtin) length=1"
+
+# Time-series object shows its class
+iaw$whatis(Sys.time())                   # "POSIXct (double) length=1"
+
+# Environment
+iaw$whatis(globalenv())                  # "environment (environment) length=..."
 }
 }

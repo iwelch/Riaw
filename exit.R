@@ -17,6 +17,19 @@
 #' iaw$exit(1)
 #' }
 #'
+#' \dontrun{
+#' # In a batch pipeline: exit with status 2 on validation failure
+#' if (nrow(bad_rows) > 0) {
+#'   message("Validation failed: ", nrow(bad_rows), " bad rows")
+#'   iaw$exit(2)
+#' }
+#' }
+#'
+#' \dontrun{
+#' # Default status 0 indicates success to the calling process
+#' iaw$exit()   # equivalent to q(save = "no", status = 0)
+#' }
+#'
 #' @family utilities
 #' @export
 

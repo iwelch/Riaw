@@ -37,5 +37,17 @@ panel <- data.frame(
   ret  = c(0.01, 0.02, 0.03, 0.10, 0.11, 0.12)
 )
 iaw$leadseries(panel$ret, panelid = panel$firm, timeid = panel$t)
+
+# Compute forward return: next period minus current
+prices <- c(100, 102, 101, 105, 108)
+fwd_ret <- iaw$leadseries(prices) - prices  # 2 -1 4 3 NA
+fwd_ret
+
+# Lead of zero returns the original series unchanged
+iaw$leadseries(c(10, 20, 30), numleads = 0)  # 10 20 30
+
+# Negative lead is equivalent to a lag
+x <- c(1, 2, 3, 4, 5)
+iaw$leadseries(x, numleads = -1)  # NA 1 2 3 4
 }
 }

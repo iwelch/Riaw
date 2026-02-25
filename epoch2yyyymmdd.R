@@ -23,6 +23,18 @@
 #'
 #' # Use a local timezone instead of UTC
 #' iaw$epoch2yyyymmdd(1609459200, tz = "America/New_York")  # still 20201231 EST
+#'
+#' # Partition tick data by trading date
+#' ticks <- c(1609459200, 1609502400, 1609588800)
+#' dates <- iaw$epoch2yyyymmdd(ticks)  # 20210101, 20210101, 20210102
+#' split(ticks, dates)  # group ticks by date
+#'
+#' # Integer output is convenient for date-keyed joins
+#' iaw$epoch2yyyymmdd(86400)  # 19700102 (integer, not character)
+#'
+#' # Extract time-of-day for intraday analytics
+#' noon_utc <- 1609502400  # 2021-01-01 12:00 UTC
+#' iaw$epoch2hhmmss(noon_utc)  # 120000 (i.e., 12:00:00)
 
 iaw$epoch2yyyymmdd <- function(epoch, tz = "UTC") {
     stopifnot(is.numeric(epoch))

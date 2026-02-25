@@ -35,6 +35,30 @@
 #' iaw$plot.shade.xyy(x2, ylo = y2, yhi = 0,
 #'                    col.plus = "blue", col.minus = "red")
 #' abline(h = 0, lty = 2)
+#'
+#' # Highlight periods where a fund outperforms its benchmark
+#' set.seed(10)
+#' months <- 1:60
+#' fund  <- cumsum(rnorm(60, 0.005, 0.03))
+#' bench <- cumsum(rnorm(60, 0.004, 0.02))
+#' plot(months, fund, type = "n", ylim = range(c(fund, bench)),
+#'      main = "Fund vs Benchmark", xlab = "Month", ylab = "Cumulative return")
+#' iaw$plot.shade.xyy(months, fund, bench,
+#'                    col.plus = adjustcolor("green", 0.4),
+#'                    col.minus = adjustcolor("red", 0.4))
+#' lines(months, fund, col = "darkgreen", lwd = 2)
+#' lines(months, bench, col = "darkred", lwd = 2)
+#' legend("topleft", c("Fund", "Benchmark"), col = c("darkgreen", "darkred"), lwd = 2)
+#'
+#' # Shade temperature difference between two cities
+#' days <- 1:365
+#' temp_a <- 15 + 10 * sin(2 * pi * days / 365) + rnorm(365, 0, 2)
+#' temp_b <- 12 + 8 * sin(2 * pi * days / 365 + 0.5) + rnorm(365, 0, 2)
+#' plot(days, temp_a, type = "n", ylim = range(c(temp_a, temp_b)),
+#'      xlab = "Day of year", ylab = "Temp (C)", main = "City A vs City B")
+#' iaw$plot.shade.xyy(days, temp_a, temp_b,
+#'                    col.plus = "coral", col.minus = "skyblue")
+#' lines(days, temp_a, col = "red"); lines(days, temp_b, col = "blue")
 #' }
 #'
 #' @family plotting

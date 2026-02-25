@@ -19,6 +19,12 @@
 #' library(shape)
 #' plot(1:10, 1:10, type = "n")
 #' Arrows(2, 2, 8, 8, arr.type = "triangle")
+#'
+#' # Multiple arrows showing fund-flow directions
+#' plot(1:10, 1:10, type = "n", main = "Capital flow diagram")
+#' shape::Arrows(2, 5, 8, 8, arr.type = "triangle", col = "blue")
+#' shape::Arrows(2, 5, 8, 2, arr.type = "triangle", col = "red")
+#' text(c(8, 8), c(8, 2), c("Equities", "Bonds"), pos = 4)
 #' }
 #'
 #' @family plotting

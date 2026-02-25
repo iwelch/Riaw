@@ -30,6 +30,20 @@
 #' # Return a list (simplify = FALSE) when each replication yields a vector
 #' sims <- iaw$mc.replicate(200, rnorm(5), simplify = FALSE)
 #' length(sims)  # 200 elements, each of length 5
+#'
+#' # Parallel Monte Carlo estimation of pi
+#' pi_est <- iaw$mc.replicate(10000, {
+#'   x <- runif(1); y <- runif(1)
+#'   as.integer(x^2 + y^2 <= 1)
+#' })
+#' 4 * mean(pi_est)  # approximately 3.14
+#'
+#' # Simulate power of a t-test at a given effect size
+#' rejections <- iaw$mc.replicate(1000, {
+#'   x <- rnorm(30, mean = 0.3)
+#'   t.test(x)$p.value < 0.05
+#' })
+#' mean(rejections)  # estimated power
 #' }
 
 iaw$mc.replicate <- function(n, expr, simplify = TRUE) {

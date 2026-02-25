@@ -28,6 +28,19 @@ f <- tempfile()
 writeLines("hello", f)
 iaw$touch(f)
 file.info(f)$mtime   # now equals (approximately) Sys.time()
+
+# Create a lock file to signal another process
+iaw$touch(file.path(tempdir(), "model.lock"))
+
+# Touch multiple files in a loop
+for (nm in c("step1.done", "step2.done")) {
+  iaw$touch(file.path(tempdir(), nm))
+}
+
+# Verify file was created
+f2 <- file.path(tempdir(), "test_touch.tmp")
+iaw$touch(f2)
+file.exists(f2)   # TRUE
 }
 
 }

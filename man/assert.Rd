@@ -36,4 +36,19 @@ check_input <- function(x) {
 check_input(c(1, 2, 3))  # passes
 check_input("oops")      # aborts with message
 }
+
+# Validate portfolio weights sum to 1
+weights <- c(0.4, 0.35, 0.25)
+iaw$assert(abs(sum(weights) - 1) < 1e-10, "weights must sum to 1")  # passes
+
+# Assert catches the failure and returns a clean error via tryCatch
+err <- tryCatch(
+  iaw$assert(FALSE, "expected positive returns"),
+  error = function(e) e$message
+)
+err   # "expected positive returns"
+
+# Guard data dimensions before matrix operations
+m <- matrix(1:12, nrow = 3)
+iaw$assert(nrow(m) >= 2, paste("need >= 2 rows, got", nrow(m)))  # passes
 }

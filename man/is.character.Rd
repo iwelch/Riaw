@@ -38,5 +38,16 @@ iaw$is.character(df$val)  # FALSE
 
 # Numbers are not characters
 iaw$is.character(c(1, 2, 3))
+
+# Validate a ticker symbol is a single string
+iaw$is.character("AAPL", 1)          # TRUE
+iaw$is.character(c("AAPL", "MSFT"), 1)  # FALSE
+
+# Factors are not character
+iaw$is.character(factor("hello"))    # FALSE
+
+# Validate CUSIP vector length (9-character identifiers)
+cusips <- c("037833100", "594918104", "023135106")
+iaw$is.character(cusips, 3)          # TRUE
 }
 }

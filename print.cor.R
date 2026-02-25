@@ -30,6 +30,25 @@
 #' # Matrix input also works
 #' m <- matrix(c(x, y), ncol = 2, dimnames = list(NULL, c("x", "y")))
 #' iaw$print.cor(m)
+#'
+#' # Financial factor correlation: size, value, momentum
+#' set.seed(100)
+#' n <- 120  # monthly observations
+#' size  <- rnorm(n, 0.003, 0.02)
+#' value <- 0.3 * size + rnorm(n, 0.002, 0.015)
+#' mom   <- -0.1 * size + rnorm(n, 0.004, 0.025)
+#' factors <- data.frame(Size = size, Value = value, Momentum = mom)
+#' iaw$print.cor(factors)
+#'
+#' # Ignore non-numeric columns automatically
+#' df2 <- data.frame(sector = c("Tech", "Fin", "Health"),
+#'                   ret1 = c(0.1, 0.05, 0.08),
+#'                   ret2 = c(0.12, 0.04, 0.09))
+#' iaw$print.cor(df2)  # only ret1 and ret2 are correlated
+#'
+#' # Use complete observations instead of pairwise
+#' df3 <- data.frame(a = c(1, NA, 3, 4), b = c(2, 3, NA, 5), c = c(1, 2, 3, 4))
+#' iaw$print.cor(df3, use = "complete.obs")
 
 
 iaw$print.cor <- function(d, digits = 2, use =  "pairwise.complete.obs") {

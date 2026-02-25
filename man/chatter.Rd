@@ -45,4 +45,18 @@ iaw$chatter("verbose")
 iaw$msg("all libraries loaded")
 }
 
+# Silence output during data loading in a backtest script
+\dontrun{
+iaw$chatter("quiet")
+prices <- read.csv("prices.csv")
+factors <- read.csv("factors.csv")
+iaw$chatter("verbose")
+}
+
+# Check current state before toggling
+\dontrun{
+state <- iaw$chatter()         # returns "quiet" or "verbose"
+if (state == "verbose") iaw$chatter("quiet")
+}
+
 }

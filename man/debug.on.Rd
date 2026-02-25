@@ -24,4 +24,17 @@ iaw$debug.on()
 options(error = NULL)
 }
 
+\dontrun{
+# Typical debugging workflow: enable, run failing code, then disable
+iaw$debug.on()
+tryCatch(log("not a number"), error = function(e) message(e$message))
+options(error = NULL)  # disable when done
+}
+
+\dontrun{
+# Pair with debug.advice() for a guided debugging session
+iaw$debug.advice()
+iaw$debug.on()
+}
+
 }

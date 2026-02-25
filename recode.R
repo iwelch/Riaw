@@ -25,6 +25,20 @@
 #' # Set unmatched values to NA with non.from.becomes.na
 #' x <- c(1, 2, 3, 4, 5)
 #' iaw$recode(x, c(1, 2, 3), c(10, 20, 30), non.from.becomes.na = TRUE)
+#'
+#' # Recode numeric exchange codes to readable labels
+#' exchange <- c(1, 2, 3, 1, 2)
+#' iaw$recode(exchange, c(1, 2, 3), c(11, 12, 13))  # c(11, 12, 13, 11, 12)
+#'
+#' # Map month abbreviations to quarter labels
+#' months <- c("Jan", "Apr", "Jul", "Oct", "Jan")
+#' iaw$recode(months, c("Jan","Apr","Jul","Oct"), c("Q1","Q2","Q3","Q4"))
+#' # c("Q1", "Q2", "Q3", "Q4", "Q1")
+#'
+#' # Only keep mapped values; everything else becomes NA
+#' ratings <- c("AAA", "AA", "A", "BBB", "BB", "B")
+#' iaw$recode(ratings, c("AAA", "AA", "A"), c("IG", "IG", "IG"),
+#'            non.from.becomes.na = TRUE)  # c("IG", "IG", "IG", NA, NA, NA)
 
 iaw$recode <- function(x, from, to, non.from.becomes.na = FALSE) {
     stopifnot(length(from) == length(to))

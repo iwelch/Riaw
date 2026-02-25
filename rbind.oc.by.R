@@ -26,6 +26,24 @@
 #' # Filter rows within groups and recombine
 #' iaw$rbind.oc.by(df, df$group, function(sub) sub[sub$x > mean(sub$x), ])
 #'
+#' # Industry-adjust returns: subtract within-group mean
+#' stocks <- data.frame(
+#'   industry = c("Tech", "Tech", "Fin", "Fin", "Fin"),
+#'   ret      = c(0.05, 0.08, 0.02, 0.04, 0.03)
+#' )
+#' adjusted <- iaw$rbind.oc.by(stocks, stocks$industry, function(sub) {
+#'   sub$adj_ret <- sub$ret - mean(sub$ret)
+#'   sub
+#' })
+#' adjusted$adj_ret  # industry-adjusted returns sum to 0 within each group
+#'
+#' # Rank-transform within groups
+#' ranked <- iaw$rbind.oc.by(stocks, stocks$industry, function(sub) {
+#'   sub$rank <- rank(sub$ret)
+#'   sub
+#' })
+#' ranked  # each group has independent 1..n ranking
+#'
 #' @family parallel
 #' @export
 

@@ -31,6 +31,23 @@
 #' prices <- matrix(c(1.0, 1.1, 1.05, 2.0, 1.9, 2.1), nrow = 3,
 #'                  dimnames = list(c("d1","d2","d3"), c("A","B")))
 #' iaw$wide2long(prices, valname.is = "ret", row.is = "date", col.is = "firm")
+#'
+#' # Correlation matrix to long format for heatmap plotting
+#' cor_mat <- cor(mtcars[, 1:4])
+#' long_cor <- iaw$wide2long(cor_mat, valname.is = "corr",
+#'                           row.is = "var1", col.is = "var2")
+#' head(long_cor)   # var1, var2, corr columns
+#'
+#' # Single-column matrix
+#' m1 <- matrix(c(10, 20, 30), dimnames = list(c("a","b","c"), "X"))
+#' iaw$wide2long(m1)   # 3 rows, columns: time, unit, val
+#'
+#' # Sector returns panel
+#' sector_ret <- data.frame(Tech = c(0.02, -0.01, 0.03),
+#'                          Energy = c(-0.01, 0.005, 0.01),
+#'                          row.names = c("Jan", "Feb", "Mar"))
+#' iaw$wide2long(sector_ret, valname.is = "return",
+#'               row.is = "month", col.is = "sector")
 
 iaw$wide2long <- function(d, valname.is = "val", row.is = "time", col.is = "unit") {
     stopifnot(is.matrix(d) || is.data.frame(d))

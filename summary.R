@@ -31,6 +31,18 @@
 #' # Return profile with NA values to see pctna column
 #' df2 <- data.frame(a = c(1:50, rep(NA, 50)), b = rnorm(100))
 #' iaw$summary(df2, "p")
+#'
+#' # Sharpe ratio profile for daily returns (annualised)
+#' set.seed(42)
+#' ret <- data.frame(strat_A = rnorm(252, 0.0003, 0.01),
+#'                   strat_B = rnorm(252, 0.0001, 0.02))
+#' iaw$summary(ret, "sr252")   # annualised mean, vol, Sharpe
+#'
+#' # Matrix input is automatically converted
+#' iaw$summary(matrix(rnorm(200), ncol = 2), "p")
+#'
+#' # "a" profile includes trimmed mean and fraction positive
+#' iaw$summary(data.frame(signal = rnorm(500, 0.02, 0.1)), "a")
 
 iaw$summary <- function(df, verbose = "X", digits = 4) {
     if (is.vector(df) | is.matrix(df)) df <- data.frame(df)

@@ -18,6 +18,16 @@
 #' # pdf.end() can also be called without a matching pdf.start()
 #' # to close any currently open graphics device
 #' iaw$pdf.end()
+#'
+#' # Suppress the status message with verbose = 0
+#' iaw$pdf.start("output_quiet")
+#' plot(1:5, main = "Quiet close")
+#' iaw$pdf.end(verbose = 0)
+#'
+#' # Multi-page PDF: draw several plots then close once
+#' iaw$pdf.start("multipage")
+#' for (i in 1:4) plot(rnorm(50), main = paste("Page", i))
+#' iaw$pdf.end()
 #' }
 #'
 #' @family plotting

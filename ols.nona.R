@@ -15,6 +15,16 @@
 #' # Use RcppArmadillo::fastLm instead:
 #' # library(RcppArmadillo)
 #' # fastLm(y ~ x, data = df)
+#'
+#' # Attempting any call raises a deprecation error
+#' tryCatch(iaw$ols.nona(y ~ x), error = function(e) e$message)
+#' # "please use library(RcppArmadillo); ..."
+#'
+#' # Recommended replacement for fast OLS without NA overhead
+#' # library(RcppArmadillo)
+#' # X <- cbind(1, rnorm(100))
+#' # y <- rnorm(100)
+#' # fastLmPure(X, y)$coefficients  # numeric vector of beta-hats
 #' }
 #'
 #' @family regression

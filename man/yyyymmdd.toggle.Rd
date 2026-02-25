@@ -31,5 +31,15 @@ iaw$yyyymmdd.toggle(greg + 30)  # 30 days later as YYYYMMDD
 # Vectorised: convert a column of dates
 dates <- c(20200101, 20201231, 20210630)
 iaw$yyyymmdd.toggle(dates)
+
+# Count business days between two dates (weekdays only)
+g1 <- iaw$yyyymmdd.toggle(20240101)
+g2 <- iaw$yyyymmdd.toggle(20240131)
+all_days <- seq(g1, g2)
+weekdays <- iaw$yyyymmdd.toggle(all_days)
+# (use with yyyymmdd(..., output="weekday") for further filtering)
+
+# NA values pass through
+iaw$yyyymmdd.toggle(c(20240101, NA, 20240301))   # NA preserved in middle
 }
 }

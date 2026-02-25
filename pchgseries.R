@@ -29,6 +29,22 @@
 #' x <- c(50, 60, 45)
 #' ret <- iaw$pchgseries(x)
 #' is.na(ret[1])   # TRUE
+#'
+#' # Compute daily returns from a stock price series
+#' closing <- c(150.00, 152.25, 151.80, 154.10, 153.50)
+#' daily_ret <- iaw$pchgseries(closing)
+#' round(daily_ret, 4)  # NA, 0.0150, -0.0030, 0.0151, -0.0039
+#'
+#' # Year-over-year growth from quarterly GDP (4-period lag)
+#' gdp <- c(100, 101, 103, 102, 105, 107, 110, 108)
+#' yoy <- iaw$pchgseries(gdp, numlags = 4)
+#' round(yoy, 3)  # NA NA NA NA 0.050 0.059 0.068 0.059
+#'
+#' # Log-returns vs simple returns (close approximation for small changes)
+#' p <- c(100, 102, 99, 105)
+#' simple <- iaw$pchgseries(p)
+#' logreturns <- diff(log(p))
+#' round(simple[-1] - logreturns, 6)  # differences are tiny
 
 iaw$pchgseries <- function(seriesin, numlags = 1, panelid = NULL, timeid = NULL) {
     stopifnot(is.numeric(seriesin))

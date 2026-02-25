@@ -30,6 +30,12 @@
 #' iaw$funseries(lag_fun, series, firm, time)
 #' }
 #'
+#' # seriescheck: validate a numeric vector before lag/lead operations
+#' iaw$seriescheck(c(1, 2, 3, 4, 5))  # returns NULL invisibly on success
+#'
+#' # panelcheck: returns 0 for non-panel (NULL panelid) input
+#' iaw$panelcheck(c(1, 2, 3), NULL, NULL)  # 0
+#'
 #' @family time-series
 #' @keywords internal
 

@@ -25,4 +25,17 @@ f <- function() stop("something went wrong")
 f()
 }
 
+\dontrun{
+# Useful at the top of a batch script for easier post-mortem debugging
+iaw$enable.error.line.num()
+source("my_analysis.R")  # errors now include line numbers
+}
+
+\dontrun{
+# Check the current setting, enable if not already on
+getOption("show.error.locations")  # NULL or FALSE by default
+iaw$enable.error.line.num()
+getOption("show.error.locations")  # TRUE
+}
+
 }

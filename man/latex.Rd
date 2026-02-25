@@ -27,6 +27,14 @@ iaw$latex(df)
 # Print a matrix as a LaTeX table
 m <- matrix(1:6, nrow = 2, dimnames = list(c("r1","r2"), c("a","b","c")))
 iaw$latex(m)
+
+# Regression summary table as LaTeX
+fit <- lm(mpg ~ wt + hp, data = mtcars)
+iaw$latex(summary(fit)$coefficients)
+
+# Correlation matrix for inclusion in a paper
+cormat <- cor(mtcars[, c("mpg", "wt", "hp", "disp")])
+iaw$latex(round(cormat, 2))
 }
 
 }

@@ -35,6 +35,23 @@
 #' process(3, "item")   # works fine
 #' process(-1, "item")  # aborts with message
 #' }
+#'
+#' # Validate that a data frame has expected columns
+#' df <- data.frame(date = Sys.Date(), ret = 0.01)
+#' ("ret" %in% names(df)) %or% stop("missing return column")  # passes
+#'
+#' # Ensure numeric input before computing statistics
+#' vals <- c(1.5, 2.3, 4.1)
+#' (is.numeric(vals)) %or% stop("vals must be numeric")  # passes silently
+#'
+#' # Guard against empty portfolio weights
+#' \dontrun{
+#' optimize_portfolio <- function(weights) {
+#'   (length(weights) > 0) %or% iaw$abort("weight vector is empty")
+#'   (abs(sum(weights) - 1) < 1e-8) %or% iaw$abort("weights must sum to 1")
+#'   weights / sum(weights)
+#' }
+#' }
 
 `%or%` <- function(e1, e2) {
     e2 <- substitute(e2)

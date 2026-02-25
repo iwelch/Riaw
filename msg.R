@@ -37,6 +37,19 @@
 #'   iaw$msg("model complete")
 #' }
 #' run_model()
+#'
+#' # Track progress in a loop
+#' process_files <- function(files) {
+#'   for (f in files) {
+#'     iaw$msg("Processing ", f)
+#'     # ... work ...
+#'   }
+#'   iaw$msg("All files done")
+#' }
+#' process_files(c("data1.csv", "data2.csv"))
+#'
+#' # Custom caller-name width for long function names
+#' iaw$msg("step complete", len.of.funname = 20)
 #' }
 
 make_msg <- function() {

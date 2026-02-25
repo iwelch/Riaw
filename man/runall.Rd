@@ -26,6 +26,16 @@ iaw$runall()
 
 # Mixed R and Perl scripts are also supported (Perl emits a warning)
 # 01-download.pl, 02-parse.R -> runs perl 01-download.pl, then sources 02-parse.R
+
+# Typical project layout:
+#   01-download.R  -- fetch raw data
+#   02-clean.R     -- merge and filter
+#   03-analyze.R   -- regressions
+#   04-tables.R    -- output LaTeX tables
+# iaw$runall() executes them sequentially, aborting on first error.
+
+# Scripts without a leading digit are ignored (e.g., helper.R, utils.R)
+# Only files matching [0-9]*.R or [0-9]*.pl are sourced.
 }
 
 }

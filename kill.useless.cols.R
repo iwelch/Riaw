@@ -23,6 +23,23 @@
 #' # All-NA column is treated as constant (one unique value: NA)
 #' df3 <- data.frame(a = c(1, 2, 3), b = c(NA, NA, NA))
 #' iaw$kill.useless.cols(df3)   # b removed
+#'
+#' # Clean a financial dataset before regression
+#' stocks <- data.frame(
+#'   ret     = c(0.01, -0.02, 0.03),
+#'   country = c("US", "US", "US"),   # constant -> removed
+#'   exchg   = c(1, 1, 1),            # constant -> removed
+#'   vol     = c(100, 200, 150)
+#' )
+#' iaw$kill.useless.cols(stocks)   # keeps ret and vol only
+#'
+#' # Single-row data frame: all columns are "constant"
+#' iaw$kill.useless.cols(data.frame(a = 1, b = "x"))
+#' # returns 0-column data frame
+#'
+#' # Preserves columns with at least one difference
+#' df4 <- data.frame(a = c(1, 1, 2), b = c(5, 5, 5))
+#' ncol(iaw$kill.useless.cols(df4))  # 1
 
 iaw$kill.useless.cols <- function(d) {
     stopifnot(is.data.frame(d))

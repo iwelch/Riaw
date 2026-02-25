@@ -73,4 +73,17 @@ iaw$subset.data.frame(d, TRUE, select = c(a, typo))
 #   undefined columns in 'select': typo
 }
 
+# Select columns from a financial data set
+prices <- data.frame(date = 20240101:20240105,
+                     open = c(150, 152, 151, 155, 154),
+                     high = c(153, 155, 154, 158, 157),
+                     close = c(152, 151, 155, 154, 156))
+iaw$subset.data.frame(prices, close > 153, select = c("date", "close"))
+
+# Row filter only -- keep all columns
+iaw$subset.data.frame(prices, open >= 152)
+
+# drop = TRUE returns a vector when selecting a single column
+iaw$subset.data.frame(prices, close > 155, select = "close", drop = TRUE)
+
 }

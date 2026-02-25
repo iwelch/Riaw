@@ -38,6 +38,22 @@ iaw$plot.points.toomany(x, y, bandwidth = c(0.1, 0.1))
 y2 <- 0.7 * x + rnorm(10000, sd = 0.7)
 plot(range(x), range(y2), type = "n")
 iaw$plot.points.toomany(x, y2, bandwidth = c(0.2, 0.2), inlogs = FALSE)
+
+# Daily stock return scatter (e.g., SPY vs QQQ) with fine bins
+set.seed(99)
+spy <- rnorm(5000, 0, 0.01)
+qqq <- 1.1 * spy + rnorm(5000, 0, 0.005)
+plot(range(spy), range(qqq), type = "n",
+     xlab = "SPY return", ylab = "QQQ return", main = "Return heatmap")
+iaw$plot.points.toomany(spy, qqq, bandwidth = c(0.002, 0.002))
+abline(lm(qqq ~ spy), col = "red", lwd = 2)
+
+# Boost color intensity with colstrength for sparse data
+set.seed(5)
+x3 <- rnorm(500)
+y3 <- rnorm(500)
+plot(range(x3), range(y3), type = "n", main = "Boosted color")
+iaw$plot.points.toomany(x3, y3, bandwidth = c(0.3, 0.3), colstrength = 3)
 }
 
 }

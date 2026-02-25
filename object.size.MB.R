@@ -24,6 +24,18 @@
 #' # Check size of a data frame
 #' d <- data.frame(x = rnorm(1e5), y = rnorm(1e5), z = sample(letters, 1e5, replace = TRUE))
 #' iaw$object.size.MB(d)
+#'
+#' # Character vectors can be surprisingly large
+#' big_str <- replicate(1e4, paste(sample(letters, 50, TRUE), collapse = ""))
+#' iaw$object.size.MB(big_str)
+#'
+#' # Logical vectors are compact
+#' iaw$object.size.MB(rep(TRUE, 1e6))   # ~3.81 MB (same as integer)
+#'
+#' # Matrix vs data frame overhead
+#' m <- matrix(0, nrow = 1000, ncol = 100)
+#' iaw$object.size.MB(m)                      # raw storage
+#' iaw$object.size.MB(as.data.frame(m))       # slightly larger due to column list
 
 iaw$object.size.MB <- function(x) {
     round(object.size(x) / 1024^2, 2)

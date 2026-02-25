@@ -27,6 +27,18 @@
 #' # NA treated as zero return (missing data gap)
 #' ret_with_gap <- c(0.01, NA, 0.02, 0.03)
 #' iaw$compoundseries(ret_with_gap, na.is.zero = TRUE)
+#'
+#' # Annual equity returns: cumulative growth of $1
+#' annual <- c(0.12, -0.05, 0.20, 0.08, -0.10)
+#' 1 + iaw$compoundseries(annual)  # wealth path starting at $1
+#'
+#' # Rolling 12-month return from monthly data
+#' monthly <- c(0.01, -0.02, 0.03, 0.01, 0.02, -0.01,
+#'              0.01, 0.03, -0.01, 0.02, 0.01, 0.02, 0.01, -0.01)
+#' iaw$compoundseries(monthly, window = 12)
+#'
+#' # Geometric mean: annualized return at each point
+#' iaw$compoundseries(c(0.10, 0.20, -0.05), geomean = TRUE)  # smoothed avg
 
 iaw$compoundseries <- function(rate.of.return.timeseries, window = 0,
                                 geomean = FALSE, na.is.zero = FALSE) {

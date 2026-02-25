@@ -36,5 +36,18 @@ iaw$covp(c(1, NA, 3, 4), c(2, 3, NA, 5))
 # All columns of a matrix against a reference vector
 m <- matrix(c(1:5, 5:1, c(1,3,5,3,1)), ncol = 3)
 apply(m, 2, function(col) iaw$covp(col, 1:5))
+
+# Population covariance of identical vectors equals population variance
+x <- c(2, 4, 6, 8)
+iaw$covp(x, x)  # 5  (population variance with n denominator)
+
+# Uncorrelated series have near-zero covariance
+set.seed(1)
+iaw$covp(rnorm(1000), rnorm(1000))  # close to 0
+
+# Negatively correlated: returns of long and short positions
+long_ret  <- c(0.02, -0.01, 0.03)
+short_ret <- c(-0.02, 0.01, -0.03)
+iaw$covp(long_ret, short_ret)  # negative covariance
 }
 }

@@ -58,4 +58,21 @@ iaw$mc.by.cripple.toggle()
 result <- iaw$mc.by(df, df$group, function(d) mean(d$value))
 iaw$mc.by.cripple.toggle()  # toggle back on
 }
+
+# Group by two variables using a list of indices
+df2 <- data.frame(sector = c("Tech","Tech","Fin","Fin"),
+                  year   = c(2020, 2021, 2020, 2021),
+                  rev    = c(100, 150, 80, 90))
+result2 <- iaw$mc.by(df2, list(df2$sector, df2$year),
+                      function(d) sum(d$rev))
+unlist(result2)  # one sum per sector-year combination
+
+# Run a regression per group in parallel
+panel <- data.frame(
+  id  = rep(c("A","B"), each = 10),
+  x   = rnorm(20),
+  y   = rnorm(20)
+)
+fits <- iaw$mc.by(panel, panel$id, function(d) coef(lm(y ~ x, data = d)))
+fits  # list of coefficient vectors, one per group
 }

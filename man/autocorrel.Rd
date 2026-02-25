@@ -36,5 +36,17 @@ iaw$autocorrel(ret, ret, leadlags = 5)   # near-zero: consistent with EMH
 cpi <- cumsum(rnorm(120, mean = 0.002))
 ip  <- 0.5 * c(rep(NA, 3), cpi[-(120:118)]) + rnorm(120)
 iaw$autocorrel(ip, cpi, leadlags = 5)   # positive cor3: IP leads CPI by 3
+
+# Autocorrelation of a single series (pass same vector twice)
+set.seed(1)
+ar1 <- filter(rnorm(200), 0.7, method = "recursive")
+cc <- iaw$autocorrel(as.numeric(ar1), as.numeric(ar1), leadlags = 3)
+cc["cor0"]   # 1.0 (perfect self-correlation at lag 0)
+
+# Cross-correlation between volume and absolute returns
+set.seed(99)
+abs_ret <- abs(rnorm(150, sd = 0.02))
+volume  <- 1e6 + 5e7 * abs_ret + rnorm(150, sd = 1e4)
+iaw$autocorrel(abs_ret, volume, leadlags = 2)  # strong cor0
 }
 }

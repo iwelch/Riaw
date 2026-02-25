@@ -30,5 +30,14 @@ iaw$.Riolog("O", "results.csv")
 
 # Log a plot output
 iaw$.Riolog("P", "figures/returns.pdf")
+
+# Log a generic message for debugging
+iaw$.Riolog("M", "Starting portfolio optimization")
+
+# Log entries include timestamp, PID, and script name for traceability
+# Typical Rio.log line: 1706112000  01-run.R  I  data.csv  2024-01-24 12:00:00
+
+# No-op if Rio.log does not exist (safe to call unconditionally)
+iaw$.Riolog("I", "nonexistent.csv")  # silently returns NULL
 }
 }

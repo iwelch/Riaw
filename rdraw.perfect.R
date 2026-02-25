@@ -29,6 +29,18 @@
 #' # Custom quantile function via closure
 #' q_t5 <- function(p) qt(p, df = 5)
 #' iaw$rdraw.perfect(20, q_t5)
+#'
+#' # Log-normal draws for simulating asset prices
+#' prices <- iaw$rdraw.perfect(100, qlnorm)
+#' median(prices)  # close to 1 (theoretical median of LogNormal(0,1))
+#'
+#' # Chi-squared draws for variance simulation
+#' chi2 <- iaw$rdraw.perfect(200, function(p) qchisq(p, df = 3))
+#' mean(chi2)  # close to 3 (theoretical mean equals df)
+#'
+#' # Verify exact moment matching with large n
+#' x <- iaw$rdraw.perfect(10000, qnorm)
+#' round(c(mean = mean(x), sd = sd(x)), 4)  # 0.0000 and ~1.0000
 
 iaw$rdraw.perfect <- function(n, qfun = qnorm) {
     stopifnot(is.numeric(n), length(n) == 1L, n >= 1)

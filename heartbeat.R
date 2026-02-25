@@ -22,6 +22,20 @@
 #' }
 #' cat("\n")
 #'
+#' # Fine-grained progress: print every 5 iterations
+#' for (i in 1:25) {
+#'   iaw$heartbeat(i, every = 5)
+#' }
+#' cat("\n")                          # prints 5 dots
+#'
+#' # Typical use: monitor a long simulation run
+#' results <- numeric(500)
+#' for (i in seq_along(results)) {
+#'   results[i] <- rnorm(1)
+#'   iaw$heartbeat(i, every = 100)   # one dot per 100 draws
+#' }
+#' cat("\n")                          # prints 5 dots
+#'
 #' @family utilities
 #' @export
 

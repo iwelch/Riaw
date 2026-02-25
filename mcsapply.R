@@ -28,6 +28,15 @@
 #' # Apply a function across column names of a data frame
 #' df <- data.frame(a = rnorm(30), b = rnorm(30), c = rnorm(30))
 #' iaw$mcsapply(names(df), function(col) mean(df[[col]]))
+#'
+#' # Parallel column-wise standard deviations
+#' mat <- matrix(rnorm(300), ncol = 10)
+#' iaw$mcsapply(1:ncol(mat), function(j) sd(mat[, j]))
+#'
+#' # Estimate multiple sample quantiles in parallel
+#' data_list <- list(a = rnorm(1000), b = rexp(1000), c = runif(1000))
+#' medians <- iaw$mcsapply(data_list, median)
+#' medians  # named numeric vector: a ~ 0, b ~ 0.69, c ~ 0.5
 #' }
 
 iaw$mcsapply <- function(X, FUN, ...) {

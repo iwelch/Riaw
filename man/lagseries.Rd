@@ -37,5 +37,17 @@ panel <- data.frame(
   ret  = c(0.01, 0.02, 0.03, 0.10, 0.11, 0.12)
 )
 iaw$lagseries(panel$ret, panelid = panel$firm, timeid = panel$t)
+
+# Compute momentum: current return minus lagged return
+prices <- c(100, 102, 101, 105, 108)
+momentum <- prices - iaw$lagseries(prices)  # NA 2 -1 4 3
+momentum
+
+# Lag of zero returns the original series unchanged
+iaw$lagseries(c(10, 20, 30), numlags = 0)  # 10 20 30
+
+# Negative lag is equivalent to a lead
+x <- c(1, 2, 3, 4, 5)
+iaw$lagseries(x, numlags = -1)  # 2 3 4 5 NA
 }
 }

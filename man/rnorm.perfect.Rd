@@ -34,5 +34,17 @@ sd(y)    # Exactly 2
 # Useful for simulation studies that need exact moments
 z <- iaw$rnorm.perfect(1000)
 range(z)   # Wider tails than rnorm() because quantiles are exact
+
+# Simulate daily stock returns with realistic parameters
+daily_ret <- iaw$rnorm.perfect(252, mean = 0.0003, sd = 0.015)
+round(mean(daily_ret) * 252, 4)  # annualized mean ~0.0756
+
+# Verify skewness is near zero (symmetric by construction)
+x <- iaw$rnorm.perfect(500)
+round(mean(((x - mean(x)) / sd(x))^3), 4)  # skewness ~0
+
+# Use as benchmark input where exact moments matter
+x <- iaw$rnorm.perfect(100, mean = 5, sd = 3)
+round(c(mean = mean(x), sd = sd(x)), 4)  # 5.0000, 3.0000
 }
 }

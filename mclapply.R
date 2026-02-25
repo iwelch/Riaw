@@ -32,6 +32,17 @@
 #'   if (x == 3) stop("bad element")
 #'   x^2
 #' }, stop.on.error = FALSE)
+#'
+#' # Limit to 2 cores explicitly
+#' iaw$mclapply(1:8, function(x) x^2, mc.cores = 2)
+#'
+#' # Read and summarize multiple CSV files in parallel
+#' files <- list.files("/data/daily", pattern = "\\.csv$", full.names = TRUE)
+#' summaries <- iaw$mclapply(files, function(f) {
+#'   d <- read.csv(f)
+#'   data.frame(file = basename(f), nrow = nrow(d), mean_ret = mean(d$ret))
+#' })
+#' do.call(rbind, summaries)
 #' }
 
 iaw$mclapply <- function(X, FUN, ..., mc.cores = getOption("mc.cores", parallel::detectCores()),
