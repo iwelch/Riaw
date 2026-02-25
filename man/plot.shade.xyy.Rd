@@ -7,7 +7,7 @@ Shades area between ylo and yhi segment-by-segment, coloring
 differently depending on which line is above.
 }
 \usage{
-plot.shade.xyy(x, ylo, yhi, col.plus = "blue", col.minus = "red", col.indif = "gray")
+\method{plot}{shade.xyy}(x, ylo, yhi, col.plus = "blue", col.minus = "red", col.indif = "gray")
 }
 \arguments{
   \item{x}{X coordinates.}

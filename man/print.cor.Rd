@@ -6,7 +6,7 @@
 prints nice correlation output
 }
 \usage{
-print.cor(d, digits = 2, use = "pairwise.complete.obs")
+\method{print}{cor}(d, digits = 2, use = "pairwise.complete.obs")
 }
 \arguments{
   \item{d}{Data frame or matrix.}

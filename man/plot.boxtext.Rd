@@ -6,7 +6,7 @@
 Adds text with background box.
 }
 \usage{
-plot.boxtext(x, y, labels, ...)
+\method{plot}{boxtext}(x, y, labels, ...)
 }
 \arguments{
   \item{x}{X position.}

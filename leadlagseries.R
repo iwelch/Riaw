@@ -11,7 +11,6 @@
 #' @param panelid Optional panel identifier vector.
 #' @param timeid Optional time identifier vector.
 #' @param errormsg Error message for validation failures (default \code{"unused"}).
-#' @param fun.and.data List with components \code{fun}, \code{param}, and \code{series}.
 #'
 #' @return \code{panelcheck}: 0 (invisibly) if no panel, or stops on error.
 #'   \code{seriescheck}: \code{NULL} (invisibly).

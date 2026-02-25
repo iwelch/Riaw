@@ -6,7 +6,7 @@
 Plots empirical CDF.
 }
 \usage{
-plot.ecdf.lineplot(x, ...)
+\method{plot}{ecdf.lineplot}(x, ...)
 }
 \arguments{
   \item{x}{Numeric vector.}

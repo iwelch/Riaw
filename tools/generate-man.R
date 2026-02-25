@@ -265,10 +265,25 @@ build_family_index <- function(pages) {
 }
 
 make_usage <- function(funcname, formals_str, is_operator = FALSE) {
-    if (is_operator)
+    if (is_operator) {
+        ## Use actual parameter names if available, else default to e1/e2
+        if (!is.null(formals_str) && nchar(trimws(formals_str)) > 0L) {
+            parts <- trimws(strsplit(formals_str, ",")[[1]])
+            ## Strip defaults (e.g., "x = 1" -> "x")
+            parts <- sub("\\s*=.*", "", parts)
+            if (length(parts) >= 2)
+                return(paste0(parts[1], " ", escape_rd(funcname), " ", parts[2]))
+        }
         return(paste0("e1 ", escape_rd(funcname), " e2"))
+    }
     args <- if (!is.null(formals_str) && nchar(trimws(formals_str)) > 0L)
                 escape_rd(formals_str) else ""
+    ## S3 methods: print.olm -> \method{print}{olm}(...)
+    if (grepl("^(print|format|summary|plot|coef|residuals|predict|vcov)\\.", funcname)) {
+        parts <- regmatches(funcname, regexpr("^[^.]+", funcname))
+        class_part <- sub(paste0("^", parts, "\\."), "", funcname)
+        return(paste0("\\method{", parts, "}{", class_part, "}(", args, ")"))
+    }
     paste0(escape_rd(funcname), "(", args, ")")
 }
 

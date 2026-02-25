@@ -4,7 +4,7 @@
 #'
 #' Checks a condition and aborts with an error message if FALSE.
 #'
-#' @param condition Logical scalar to test.
+#' @param cond Logical scalar to test.
 #' @param ... Error message arguments passed to abort().
 #'
 #' @return Invisible NULL if condition is TRUE; otherwise stops.
@@ -30,11 +30,11 @@
 #' check_input("oops")      # aborts with message
 #' }
 
-iaw$assert <- function(condition, ...) {
-    stopifnot(is.logical(condition), length(condition) == 1L)
-    if (!condition) {
+iaw$assert <- function(cond, ...) {
+    stopifnot(is.logical(cond), length(cond) == 1L)
+    if (!cond) {
         msg <- paste(...)
-        if (nchar(msg) == 0) msg <- paste(deparse(substitute(condition)), collapse = " ")
+        if (nchar(msg) == 0) msg <- paste(deparse(substitute(cond)), collapse = " ")
         iaw$abort(msg)
     }
     invisible(NULL)

@@ -6,7 +6,7 @@
 Creates 2D histogram/heatmap.
 }
 \usage{
-plot.hist2d(x, y, nbins = 50)
+\method{plot}{hist2d}(x, y, nbins = 50)
 }
 \arguments{
   \item{x}{X values.}

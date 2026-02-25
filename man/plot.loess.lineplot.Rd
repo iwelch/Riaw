@@ -6,7 +6,7 @@
 Plots loess-smoothed line.
 }
 \usage{
-plot.loess.lineplot(x, y, lo=200, span=0.75, mean.hatch=NA, ...)
+\method{plot}{loess.lineplot}(x, y, lo=200, span=0.75, mean.hatch=NA, ...)
 }
 \arguments{
   \item{x}{Numeric vector of x values.}

@@ -6,7 +6,7 @@
 Adds text with background color.
 }
 \usage{
-plot.text.bg(x, y, labels, bg = "white", ...)
+\method{plot}{text.bg}(x, y, labels, bg = "white", ...)
 }
 \arguments{
   \item{x}{X position.}

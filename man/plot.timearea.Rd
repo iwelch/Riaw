@@ -6,7 +6,7 @@
 Creates time series area plot.
 }
 \usage{
-plot.timearea(x, y, ...)
+\method{plot}{timearea}(x, y, ...)
 }
 \arguments{
   \item{x}{Time values.}

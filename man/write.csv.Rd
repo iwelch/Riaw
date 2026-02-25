@@ -23,7 +23,7 @@ Invisibly returns input object.
 }
 \seealso{
 
-Other io: \code{\link{.Riolog}}, \code{\link{lock}}, \code{\link{read.csv}}, \code{\link{touch}}
+Other io: \code{\link{Riolog}}, \code{\link{lock}}, \code{\link{read.csv}}, \code{\link{touch}}
 }
 \examples{
 \dontrun{

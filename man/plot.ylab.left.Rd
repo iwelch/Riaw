@@ -6,7 +6,7 @@
 Adds rotated y-axis label on left.
 }
 \usage{
-plot.ylab.left(label, ...)
+\method{plot}{ylab.left}(label, ...)
 }
 \arguments{
   \item{label}{Label text.}

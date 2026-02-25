@@ -6,7 +6,7 @@
 places text label on slope at an x-point
 }
 \usage{
-plot.labelcurve(xseries, yseries, xval, label, ...)
+\method{plot}{labelcurve}(xseries, yseries, xval, label, ...)
 }
 \arguments{
   \item{xseries}{X values.}

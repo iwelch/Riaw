@@ -66,7 +66,7 @@ iaw$mc.by.cache <- function(true.or.null) {
 #'
 #' @export
 iaw$mc.by.cripple.toggle <- function() {
-    iaw$.mc.cripple <<- !iaw$.mc.cripple
+    assign(".mc.cripple", !iaw$.mc.cripple, envir = iaw)
     message("[mc.by parallel: ", if (iaw$.mc.cripple) "OFF" else "ON", "]")
 }
 

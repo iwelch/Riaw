@@ -16,8 +16,7 @@ panelcheck(seriesin, panelid, timeid, errormsg = "unused")
   \item{seriesin}{Numeric vector.}
   \item{panelid}{Optional panel identifier vector.}
   \item{timeid}{Optional time identifier vector.}
-  \item{errormsg}{Error message for validation failures (default \code{"unused"}).}
-  \item{fun.and.data}{List with components \code{fun}, \code{param}, and \code{series}. }
+  \item{errormsg}{Error message for validation failures (default \code{"unused"}). }
 }
 \value{
 \code{panelcheck}: 0 (invisibly) if no panel, or stops on error. \code{seriescheck}: \code{NULL} (invisibly). \code{funseries}: transformed numeric vector. 

@@ -6,10 +6,10 @@
 Checks a condition and aborts with an error message if FALSE.
 }
 \usage{
-assert(condition, ...)
+assert(cond, ...)
 }
 \arguments{
-  \item{condition}{Logical scalar to test.}
+  \item{cond}{Logical scalar to test.}
   \item{...}{Error message arguments passed to abort(). }
 }
 \value{

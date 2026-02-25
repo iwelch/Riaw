@@ -6,7 +6,7 @@
 Adds yearly tick marks to time axis.
 }
 \usage{
-plot.yearly.tickmarks(years, ...)
+\method{plot}{yearly.tickmarks}(years, ...)
 }
 \arguments{
   \item{years}{Years to mark.}

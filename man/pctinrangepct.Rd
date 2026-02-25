@@ -6,7 +6,7 @@
 Tests whether values fall within a specified inclusive range.
 }
 \usage{
-e1 \%inrange\% e2
+x \%inrange\% range_vector
 }
 \arguments{
   \item{x}{A numeric value or vector to test.}

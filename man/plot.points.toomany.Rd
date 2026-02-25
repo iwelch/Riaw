@@ -7,7 +7,7 @@ Bins (x, y) into a grid and draws density-colored rectangles.
 Useful when a scatterplot has too many points to render individually.
 }
 \usage{
-plot.points.toomany(x, y, bandwidth, inlogs=TRUE, colstrength=1, ...)
+\method{plot}{points.toomany}(x, y, bandwidth, inlogs=TRUE, colstrength=1, ...)
 }
 \arguments{
   \item{x}{X values.}

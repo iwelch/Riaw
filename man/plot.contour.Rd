@@ -6,7 +6,7 @@
 Creates filled contour plot.
 }
 \usage{
-plot.contour(x, y, z, ...)
+\method{plot}{contour}(x, y, z, ...)
 }
 \arguments{
   \item{x}{X coordinates.}

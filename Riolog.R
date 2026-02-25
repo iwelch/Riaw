@@ -1,6 +1,6 @@
 #' Log to Rio.log
 #'
-#' @name .Riolog
+#' @name Riolog
 #'
 #' Writes a line to Rio.log if it exists.
 #'

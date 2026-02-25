@@ -6,7 +6,7 @@
 Creates basic world map.
 }
 \usage{
-plot.worldmap(...)
+\method{plot}{worldmap}(...)
 }
 \arguments{
   \item{...}{Map arguments. }

@@ -19,7 +19,7 @@ TRUE if lock acquired.
 }
 \seealso{
 
-Other io: \code{\link{.Riolog}}, \code{\link{read.csv}}, \code{\link{touch}}, \code{\link{write.csv}}
+Other io: \code{\link{Riolog}}, \code{\link{read.csv}}, \code{\link{touch}}, \code{\link{write.csv}}
 }
 \examples{
 \dontrun{

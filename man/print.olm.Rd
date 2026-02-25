@@ -6,7 +6,7 @@
 S3 print method for olm objects. Provides compact output.
 }
 \usage{
-print.olm(x, yname = NULL, xnames = NULL, wantedcols = 1:7, description = NULL, ...)
+\method{print}{olm}(x, yname = NULL, xnames = NULL, wantedcols = 1:7, description = NULL, ...)
 }
 \arguments{
   \item{x}{An olm object.}
