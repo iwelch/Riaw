@@ -17,7 +17,7 @@ Numeric days.
 }
 \seealso{
 
-Other datetime: \code{\link{epoch2POSIXct}}, \code{\link{epoch2nyc}}, \code{\link{epoch2yyyymmdd}}, \code{\link{tmdiffsec}}, \code{\link{yyyymmdd.toggle}}, \code{\link{yyyymmdd}}
+Other datetime: \code{\link{epoch2nyc}}, \code{\link{epoch2POSIXct}}, \code{\link{epoch2yyyymmdd}}, \code{\link{tmdiffsec}}, \code{\link{yyyymmdd.toggle}}, \code{\link{yyyymmdd}}
 }
 \examples{
 \dontrun{

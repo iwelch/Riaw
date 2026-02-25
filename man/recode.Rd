@@ -19,7 +19,7 @@ Recoded vector.
 }
 \seealso{
 
-Other data-manipulation: \code{\link{diffid.for.fixed.effects}}, \code{\link{kill.useless.cols}}, \code{\link{rename.columns}}, \code{\link{subset.data.frame}}
+Other data-manipulation: \code{\link{diffid.for.fixed.effects}}, \code{\link{doublesort}}, \code{\link{kill.useless.cols}}, \code{\link{rename.columns}}, \code{\link{subset.data.frame}}
 }
 \examples{
 \dontrun{

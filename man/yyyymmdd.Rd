@@ -19,7 +19,7 @@ Converted date in the requested format.
 \seealso{
 [iaw$yyyymmdd.toggle()], [iaw$as.PlotDate.yyyymmdd()] 
 
-Other datetime: \code{\link{diffdays}}, \code{\link{epoch2POSIXct}}, \code{\link{epoch2nyc}}, \code{\link{epoch2yyyymmdd}}, \code{\link{tmdiffsec}}, \code{\link{yyyymmdd.toggle}}
+Other datetime: \code{\link{diffdays}}, \code{\link{epoch2nyc}}, \code{\link{epoch2POSIXct}}, \code{\link{epoch2yyyymmdd}}, \code{\link{tmdiffsec}}, \code{\link{yyyymmdd.toggle}}
 }
 \examples{
 \dontrun{

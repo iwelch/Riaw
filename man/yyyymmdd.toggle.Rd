@@ -17,7 +17,7 @@ Numeric vector converted to the other format.
 }
 \seealso{
 
-Other datetime: \code{\link{diffdays}}, \code{\link{epoch2POSIXct}}, \code{\link{epoch2nyc}}, \code{\link{epoch2yyyymmdd}}, \code{\link{tmdiffsec}}, \code{\link{yyyymmdd}}
+Other datetime: \code{\link{diffdays}}, \code{\link{epoch2nyc}}, \code{\link{epoch2POSIXct}}, \code{\link{epoch2yyyymmdd}}, \code{\link{tmdiffsec}}, \code{\link{yyyymmdd}}
 }
 \examples{
 \dontrun{

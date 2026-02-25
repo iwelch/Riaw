@@ -18,7 +18,7 @@ De-meaned values with the same dimensions as h.
 }
 \seealso{
 
-Other data-manipulation: \code{\link{kill.useless.cols}}, \code{\link{recode}}, \code{\link{rename.columns}}, \code{\link{subset.data.frame}}
+Other data-manipulation: \code{\link{doublesort}}, \code{\link{kill.useless.cols}}, \code{\link{recode}}, \code{\link{rename.columns}}, \code{\link{subset.data.frame}}
 }
 \examples{
 # Demean a vector within groups (firm fixed effects)

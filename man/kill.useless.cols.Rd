@@ -16,7 +16,7 @@ Data frame with constant columns removed.
 }
 \seealso{
 
-Other data-manipulation: \code{\link{diffid.for.fixed.effects}}, \code{\link{recode}}, \code{\link{rename.columns}}, \code{\link{subset.data.frame}}
+Other data-manipulation: \code{\link{diffid.for.fixed.effects}}, \code{\link{doublesort}}, \code{\link{recode}}, \code{\link{rename.columns}}, \code{\link{subset.data.frame}}
 }
 \examples{
 \dontrun{

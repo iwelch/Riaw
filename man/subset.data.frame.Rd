@@ -45,7 +45,7 @@ lockBinding("subset.data.frame", ns)
 \seealso{
 \code{\link[base]{subset.data.frame}}, \code{\link{check.names}}
 
-Other data-manipulation: \code{\link{diffid.for.fixed.effects}}, \code{\link{kill.useless.cols}}, \code{\link{recode}}, \code{\link{rename.columns}}
+Other data-manipulation: \code{\link{diffid.for.fixed.effects}}, \code{\link{doublesort}}, \code{\link{kill.useless.cols}}, \code{\link{recode}}, \code{\link{rename.columns}}
 }
 \examples{
 d <- data.frame(a = 1:5, b = 6:10, c = 11:15)

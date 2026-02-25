@@ -19,7 +19,7 @@ Full pathname, or NULL if not found.
 }
 \seealso{
 
-Other io: \code{\link{Riolog}}, \code{\link{lock}}, \code{\link{read.csv}}, \code{\link{touch}}, \code{\link{write.csv}}
+Other io: \code{\link{lock}}, \code{\link{read.csv}}, \code{\link{Riolog}}, \code{\link{touch}}, \code{\link{write.csv}}
 }
 \examples{
 \dontrun{
