@@ -2,6 +2,8 @@
 
 #' Locate a File
 #'
+#' @name locate
+#'
 #' Search for file locally, one directory up, one down, then system-wide.
 #'
 #' @param global.filename Filename to find.

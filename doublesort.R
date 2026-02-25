@@ -2,6 +2,8 @@
 
 #' Double Sort for Portfolio Formation
 #'
+#' @name doublesort
+#'
 #' Given two criteria, sort by criterion 1 into groups, then rank within
 #' each group by criterion 2. Middle observations removed if N not divisible.
 #'
