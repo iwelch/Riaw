@@ -22,5 +22,13 @@ Other statistics: \code{\link{autocorrel}}, \code{\link{autopcorrel}}, \code{\li
 \examples{
 \dontrun{
 iaw$tabularsummary(c("a", "b", "a", "c", "a"))
+
+# Summarise a factor column from a data frame
+df <- data.frame(sector = c("Tech", "Finance", "Tech", "Energy",
+                             "Finance", "Tech", NA))
+iaw$tabularsummary(df$sector)   # shows NA as its own row
+
+# Unsorted output preserves original level order
+iaw$tabularsummary(c("low", "high", "med", "low", "low"), sort = FALSE)
 }
 }

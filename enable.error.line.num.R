@@ -6,6 +6,16 @@
 #'
 #' @return Invisible NULL.
 #'
+#' @examples
+#' \dontrun{
+#' # Turn on line-number reporting in error messages
+#' iaw$enable.error.line.num()
+#'
+#' # Now errors show the source line where they occurred
+#' f <- function() stop("something went wrong")
+#' f()
+#' }
+#'
 #' @family utilities
 #' @export
 

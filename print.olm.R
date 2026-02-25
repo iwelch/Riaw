@@ -14,6 +14,18 @@
 #'
 #' @return Invisibly returns the olm object.
 #'
+#' @examples
+#' # Fit a model with iaw$olm and print it (print.olm is called automatically)
+#' df <- data.frame(y = c(1, 2, 3, 4, 5), x = c(1.1, 2.0, 2.9, 4.1, 5.0))
+#' fit <- iaw$olm(y ~ x, data = df)
+#' print(fit)
+#'
+#' # Supply custom variable labels
+#' print(fit, yname = "Return", xnames = "Market")
+#'
+#' # Explicit call with a description header
+#' iaw$print.olm(fit, description = "Baseline OLS")
+#'
 #' @family regression
 #' @export
 

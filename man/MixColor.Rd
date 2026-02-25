@@ -19,5 +19,20 @@ Color value.
 }
 \seealso{
 
-Other plotting: \code{\link{as.PlotDate.yyyymmdd}}, \code{\link{plot.boxtext}}, \code{\link{colorblind}}, \code{\link{plot.contour}}, \code{\link{plot.ecdf.lineplot}}, \code{\link{plot.hist2d}}, \code{\link{hline}}, \code{\link{iaw.boxplot}}, \code{\link{plot.labelcurve}}, \code{\link{lambda2color}}, \code{\link{plot.loess.lineplot}}, \code{\link{plot.native.slope}}, \code{\link{plot.p.arrows}}, \code{\link{plot.pdf.embedfonts}}, \code{\link{pdf.end}}, \code{\link{plot.pdf.start.bera}}, \code{\link{pdf.start}}, \code{\link{plot.timearea}}, \code{\link{plot.worldmap}}, \code{\link{plot.points.toomany}}, \code{\link{plot.shade.xyy}}, \code{\link{plot.text.bg}}, \code{\link{plot.text.onbg}}, \code{\link{vline}}, \code{\link{plot.yearly.tickmarks}}, \code{\link{plot.ylab.left}}
+Other plotting: \code{\link{as.PlotDate.yyyymmdd}}, \code{\link{plot.boxtext}}, \code{\link{colorblind}}, \code{\link{plot.contour}}, \code{\link{plot.ecdf.lineplot}}, \code{\link{plot.hist2d}}, \code{\link{hline}}, \code{\link{iaw.boxplot}}, \code{\link{plot.labelcurve}}, \code{\link{lambda2color}}, \code{\link{plot.loess.lineplot}}, \code{\link{plot.native.slope}}, \code{\link{plot.p.arrows}}, \code{\link{plot.pdf.embedfonts}}, \code{\link{pdf.end}}, \code{\link{pdf.start}}, \code{\link{plot.pdf.start.bera}}, \code{\link{plot.timearea}}, \code{\link{plot.worldmap}}, \code{\link{plot.points.toomany}}, \code{\link{plot.shade.xyy}}, \code{\link{plot.text.bg}}, \code{\link{plot.text.onbg}}, \code{\link{vline}}, \code{\link{plot.yearly.tickmarks}}, \code{\link{plot.ylab.left}}
+}
+\examples{
+# 50/50 mix of red and blue
+iaw$mixcolor("red", "blue")
+
+# 25\% red, 75\% blue
+iaw$mixcolor("red", "blue", ratio = 0.25)
+
+\dontrun{
+# Use mixed colors in a gradient legend
+cols <- sapply(seq(0, 1, by = 0.1), function(r) iaw$mixcolor("red", "blue", r))
+barplot(rep(1, length(cols)), col = cols, border = NA,
+        main = "Red-to-blue gradient")
+}
+
 }

@@ -25,7 +25,21 @@ Other regression: \code{\link{famamacbeth}}, \code{\link{neweywest}}, \code{\lin
 }
 \examples{
 \dontrun{
+# Basic usage: y is a linear trend plus noise, x is the trend variable
+set.seed(1)
 df <- data.frame(y = cumsum(rnorm(50)), x = 1:50)
-iaw$ooslm(y ~ x, df)
+res <- iaw$ooslm(y ~ x, df)
+head(res)
+
+# Positive delta.abserr means the conditional model beats the unconditional mean
+# Check what fraction of periods the model wins out-of-sample
+mean(res$delta.abserr > 0, na.rm = TRUE)
+
+# Multiple predictors
+set.seed(2)
+n <- 60
+df2 <- data.frame(y = rnorm(n), x1 = rnorm(n), x2 = rnorm(n))
+res2 <- iaw$ooslm(y ~ x1 + x2, df2)
+summary(res2$delta.abserr)
 }
 }

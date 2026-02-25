@@ -23,6 +23,17 @@ Other utilities: \code{\link{ascii}}, \code{\link{base}}, \code{\link{beep}}, \c
 }
 \examples{
 \dontrun{
+# Distance from New York to Los Angeles (~3940 km)
 iaw$latlon.distance(40.7128, -74.0060, 34.0522, -118.2437)
+
+# Distance from London to Paris (~341 km)
+iaw$latlon.distance(51.5074, -0.1278, 48.8566, 2.3522)
+
+# Vectorised: distances from one city to several others
+iaw$latlon.distance(
+  rep(40.7128, 3), rep(-74.0060, 3),
+  c(34.0522, 41.8781, 29.7604),    # LA, Chicago, Houston
+  c(-118.2437, -87.6298, -95.3698)
+)
 }
 }

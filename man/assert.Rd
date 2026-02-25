@@ -20,7 +20,20 @@ Invisible NULL if condition is TRUE; otherwise stops.
 Other error-handling: \code{\link{abort}}
 }
 \examples{
+# Basic assertion that passes silently
+iaw$assert(1 + 1 == 2, "math is broken")
+
+# Glue-style interpolation in the message
+n <- 5
+iaw$assert(n > 0, paste("n must be positive, got", n))
+
+# Common pattern: validate function arguments
 \dontrun{
-iaw$assert(is.numeric(x), "x must be numeric")
+check_input <- function(x) {
+  iaw$assert(is.numeric(x), paste("x must be numeric, got", class(x)))
+  iaw$assert(length(x) > 0, "x must not be empty")
+}
+check_input(c(1, 2, 3))  # passes
+check_input("oops")      # aborts with message
 }
 }

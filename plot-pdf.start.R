@@ -1,3 +1,42 @@
+#' Open PDF Graphics Device
+#'
+#' @name pdf.start
+#'
+#' Opens a PDF device with sensible defaults for publication-quality plots.
+#' Uses Cairo on macOS for better font rendering. Automatically closes
+#' a previously unclosed PDF device.
+#'
+#' @param pdffilename Character. Output filename (extension added if missing).
+#'   If no path separator, auto-places in \code{pdf/}, \code{figs/}, or \code{fig/}.
+#' @param scale Numeric. Scale factor for dimensions (default 0.75).
+#' @param wd Numeric. Base width in inches (default 9).
+#' @param ht Numeric. Base height in inches (default 6).
+#' @param pointsize Numeric. Font size; if negative, computed as 12/scale.
+#' @param embed Numeric. Font embedding flag (default 2).
+#' @param verbose Logical. Print status message (default \code{TRUE}).
+#' @param mar Numeric vector of length 4. Plot margins (default \code{c(4.1, 4.1, 1.1, 1.1)}).
+#' @param mgp Numeric vector of length 3. Margin line settings (default \code{c(2.5, 0.75, 0)}).
+#' @param ... Additional arguments passed to the PDF device function.
+#'
+#' @return Called for side effect. Opens a PDF device.
+#'
+#' @examples
+#' \dontrun{
+#' # Open a PDF, draw a plot, close it
+#' iaw$pdf.start("myplot")
+#' plot(1:10, main = "Test")
+#' iaw$pdf.end()
+#'
+#' # Smaller custom dimensions
+#' iaw$pdf.start("narrow", wd = 5, ht = 4)
+#' hist(rnorm(200))
+#' iaw$pdf.end()
+#' }
+#'
+#' @family plotting
+#' @export
+#'
+#' @seealso [iaw$pdf.end()]
 iaw$pdf.start <- function (pdffilename,
                            scale = 0.75, wd = 9, ht = 6, pointsize = (-1),
                            embed = 2,
@@ -27,6 +66,7 @@ iaw$pdf.start <- function (pdffilename,
         for (dir in c("pdf/", "figs/", "fig/")) {
             if (dir.exists(dir)) {
                 pdffilename <- paste0(dir, pdffilename)
+                break
             }
         }
     }

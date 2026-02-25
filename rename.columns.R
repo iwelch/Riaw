@@ -16,6 +16,14 @@
 #' @examples
 #' df <- data.frame(a = 1, b = 2)
 #' iaw$rename.columns(df, c(a = "x", b = "y"))
+#'
+#' # Rename a single column using from/to vectors
+#' df <- data.frame(old_name = 1:3, keep = 4:6)
+#' iaw$rename.columns(df, "old_name", "new_name")
+#'
+#' # Rename multiple columns in a pipeline-friendly way
+#' df <- data.frame(ret = c(0.01, -0.02), vol = c(0.1, 0.2), id = 1:2)
+#' iaw$rename.columns(df, c(ret = "return", vol = "volatility"))
 
 iaw$rename.columns <- function(df, from, to = NULL) {
     stopifnot(is.list(df))
@@ -36,4 +44,6 @@ iaw$rename.columns <- function(df, from, to = NULL) {
     df
 }
 
+#' @rdname rename.columns
+#' @export
 iaw$rename.column <- iaw$rename.columns

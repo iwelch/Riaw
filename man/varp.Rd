@@ -21,6 +21,16 @@ Other statistics: \code{\link{autocorrel}}, \code{\link{autopcorrel}}, \code{\li
 }
 \examples{
 \dontrun{
+# Population variance (divides by n, not n-1)
 iaw$varp(1:10)
+var(1:10)        # sample variance is larger
+
+# For a population of N elements, varp = var * (N-1)/N
+x <- c(2, 4, 4, 4, 5, 5, 7, 9)
+iaw$varp(x)
+var(x) * (length(x) - 1) / length(x)   # same result
+
+# NA values are dropped by default
+iaw$varp(c(1, 2, NA, 4, 5))
 }
 }

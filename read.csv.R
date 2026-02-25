@@ -4,11 +4,12 @@
 #'
 #' Reads CSV files using data.table::fread for speed.
 #'
-#' @param filename Path to CSV or CSV.GZ file.
-#' @param ... Arguments passed to fread.
+#' @param filename Path to CSV, CSV.GZ, or FST file.
+#' @param ... Arguments passed to \code{data.table::fread}.
+#' @param select Character vector of column names to read, or \code{NULL} for all (default).
 #' @param search Directory to add to search path.
-#' @param allow.fst.cache Use FST cache if available.
-#' @param verbose Print file info.
+#' @param allow.fst.cache Logical. Use FST cache if available (default \code{TRUE}).
+#' @param quiet Logical. If \code{TRUE}, suppress file info message (default \code{FALSE}).
 #'
 #' @return Data frame.
 #'
@@ -19,13 +20,23 @@
 #'
 #' @examples
 #' \dontrun{
+#' # Basic CSV read
 #' df <- iaw$read.csv("data.csv")
+#'
+#' # Read only selected columns (fread-style column selection)
+#' df <- iaw$read.csv("data.csv", select = c("date", "price", "volume"))
+#'
+#' # Read compressed file, suppress progress message
+#' df <- iaw$read.csv("data.csv.gz", quiet = TRUE)
+#'
+#' # Add a search directory so relative filenames resolve automatically
+#' df <- iaw$read.csv("prices.csv", search = "~/data/")
 #' }
 
 iaw$searchdir <- c(".")
 
 iaw$read.csv <- function(filename, ..., select = NULL, search = NULL,
-                          allow.fst.cache = TRUE, verbose = FALSE) {
+                          allow.fst.cache = TRUE, quiet = FALSE) {
     stopifnot(is.character(filename), length(filename) == 1L)
     stopifnot(grepl("sv$", filename) | grepl("sv.gz$", filename) | grepl(".fst$", filename))
 
@@ -59,20 +70,26 @@ iaw$read.csv <- function(filename, ..., select = NULL, search = NULL,
         object <- fst::read.fst(cachefilename, columns = select)
         filename <- cachefilename
     } else {
-        object <- data.table::fread(filename, nThread = 8, data.table = FALSE, integer64 = "numeric", select = select, ...)
+        object <- data.table::fread(filename, nThread = getOption("mc.cores", data.table::getDTthreads()), data.table = FALSE, integer64 = "numeric", select = select, ...)
     }
 
     iaw$.Riolog("I", filename)
 
-    if (verbose) {
-        cat("\n[read from", filename, ":", nrow(object), "rows,", ncol(object), "cols]\n")
-    } else {
-        message("\n[read from ", filename, ": ", nrow(object), " rows, ", ncol(object), " cols]\n")
+    if (!quiet) {
+        message("[read from ", filename, ": ", nrow(object), " rows, ", ncol(object), " cols]")
     }
 
     invisible(as.data.frame(object))
 }
 
+#' @rdname read.csv
+#' @export
 iaw$read.csv.gz <- iaw$read.csv
+
+#' @rdname read.csv
+#' @export
 iaw$read.fst <- iaw$read.csv
+
+#' @rdname read.csv
+#' @export
 iaw$fread <- iaw$read.csv

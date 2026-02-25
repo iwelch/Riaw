@@ -15,6 +15,22 @@
 #'
 #' @return An object of class "olm" inheriting from "summary.lm".
 #'
+#' @examples
+#' # Basic regression
+#' df <- data.frame(y = c(1, 2, 3, 4, 5), x = c(1.1, 1.9, 3.2, 3.8, 5.1))
+#' fit <- iaw$olm(y ~ x, data = df)
+#' print(fit)
+#'
+#' # With NA values (na.exclude keeps original indices in residuals)
+#' df2 <- data.frame(y = c(1, NA, 3, 4, 5), x = c(1, 2, 3, 4, 5))
+#' fit2 <- iaw$olm(y ~ x, data = df2)
+#' print(fit2)
+#'
+#' # Multiple predictors; disable standardised coefficients
+#' df3 <- data.frame(y = rnorm(20), x1 = rnorm(20), x2 = rnorm(20))
+#' fit3 <- iaw$olm(y ~ x1 + x2, data = df3, stdcoefs = FALSE)
+#' print(fit3)
+#'
 #' @family regression
 #' @export
 #'
@@ -27,12 +43,12 @@ iaw$olm <- function (..., newey.west = 0, stdcoefs = TRUE, include.anova = TRUE,
     if (!requireNamespace("sandwich", quietly = TRUE)) stop("Package 'sandwich' required")
 
     ## R is painfully error-tolerant. I prefer reasonable and immediate error warnings.
-    stopifnot( (is.vector(newey.west))&(length(newey.west)==1)|(is.numeric(newey.west)) )
-    stopifnot( (is.vector(stdcoefs))&(length(stdcoefs)==1)|(is.logical(stdcoefs)) )
+    stopifnot( (is.vector(newey.west))&(length(newey.west)==1)&(is.numeric(newey.west)) )
+    stopifnot( (is.vector(stdcoefs))&(length(stdcoefs)==1)&(is.logical(stdcoefs)) )
     ## stopifnot( (is.vector(keepx))&(length(keepx)==1)|(is.logical(keepx)) )
     ## I wish I could check lm()'s argument, but I cannot.
 
-    lmo <- stats:::lm(..., x=TRUE, na.action=na.exclude)  ## keep NA values
+    lmo <- stats::lm(..., x=TRUE, na.action=na.exclude)  ## keep NA values
     ## note that both the lmo$x matrix and residuals(lmo) omit all NA observations
 
     ## following two statements need to come early to apply to lmo (before we add stuff to it)
@@ -48,8 +64,13 @@ iaw$olm <- function (..., newey.west = 0, stdcoefs = TRUE, include.anova = TRUE,
 
     basesigma <- sigma(lmo)
 
+    ## Compute ANOVA from lm object before converting to summary.lm
+    if (include.anova) {
+        anova_ss <- anova(lmo)[, "Sum Sq"]
+    }
+
     full.x.matrix <- lmo$x
-    lmo <- stats:::summary.lm( lmo )  ## add the summary.lm object; changes contents of lmo
+    lmo <- stats::summary.lm( lmo )  ## add the summary.lm object; changes contents of lmo
     lmo$x <- full.x.matrix
 
     ## 3 is the T stat
@@ -73,7 +94,7 @@ iaw$olm <- function (..., newey.west = 0, stdcoefs = TRUE, include.anova = TRUE,
     }
 
     if (include.anova) {
-        aa <- (data.frame( summary(aov(...))[[1]])[,2, drop=FALSE])[,1]
+        aa <- anova_ss
         sumaa <- sum(aa)  ## includes residuals!!
         aa <- aa/sumaa
         lmo$residssq <- round(aa[length(aa)], digits)

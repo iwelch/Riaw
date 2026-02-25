@@ -25,6 +25,14 @@ Other time-series: \code{\link{compoundseries}}, \code{\link{cumulateseries}}, \
 \examples{
 \dontrun{
 x <- c(100, 102, 105, 103, 108)
-iaw$chgseries(x)
+iaw$chgseries(x)   # first difference: NA, 2, 3, -2, 5
+
+# 2-period difference (change from two periods ago)
+iaw$chgseries(x, numlags = 2)
+
+# Panel data: differences respect group boundaries via panelid
+prices <- c(100, 102, 105, 200, 198, 203)
+firm   <- c("A",  "A",  "A", "B",  "B",  "B")
+iaw$chgseries(prices, panelid = firm)  # no cross-firm differencing
 }
 }

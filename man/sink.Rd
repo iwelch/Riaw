@@ -26,7 +26,20 @@ Other utilities: \code{\link{ascii}}, \code{\link{base}}, \code{\link{beep}}, \c
 }
 \examples{
 \dontrun{
-iaw$sink("output.Rout", verbose = TRUE)  # start
-iaw$sink()                                # stop
+# Redirect output to a file, run some code, then close
+iaw$sink("output.Rout")
+print(summary(mtcars))
+iaw$sink()   # closes the file
+
+# Use verbose = TRUE to print timing info when closing
+iaw$sink("results.Rout", verbose = TRUE)
+cat("processing...\n")
+Sys.sleep(0.1)
+iaw$sink(verbose = TRUE)   # prints elapsed time
+
+# Append to existing file instead of overwriting
+iaw$sink("log.Rout", append = TRUE)
+cat("run 2 results\n")
+iaw$sink()
 }
 }

@@ -16,7 +16,14 @@ List with memory info.
 Other utilities: \code{\link{ascii}}, \code{\link{base}}, \code{\link{beep}}, \code{\link{bisection}}, \code{\link{cat.both}}, \code{\link{cat.stderr}}, \code{\link{chatter}}, \code{\link{check.names}}, \code{\link{debug.advice}}, \code{\link{debug.on}}, \code{\link{dict.lookup}}, \code{\link{done}}, \code{\link{enable.error.line.num}}, \code{\link{exit}}, \code{\link{grepcolname}}, \code{\link{heartbeat}}, \code{\link{index.of.variable}}, \code{\link{instrumentR}}, \code{\link{kable}}, \code{\link{latex}}, \code{\link{latlon.distance}}, \code{\link{latlonx}}, \code{\link{mklatlonid}}, \code{\link{invlatlon}}, \code{\link{testlatlon}}, \code{\link{ls.objects}}, \code{\link{mk.random.walk}}, \code{\link{mkRdictionary}}, \code{\link{msg}}, \code{\link{nearest}}, \code{\link{now}}, \code{\link{numobs.by}}, \code{\link{object.size.MB}}, \code{\link{osinfo}}, \code{\link{rdraw.perfect}}, \code{\link{require.variables}}, \code{\link{rexp.perfect}}, \code{\link{rnorm.perfect}}, \code{\link{runall}}, \code{\link{setupknitr}}, \code{\link{sink}}, \code{\link{sprint.data.frame}}, \code{\link{strcat}}, \code{\link{whatis}}, \code{\link{which.nearest}}
 }
 \examples{
-\dontrun{
+# Check current memory usage (triggers a GC cycle)
 iaw$meminfo()
+
+# Allocate a large object and see memory rise
+\dontrun{
+m <- matrix(rnorm(1e6), ncol = 100)
+iaw$meminfo()$used_MB   # higher after allocation
+rm(m); gc()
+iaw$meminfo()$used_MB   # lower after removal
 }
 }

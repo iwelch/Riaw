@@ -9,6 +9,18 @@
 #'
 #' @return Numeric vector.
 #'
+#' @examples
+#' # 10 exponential draws with exact quantile spacing (rate = 1)
+#' x <- iaw$rexp.perfect(10)
+#' x
+#'
+#' # Higher rate parameter (shorter mean)
+#' x2 <- iaw$rexp.perfect(8, rate = 2)
+#' x2
+#'
+#' # The sample mean matches the theoretical mean 1/rate
+#' mean(iaw$rexp.perfect(1000, rate = 0.5))   # close to 2.0
+#'
 #' @family utilities
 #' @export
 

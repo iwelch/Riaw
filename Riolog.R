@@ -14,7 +14,14 @@
 #'
 #' @examples
 #' \dontrun{
+#' # Log an input file read event (only writes if Rio.log exists in working dir)
 #' iaw$.Riolog("I", "data.csv")
+#'
+#' # Log an output file write event
+#' iaw$.Riolog("O", "results.csv")
+#'
+#' # Log a plot output
+#' iaw$.Riolog("P", "figures/returns.pdf")
 #' }
 
 iaw$.Riolog <- function(code, msg) {

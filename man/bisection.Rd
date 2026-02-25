@@ -26,6 +26,19 @@ Other utilities: \code{\link{ascii}}, \code{\link{base}}, \code{\link{beep}}, \c
 }
 \examples{
 \dontrun{
-iaw$bisection(function(x) x^2 - 2, 0, 2)
+# Find sqrt(2): solve x^2 - 2 = 0 on [0, 2]
+res <- iaw$bisection(function(x) x^2 - 2, 0, 2)
+res$mid   # approx 1.414214
+
+# Solve a transcendental equation: e^x = 3
+res2 <- iaw$bisection(function(x) exp(x) - 3, 0, 2)
+res2$mid  # approx log(3) = 1.098612
+
+# Vectorized: find roots for multiple targets simultaneously
+targets <- c(2, 3, 4)
+res3 <- iaw$bisection(function(x, t) x^2 - t,
+                       lower = c(0, 0, 0), upper = c(2, 2, 2),
+                       t = targets)
+res3$mid  # approx sqrt(2), sqrt(3), sqrt(4)
 }
 }

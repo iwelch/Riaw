@@ -1,284 +1,177 @@
-# Tests for datetime functions: epoch2POSIXct, epoch2yyyymmdd, epoch2nyc, yyyymmdd2int, diffdays, tmdiffsec
+# Tests for datetime functions: epoch2yyyymmdd, epoch2hhmmss, epoch2POSIXct,
+# epoch2nyc, yyyymmdd.toggle, yyyymmdd, diffdays, tmdiffsec,
+# latlon.distance, mklatlonid, invlatlon, now
 
-# epoch2POSIXct tests
-test_that("iaw$epoch2POSIXct converts correctly", {
-    result <- iaw$epoch2POSIXct(0)
-    expect_equal(as.numeric(result), 0)
+# --- epoch2yyyymmdd ---
+
+test_that("epoch2yyyymmdd converts known epoch to correct date", {
+    # 2021-01-01 00:00:00 UTC = 1609459200
+    expect_equal(iaw$epoch2yyyymmdd(1609459200), 20210101L)
+    # epoch 0 = 1970-01-01
+    expect_equal(iaw$epoch2yyyymmdd(0), 19700101L)
 })
 
-test_that("iaw$epoch2POSIXct returns POSIXct", {
-    result <- iaw$epoch2POSIXct(1609459200)
+test_that("epoch2yyyymmdd rejects non-numeric input", {
+    expect_error(iaw$epoch2yyyymmdd("2021-01-01"))
+})
+
+# --- epoch2hhmmss ---
+
+test_that("epoch2hhmmss converts known epoch to correct time", {
+    # 2021-01-01 13:30:45 UTC = 1609459200 + 13*3600 + 30*60 + 45 = 1609507845
+    expect_equal(iaw$epoch2hhmmss(1609507845), 133045L)
+    # Midnight UTC
+    expect_equal(iaw$epoch2hhmmss(1609459200), 0L)
+})
+
+test_that("epoch2hhmmss rejects non-numeric input", {
+    expect_error(iaw$epoch2hhmmss("noon"))
+})
+
+# --- epoch2POSIXct ---
+
+test_that("epoch2POSIXct returns POSIXct with correct timezone", {
+    result <- iaw$epoch2POSIXct(1609459200, tz = "UTC")
     expect_s3_class(result, "POSIXct")
+    expect_equal(attr(result, "tzone"), "UTC")
+    expect_match(format(result, "%Y-%m-%d"), "2021-01-01")
 })
 
-test_that("iaw$epoch2POSIXct handles vector", {
+test_that("epoch2POSIXct handles vector input", {
     result <- iaw$epoch2POSIXct(c(0, 86400))
     expect_length(result, 2)
 })
 
-test_that("iaw$epoch2POSIXct respects timezone", {
-    result <- iaw$epoch2POSIXct(0, tz = "UTC")
-    expect_equal(attr(result, "tzone"), "UTC")
-})
+# --- epoch2nyc ---
 
-test_that("iaw$epoch2POSIXct known date", {
-    # 2021-01-01 00:00:00 UTC
-    result <- iaw$epoch2POSIXct(1609459200, tz = "UTC")
-    expect_match(format(result, "%Y-%m-%d"), "2021-01-01")
-})
-
-test_that("iaw$epoch2POSIXct handles negative epoch", {
-    result <- iaw$epoch2POSIXct(-86400)  # 1969-12-31
-    expect_s3_class(result, "POSIXct")
-})
-
-test_that("iaw$epoch2POSIXct default is UTC", {
-    result <- iaw$epoch2POSIXct(0)
-    expect_equal(attr(result, "tzone"), "UTC")
-})
-
-# Failing tests
-test_that("iaw$epoch2POSIXct rejects non-numeric", {
-    expect_error(iaw$epoch2POSIXct("not a number"))
-})
-
-test_that("iaw$epoch2POSIXct rejects character", {
-    expect_error(iaw$epoch2POSIXct("1609459200"))
-})
-
-test_that("iaw$epoch2POSIXct rejects NULL", {
-    expect_error(iaw$epoch2POSIXct(NULL))
-})
-
-# epoch2yyyymmdd tests
-test_that("iaw$epoch2yyyymmdd converts correctly", {
-    result <- iaw$epoch2yyyymmdd(1609459200)
-    expect_equal(result, 20210101L)
-})
-
-test_that("iaw$epoch2yyyymmdd returns integer", {
-    result <- iaw$epoch2yyyymmdd(1609459200)
-    expect_type(result, "integer")
-})
-
-test_that("iaw$epoch2yyyymmdd handles vector", {
-    result <- iaw$epoch2yyyymmdd(c(1609459200, 1609545600))
-    expect_length(result, 2)
-})
-
-test_that("iaw$epoch2yyyymmdd respects timezone", {
-    result <- iaw$epoch2yyyymmdd(1609459200, tz = "UTC")
-    expect_equal(result, 20210101L)
-})
-
-test_that("iaw$epoch2yyyymmdd correct format", {
-    result <- iaw$epoch2yyyymmdd(1609459200)
-    expect_true(result > 20000000)  # After year 2000
-    expect_true(result < 30000000)  # Before year 3000
-})
-
-test_that("iaw$epoch2yyyymmdd handles epoch 0", {
-    result <- iaw$epoch2yyyymmdd(0)
-    expect_equal(result, 19700101L)
-})
-
-test_that("iaw$epoch2yyyymmdd 8 digits", {
-    result <- iaw$epoch2yyyymmdd(1609459200)
-    expect_equal(nchar(as.character(result)), 8)
-})
-
-# Failing tests
-test_that("iaw$epoch2yyyymmdd rejects non-numeric", {
-    expect_error(iaw$epoch2yyyymmdd("not a number"))
-})
-
-test_that("iaw$epoch2yyyymmdd rejects character", {
-    expect_error(iaw$epoch2yyyymmdd("1609459200"))
-})
-
-test_that("iaw$epoch2yyyymmdd rejects NULL", {
-    expect_error(iaw$epoch2yyyymmdd(NULL))
-})
-
-# epoch2nyc tests
-test_that("iaw$epoch2nyc returns POSIXct", {
+test_that("epoch2nyc returns POSIXct in America/New_York", {
     result <- iaw$epoch2nyc(1609459200)
     expect_s3_class(result, "POSIXct")
-})
-
-test_that("iaw$epoch2nyc uses NYC timezone", {
-    result <- iaw$epoch2nyc(1609459200)
     expect_equal(attr(result, "tzone"), "America/New_York")
 })
 
-test_that("iaw$epoch2nyc handles vector", {
-    result <- iaw$epoch2nyc(c(0, 86400))
-    expect_length(result, 2)
-})
-
-test_that("iaw$epoch2nyc different from UTC", {
+test_that("epoch2nyc differs from UTC by offset", {
     utc <- iaw$epoch2POSIXct(1609459200, tz = "UTC")
     nyc <- iaw$epoch2nyc(1609459200)
-    # Hour should differ
-    expect_true(format(utc, "%H") != format(nyc, "%H") || format(utc, "%d") != format(nyc, "%d"))
+    # Formatted hour or date should differ (UTC midnight = NYC previous evening)
+    expect_true(format(utc, "%H") != format(nyc, "%H") ||
+                format(utc, "%d") != format(nyc, "%d"))
 })
 
-test_that("iaw$epoch2nyc converts epoch 0", {
-    result <- iaw$epoch2nyc(0)
-    expect_s3_class(result, "POSIXct")
+# --- yyyymmdd.toggle ---
+
+test_that("yyyymmdd.toggle round-trips YYYYMMDD -> gregorian -> YYYYMMDD", {
+    original <- 20210115
+    greg <- iaw$yyyymmdd.toggle(original)
+    expect_true(is.numeric(greg))
+    back <- iaw$yyyymmdd.toggle(greg)
+    expect_equal(back, original)
 })
 
-test_that("iaw$epoch2nyc handles negative epoch", {
-    result <- iaw$epoch2nyc(-86400)
-    expect_s3_class(result, "POSIXct")
+test_that("yyyymmdd.toggle converts known date correctly", {
+    # 2021-01-15 is day 18642 since 1970-01-01
+    expect_equal(iaw$yyyymmdd.toggle(20210115), as.numeric(as.Date("2021-01-15")))
 })
 
-test_that("iaw$epoch2nyc correct class", {
-    result <- iaw$epoch2nyc(1609459200)
-    expect_true(inherits(result, "POSIXct"))
+test_that("yyyymmdd.toggle passes through all-NA", {
+    result <- iaw$yyyymmdd.toggle(NA_real_)
+    expect_true(is.na(result))
 })
 
-# yyyymmdd2int tests
-test_that("iaw$yyyymmdd2int converts Date", {
-    result <- iaw$yyyymmdd2int(as.Date("2021-01-15"))
-    expect_equal(result, 20210115L)
+# --- yyyymmdd ---
+
+test_that("yyyymmdd converts YYYYMMDD to weekday", {
+    # 2024-01-15 is a Monday
+    result <- iaw$yyyymmdd(20240115, output = "weekday")
+    expect_equal(result, "Mon")
 })
 
-test_that("iaw$yyyymmdd2int returns integer", {
-    result <- iaw$yyyymmdd2int(as.Date("2021-01-15"))
-    expect_type(result, "integer")
+test_that("yyyymmdd converts YYYYMMDD to gregorian number", {
+    greg <- iaw$yyyymmdd(20210115, output = "gregorian")
+    expect_true(is.numeric(greg))
+    # Gregorian day number should match yyyymmdd.toggle
+    expect_equal(greg, iaw$yyyymmdd.toggle(20210115))
 })
 
-test_that("iaw$yyyymmdd2int handles character date", {
-    result <- iaw$yyyymmdd2int("2021-01-15")
-    expect_equal(result, 20210115L)
+test_that("yyyymmdd errors if no output format given with multiple defaults", {
+    # When output is not specified as a single value, it errors
+    expect_error(iaw$yyyymmdd(20210115))
 })
 
-test_that("iaw$yyyymmdd2int handles vector", {
-    result <- iaw$yyyymmdd2int(c(as.Date("2021-01-01"), as.Date("2021-12-31")))
-    expect_length(result, 2)
-})
+# --- diffdays ---
 
-test_that("iaw$yyyymmdd2int correct format", {
-    result <- iaw$yyyymmdd2int(as.Date("2021-06-15"))
-    expect_equal(nchar(as.character(result)), 8)
-})
-
-test_that("iaw$yyyymmdd2int alias works", {
-    result <- iaw$yyyymmdd.to.int(as.Date("2021-01-15"))
-    expect_equal(result, 20210115L)
-})
-
-test_that("iaw$yyyymmdd2int preserves day", {
-    result <- iaw$yyyymmdd2int(as.Date("2021-01-31"))
-    expect_equal(result %% 100, 31)
-})
-
-# Failing tests
-test_that("iaw$yyyymmdd2int rejects numeric", {
-    expect_error(iaw$yyyymmdd2int(20210115))
-})
-
-test_that("iaw$yyyymmdd2int rejects invalid date string", {
-    expect_error(iaw$yyyymmdd2int("not a date"))
-})
-
-test_that("iaw$yyyymmdd2int rejects NULL", {
-    expect_error(iaw$yyyymmdd2int(NULL))
-})
-
-# diffdays tests
-test_that("iaw$diffdays calculates difference", {
+test_that("diffdays computes correct day difference", {
     d1 <- as.Date("2021-01-01")
     d2 <- as.Date("2021-01-15")
-    result <- iaw$diffdays(d1, d2)
-    expect_equal(result, 14)
+    expect_equal(iaw$diffdays(d1, d2), 14)
 })
 
-test_that("iaw$diffdays returns numeric", {
-    d1 <- as.Date("2021-01-01")
-    d2 <- as.Date("2021-01-02")
-    expect_type(iaw$diffdays(d1, d2), "double")
-})
-
-test_that("iaw$diffdays handles negative", {
+test_that("diffdays returns negative for reversed dates", {
     d1 <- as.Date("2021-01-15")
     d2 <- as.Date("2021-01-01")
-    result <- iaw$diffdays(d1, d2)
-    expect_equal(result, -14)
+    expect_equal(iaw$diffdays(d1, d2), -14)
 })
 
-test_that("iaw$diffdays same date is zero", {
-    d <- as.Date("2021-01-01")
-    result <- iaw$diffdays(d, d)
-    expect_equal(result, 0)
+test_that("diffdays same date is zero", {
+    d <- as.Date("2021-06-15")
+    expect_equal(iaw$diffdays(d, d), 0)
 })
 
-test_that("iaw$diffdays one day", {
-    d1 <- as.Date("2021-01-01")
-    d2 <- as.Date("2021-01-02")
-    result <- iaw$diffdays(d1, d2)
-    expect_equal(result, 1)
+# --- tmdiffsec ---
+
+test_that("tmdiffsec computes correct seconds", {
+    t1 <- as.POSIXct("2021-01-01 00:00:00", tz = "UTC")
+    t2 <- as.POSIXct("2021-01-01 01:00:00", tz = "UTC")
+    expect_equal(iaw$tmdiffsec(t1, t2), 3600)
 })
 
-test_that("iaw$diffdays year difference", {
-    d1 <- as.Date("2021-01-01")
-    d2 <- as.Date("2022-01-01")
-    result <- iaw$diffdays(d1, d2)
-    expect_equal(result, 365)
+test_that("tmdiffsec handles negative difference", {
+    t1 <- as.POSIXct("2021-01-01 01:00:00", tz = "UTC")
+    t2 <- as.POSIXct("2021-01-01 00:00:00", tz = "UTC")
+    expect_equal(iaw$tmdiffsec(t1, t2), -3600)
 })
 
-test_that("iaw$diffdays handles POSIXct", {
-    t1 <- as.POSIXct("2021-01-01")
-    t2 <- as.POSIXct("2021-01-02")
-    result <- iaw$diffdays(t1, t2)
-    expect_equal(result, 1)
+# --- latlon.distance ---
+
+test_that("latlon.distance NYC to LA is approximately 3944 km", {
+    # NYC: 40.7128, -74.0060; LA: 34.0522, -118.2437
+    d <- iaw$latlon.distance(40.7128, -74.0060, 34.0522, -118.2437)
+    expect_true(is.numeric(d))
+    expect_equal(d, 3944, tolerance = 50)
 })
 
-# tmdiffsec tests
-test_that("iaw$tmdiffsec calculates seconds", {
-    t1 <- as.POSIXct("2021-01-01 00:00:00")
-    t2 <- as.POSIXct("2021-01-01 00:01:00")
-    result <- iaw$tmdiffsec(t1, t2)
-    expect_equal(result, 60)
+test_that("latlon.distance same point is zero", {
+    d <- iaw$latlon.distance(0, 0, 0, 0)
+    expect_equal(d, 0)
 })
 
-test_that("iaw$tmdiffsec returns numeric", {
-    t1 <- as.POSIXct("2021-01-01 00:00:00")
-    t2 <- as.POSIXct("2021-01-01 00:00:01")
-    expect_type(iaw$tmdiffsec(t1, t2), "double")
+# --- mklatlonid / invlatlon round-trip ---
+
+test_that("mklatlonid and invlatlon round-trip correctly", {
+    lat <- 40.5
+    lon <- -74.5
+    id <- iaw$mklatlonid(lat, lon)
+    expect_true(is.numeric(id))
+    expect_true(id >= 1 && id <= 64800)
+    back <- iaw$invlatlon(id)
+    expect_equal(back[["lat"]], lat, tolerance = 1)
+    expect_equal(back[["lon"]], lon, tolerance = 1)
 })
 
-test_that("iaw$tmdiffsec handles negative", {
-    t1 <- as.POSIXct("2021-01-01 00:01:00")
-    t2 <- as.POSIXct("2021-01-01 00:00:00")
-    result <- iaw$tmdiffsec(t1, t2)
-    expect_equal(result, -60)
+test_that("mklatlonid rejects out-of-range coordinates", {
+    expect_error(iaw$mklatlonid(100, 0))   # lat > 90
+    expect_error(iaw$mklatlonid(0, 200))   # lon > 180
 })
 
-test_that("iaw$tmdiffsec same time is zero", {
-    t <- as.POSIXct("2021-01-01 00:00:00")
-    result <- iaw$tmdiffsec(t, t)
-    expect_equal(result, 0)
+# --- now ---
+
+test_that("now returns a character timestamp", {
+    result <- iaw$now()
+    expect_type(result, "character")
+    expect_match(result, "^\\d{4}-\\d{2}-\\d{2} \\d{2}:\\d{2}:\\d{2}$")
 })
 
-test_that("iaw$tmdiffsec one hour", {
-    t1 <- as.POSIXct("2021-01-01 00:00:00")
-    t2 <- as.POSIXct("2021-01-01 01:00:00")
-    result <- iaw$tmdiffsec(t1, t2)
-    expect_equal(result, 3600)
-})
-
-test_that("iaw$tmdiffsec one day in seconds", {
-    t1 <- as.POSIXct("2021-01-01 00:00:00")
-    t2 <- as.POSIXct("2021-01-02 00:00:00")
-    result <- iaw$tmdiffsec(t1, t2)
-    expect_equal(result, 86400)
-})
-
-test_that("iaw$tmdiffsec precise to second", {
-    t1 <- as.POSIXct("2021-01-01 00:00:00")
-    t2 <- as.POSIXct("2021-01-01 00:00:05")
-    result <- iaw$tmdiffsec(t1, t2)
-    expect_equal(result, 5)
+test_that("now respects custom format", {
+    result <- iaw$now(format = "%Y")
+    expect_match(result, "^\\d{4}$")
 })

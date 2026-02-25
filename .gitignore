@@ -1,3 +1,8 @@
 *.Rdata
 *.~*~
 *.Rout
+Rold
+Rold/*
+inst/lib/
+iaw.Rcheck/
+iaw_*.tar.gz

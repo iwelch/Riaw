@@ -19,10 +19,19 @@ Converted date in the requested format.
 \seealso{
 [iaw$yyyymmdd.toggle()], [iaw$as.PlotDate.yyyymmdd()] 
 
-Other datetime: \code{\link{diffdays}}, \code{\link{epoch2nyc}}, \code{\link{epoch2POSIXct}}, \code{\link{epoch2yyyymmdd}}, \code{\link{tmdiffsec}}, \code{\link{yyyymmdd.toggle}}
+Other datetime: \code{\link{diffdays}}, \code{\link{epoch2POSIXct}}, \code{\link{epoch2nyc}}, \code{\link{epoch2yyyymmdd}}, \code{\link{tmdiffsec}}, \code{\link{yyyymmdd.toggle}}
 }
 \examples{
 \dontrun{
-iaw$yyyymmdd(20240115, output = "weekday")
+iaw$yyyymmdd(20240115, output = "weekday")   # "Mon"
+
+# Convert to Gregorian day number for arithmetic
+iaw$yyyymmdd(20230101, output = "gregorian")
+
+# Get ISO week number
+iaw$yyyymmdd(20240104, output = "weeknum")
+
+# Convert a Gregorian day number back to YYYYMMDD integer
+iaw$yyyymmdd(19358, output = "yyyymmdd")   # days since 1970-01-01
 }
 }

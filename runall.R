@@ -1,7 +1,26 @@
-#' Runall R project files, in numerical start order
+#' Run All Numbered Scripts in Working Directory
 #'
 #' @name runall
 #'
+#' Sources all R and Perl scripts matching \code{[0-9]*.R} and \code{[0-9]*.pl}
+#' in the current directory, ordered by numeric prefix. Aborts on first error.
+#'
+#' @return Called for side effect. Prints status messages.
+#'
+#' @examples
+#' \dontrun{
+#' # In a project directory with scripts 01-load.R, 02-clean.R, 03-model.R:
+#' setwd("/path/to/project")
+#' iaw$runall()
+#' # Sources 01-load.R, then 02-clean.R, then 03-model.R in order.
+#' # Stops immediately if any script throws an error.
+#'
+#' # Mixed R and Perl scripts are also supported (Perl emits a warning)
+#' # 01-download.pl, 02-parse.R -> runs perl 01-download.pl, then sources 02-parse.R
+#' }
+#'
+#' @family utilities
+#' @export
 
 iaw$runall <- function() {
   message( "iaw$runall: ", getwd() )

@@ -21,7 +21,21 @@ Other type-checking: \code{\link{is.character}}, \code{\link{is.instring}}, \cod
 }
 \examples{
 \dontrun{
+# Basic numeric check (no length constraint)
+iaw$is.numeric(c(1.5, 2.5, 3.5))
+
+# Length-constrained check: must be numeric AND exactly length 1
 iaw$is.numeric(5, 1)
+iaw$is.numeric(c(1, 2), 1)  # FALSE: wrong length
+
+# Useful for validating a fixed-length input
 iaw$is.numeric(c(1, 2, 3), 3)
+
+# Difference from base::is.numeric: iaw version adds length check
+is.numeric(c(1, 2, 3))         # TRUE (base, no length check)
+iaw$is.numeric(c(1, 2, 3), 2)  # FALSE (iaw: wrong length)
+
+# A character vector is not numeric
+iaw$is.numeric(c("1", "2", "3"))
 }
 }

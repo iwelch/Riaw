@@ -8,6 +8,21 @@
 #'
 #' @return Color value.
 #'
+#' @examples
+#' # Red light (~700 nm)
+#' iaw$lambda2color(700)
+#'
+#' # Blue light (~450 nm)
+#' iaw$lambda2color(450)
+#'
+#' \dontrun{
+#' # Use wavelength colors in a spectrum plot
+#' lambdas <- seq(380, 780, by = 10)
+#' cols <- sapply(lambdas, iaw$lambda2color)
+#' barplot(rep(1, length(lambdas)), col = cols, border = NA,
+#'         names.arg = lambdas, las = 2, main = "Visible spectrum")
+#' }
+#'
 #' @family plotting
 #' @export
 

@@ -11,6 +11,18 @@
 #'
 #' @return Full pathname, or NULL if not found.
 #'
+#' @examples
+#' \dontrun{
+#' # Find a data file anywhere on disk (searches locally first, then system-wide)
+#' iaw$locate("mydata.csv")
+#'
+#' # Restrict matches to a particular project directory
+#' iaw$locate("config.R", restrict.pattern = "/myproject/")
+#'
+#' # Allow multiple matches (returns most recently modified)
+#' iaw$locate("README.md", strict = FALSE)
+#' }
+#'
 #' @family io
 #' @export
 

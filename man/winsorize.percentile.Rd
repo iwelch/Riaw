@@ -23,7 +23,19 @@ Other data-transformation: \code{\link{normalize}}, \code{\link{standardize}}, \
 }
 \examples{
 \dontrun{
+# Default: clip at 1st and 99th percentile; the two outliers are pulled in
+set.seed(1)
 x <- c(rnorm(98), -100, 100)
-iaw$winsorize.percentile(x)
+range(x)
+range(iaw$winsorize.percentile(x))
+
+# Tighter winsorization at 5th/95th percentile
+iaw$winsorize.percentile(x, xperc = c(0.05, 0.95))
+
+# verbose = TRUE reports the actual cutoff values used
+iaw$winsorize.percentile(x, verbose = TRUE, name = "returns")
+
+# NA values pass through unchanged
+iaw$winsorize.percentile(c(NA, 1:10, NA))
 }
 }

@@ -23,5 +23,18 @@ Other utilities: \code{\link{ascii}}, \code{\link{base}}, \code{\link{beep}}, \c
 \dontrun{
 df <- data.frame(a = 1, b = 2)
 iaw$check.names(c("a", "b"), df)
+
+# Useful at the top of a function to validate required columns early
+process <- function(df) {
+  iaw$check.names(c("date", "price", "volume"), df)
+  # ... rest of function
+}
+
+# Missing column triggers an informative error
+df2 <- data.frame(date = 1, price = 2)
+tryCatch(
+  iaw$check.names(c("date", "price", "volume"), df2),
+  error = function(e) message(e$message)
+)
 }
 }

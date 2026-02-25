@@ -29,6 +29,22 @@ Other statistics: \code{\link{autocorrel}}, \code{\link{autopcorrel}}, \code{\li
 }
 \examples{
 \dontrun{
+# Total compound return over a sequence of period returns
 iaw$cmpsum(c(0.1, 0.05, -0.02))
+
+# Compare two return streams: compounding matters vs simple sum
+r1 <- c(0.05, 0.05, 0.05)
+r2 <- c(0.20, -0.05, 0.00)
+iaw$cmpsum(r1)  # steady returns compound better
+iaw$cmpsum(r2)  # volatile path has lower compound sum
+
+# Annualized compound return (MPY = 12 for monthly data)
+monthly_rets <- c(0.01, 0.02, -0.01, 0.015, 0.005, 0.02,
+                  0.01, -0.005, 0.03, 0.01, 0.015, 0.02)
+iaw$cmpsum(monthly_rets, MPY = 12)
+
+# geomean is shorthand for cmpsum(x, MPY = 1)
+iaw$geomean(c(0.05, 0.10, -0.02))
+iaw$cmpsum(c(0.05, 0.10, -0.02), MPY = 1)  # same
 }
 }

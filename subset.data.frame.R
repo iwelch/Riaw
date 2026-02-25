@@ -46,9 +46,17 @@
 #' @examples
 #' d <- data.frame(a = 1:5, b = 6:10, c = 11:15)
 #'
-#' # Valid selections work as expected
+#' # Basic row + column subset
 #' iaw$subset.data.frame(d, a > 2, select = c("a", "b"))
+#'
+#' # NSE column names (no quotes needed)
 #' iaw$subset.data.frame(d, a > 2, select = c(a, b))
+#'
+#' # Row filter only (all columns kept)
+#' iaw$subset.data.frame(d, b >= 8)
+#'
+#' # Range selection: columns a through b
+#' iaw$subset.data.frame(d, a <= 3, select = a:b)
 #'
 #' # Invalid columns give informative errors
 #' \dontrun{

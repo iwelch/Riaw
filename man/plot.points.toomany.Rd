@@ -22,5 +22,22 @@ Invisible NULL.
 }
 \seealso{
 
-Other plotting: \code{\link{as.PlotDate.yyyymmdd}}, \code{\link{plot.boxtext}}, \code{\link{colorblind}}, \code{\link{plot.contour}}, \code{\link{plot.ecdf.lineplot}}, \code{\link{plot.hist2d}}, \code{\link{hline}}, \code{\link{iaw.boxplot}}, \code{\link{plot.labelcurve}}, \code{\link{lambda2color}}, \code{\link{plot.loess.lineplot}}, \code{\link{MixColor}}, \code{\link{plot.native.slope}}, \code{\link{plot.p.arrows}}, \code{\link{plot.pdf.embedfonts}}, \code{\link{pdf.end}}, \code{\link{plot.pdf.start.bera}}, \code{\link{pdf.start}}, \code{\link{plot.timearea}}, \code{\link{plot.worldmap}}, \code{\link{plot.shade.xyy}}, \code{\link{plot.text.bg}}, \code{\link{plot.text.onbg}}, \code{\link{vline}}, \code{\link{plot.yearly.tickmarks}}, \code{\link{plot.ylab.left}}
+Other plotting: \code{\link{as.PlotDate.yyyymmdd}}, \code{\link{plot.boxtext}}, \code{\link{colorblind}}, \code{\link{plot.contour}}, \code{\link{plot.ecdf.lineplot}}, \code{\link{plot.hist2d}}, \code{\link{hline}}, \code{\link{iaw.boxplot}}, \code{\link{plot.labelcurve}}, \code{\link{lambda2color}}, \code{\link{plot.loess.lineplot}}, \code{\link{MixColor}}, \code{\link{plot.native.slope}}, \code{\link{plot.p.arrows}}, \code{\link{plot.pdf.embedfonts}}, \code{\link{pdf.end}}, \code{\link{pdf.start}}, \code{\link{plot.pdf.start.bera}}, \code{\link{plot.timearea}}, \code{\link{plot.worldmap}}, \code{\link{plot.shade.xyy}}, \code{\link{plot.text.bg}}, \code{\link{plot.text.onbg}}, \code{\link{vline}}, \code{\link{plot.yearly.tickmarks}}, \code{\link{plot.ylab.left}}
+}
+\examples{
+\dontrun{
+# Density heatmap for 10,000 points that would be overplotted as dots
+set.seed(1)
+x <- rnorm(10000)
+y <- rnorm(10000)
+plot(range(x), range(y), type = "n", xlab = "x", ylab = "y",
+     main = "Density heatmap")
+iaw$plot.points.toomany(x, y, bandwidth = c(0.1, 0.1))
+
+# Correlated data with coarser bins
+y2 <- 0.7 * x + rnorm(10000, sd = 0.7)
+plot(range(x), range(y2), type = "n")
+iaw$plot.points.toomany(x, y2, bandwidth = c(0.2, 0.2), inlogs = FALSE)
+}
+
 }

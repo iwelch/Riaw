@@ -21,7 +21,22 @@ Other type-checking: \code{\link{is.instring}}, \code{\link{is.numeric}}, \code{
 }
 \examples{
 \dontrun{
+# Basic character check (no length constraint)
+iaw$is.character(c("foo", "bar"))
+
+# Length-constrained check: must be character AND exactly length 1
 iaw$is.character("hello", 1)
+iaw$is.character(c("a", "b"), 1)  # FALSE: wrong length
+
+# Validate a fixed-length character vector
 iaw$is.character(c("a", "b"), 2)
+
+# Check that a data frame column is character
+df <- data.frame(id = c("A", "B", "C"), val = 1:3, stringsAsFactors = FALSE)
+iaw$is.character(df$id)   # TRUE
+iaw$is.character(df$val)  # FALSE
+
+# Numbers are not characters
+iaw$is.character(c(1, 2, 3))
 }
 }

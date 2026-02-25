@@ -26,4 +26,19 @@ panelcheck(seriesin, panelid, timeid, errormsg = "unused")
 
 Other time-series: \code{\link{chgseries}}, \code{\link{compoundseries}}, \code{\link{cumulateseries}}, \code{\link{lagdataframe}}, \code{\link{lagseries}}, \code{\link{leadlagpanel}}, \code{\link{leadseries}}, \code{\link{ma}}, \code{\link{pchgseries}}
 }
+\examples{
+\dontrun{
+# panelcheck: validate that a panel is sorted by id then time
+series  <- c(1, 2, 3, 4, 5, 6)
+firm    <- c("A", "A", "A", "B", "B", "B")
+time    <- c(1, 2, 3, 1, 2, 3)
+iaw$panelcheck(series, firm, time)  # returns 0 silently when valid
+
+# funseries: apply a lag function respecting panel boundaries
+lag_fun <- list(fun = function(x, p) c(rep(NA, p), head(x, -p)), param = 1,
+                series = series)
+iaw$funseries(lag_fun, series, firm, time)
+}
+
+}
 \keyword{internal}

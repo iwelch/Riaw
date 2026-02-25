@@ -18,5 +18,21 @@ Invisible NULL.
 }
 \seealso{
 
-Other plotting: \code{\link{as.PlotDate.yyyymmdd}}, \code{\link{plot.boxtext}}, \code{\link{colorblind}}, \code{\link{plot.contour}}, \code{\link{plot.ecdf.lineplot}}, \code{\link{hline}}, \code{\link{iaw.boxplot}}, \code{\link{plot.labelcurve}}, \code{\link{lambda2color}}, \code{\link{plot.loess.lineplot}}, \code{\link{MixColor}}, \code{\link{plot.native.slope}}, \code{\link{plot.p.arrows}}, \code{\link{plot.pdf.embedfonts}}, \code{\link{pdf.end}}, \code{\link{plot.pdf.start.bera}}, \code{\link{pdf.start}}, \code{\link{plot.timearea}}, \code{\link{plot.worldmap}}, \code{\link{plot.points.toomany}}, \code{\link{plot.shade.xyy}}, \code{\link{plot.text.bg}}, \code{\link{plot.text.onbg}}, \code{\link{vline}}, \code{\link{plot.yearly.tickmarks}}, \code{\link{plot.ylab.left}}
+Other plotting: \code{\link{as.PlotDate.yyyymmdd}}, \code{\link{plot.boxtext}}, \code{\link{colorblind}}, \code{\link{plot.contour}}, \code{\link{plot.ecdf.lineplot}}, \code{\link{hline}}, \code{\link{iaw.boxplot}}, \code{\link{plot.labelcurve}}, \code{\link{lambda2color}}, \code{\link{plot.loess.lineplot}}, \code{\link{MixColor}}, \code{\link{plot.native.slope}}, \code{\link{plot.p.arrows}}, \code{\link{plot.pdf.embedfonts}}, \code{\link{pdf.end}}, \code{\link{pdf.start}}, \code{\link{plot.pdf.start.bera}}, \code{\link{plot.timearea}}, \code{\link{plot.worldmap}}, \code{\link{plot.points.toomany}}, \code{\link{plot.shade.xyy}}, \code{\link{plot.text.bg}}, \code{\link{plot.text.onbg}}, \code{\link{vline}}, \code{\link{plot.yearly.tickmarks}}, \code{\link{plot.ylab.left}}
+}
+\examples{
+\dontrun{
+# 2D histogram of bivariate normal data
+set.seed(1)
+x <- rnorm(1000)
+y <- rnorm(1000)
+iaw$plot.hist2d(x, y)
+
+# Correlated variables with finer binning
+set.seed(2)
+x2 <- rnorm(2000)
+y2 <- 0.8 * x2 + rnorm(2000, sd = 0.6)
+iaw$plot.hist2d(x2, y2, nbins = 80)
+}
+
 }

@@ -21,7 +21,7 @@ options(
                 "Darwin"  = "macos",
                 "Linux"   = "linux",
                 "Windows" = "windows",
-                tolower(sysname)
+                tolower(Sys.info()["sysname"])
                 ),  # fallback
 
 
@@ -378,6 +378,14 @@ if (file.exists(fname.lib.cached) &&
 
     save(iaw, file = fname.lib.cached)
     message("[Compiled and Saved ", fname.lib.cached, "]\n")
+
+    ## Also rebuild the installed package so ?help works via library(iaw)
+    if (file.exists(paste0(libdir, "/Makefile"))) {
+        message("[Rebuilding installed iaw package for ?help ...]", appendLF = FALSE)
+        rc <- system2("make", args = c("-C", libdir, "install"),
+                       stdout = NULL, stderr = NULL)
+        if (rc == 0) message(" done]") else message(" FAILED (exit ", rc, ")]")
+    }
 
     rm(Rfile, Rfunc)
 }

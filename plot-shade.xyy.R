@@ -1,29 +1,44 @@
-#' Shade Area Between Lines
+#' Shade Area Between Two Lines with Directional Coloring
 #'
 #' @name plot.shade.xyy
 #'
-#' Shades area between two y values.
+#' Shades area between ylo and yhi segment-by-segment, coloring
+#' differently depending on which line is above.
 #'
 #' @param x X coordinates.
-#' @param y1 Lower y values.
-#' @param y2 Upper y values.
-#' @param col Fill color.
-#' @param ... Polygon arguments.
+#' @param ylo First y series.
+#' @param yhi Second y series.
+#' @param col.plus Color when ylo > yhi. Default "blue".
+#' @param col.minus Color when ylo < yhi. Default "red".
+#' @param col.indif Color when crossing (currently unused).
 #'
 #' @return Invisible NULL.
 #'
+#' @examples
+#' \dontrun{
+#' # Shade between two sinusoids: blue where ylo > yhi, red where ylo < yhi
+#' x    <- seq(0, 4 * pi, length.out = 200)
+#' ylo  <- sin(x)
+#' yhi  <- cos(x)
+#' plot(x, ylo, type = "n", ylim = c(-1.5, 1.5),
+#'      xlab = "x", ylab = "y", main = "Shaded difference")
+#' iaw$plot.shade.xyy(x, ylo, yhi)
+#' lines(x, ylo, lwd = 2)
+#' lines(x, yhi, lwd = 2, lty = 2)
+#' legend("topright", c("sin > cos", "cos > sin"),
+#'        fill = c("blue", "red"))
+#'
+#' # Shade between a series and zero
+#' x2   <- 1:50
+#' y2   <- cumsum(rnorm(50))
+#' plot(x2, y2, type = "l", main = "Cumulative sum vs. zero")
+#' iaw$plot.shade.xyy(x2, ylo = y2, yhi = 0,
+#'                    col.plus = "blue", col.minus = "red")
+#' abline(h = 0, lty = 2)
+#' }
+#'
 #' @family plotting
 #' @export
-
-if (0) {
-
-iaw$plot.shade.xyy <- function(x, y1, y2, col = "lightgray", ...) {
-    stopifnot(is.numeric(x), is.numeric(y1), is.numeric(y2))
-    polygon(c(x, rev(x)), c(y1, rev(y2)), col = col, border = NA, ...)
-    invisible(NULL)
-}
-
-} else {
 
 iaw$plot.shade.xyy <- function (x, ylo, yhi, col.plus = "blue", col.minus = "red", col.indif = "gray")
 {
@@ -45,11 +60,7 @@ iaw$plot.shade.xyy <- function (x, ylo, yhi, col.plus = "blue", col.minus = "red
               c(ylo[i], ylo[i + 1], yhi[i + 1], yhi[i]), col = col.plus,
               border = FALSE)
     }
-    else {
-#      polygon(c(x[i], x[i + 1], x[i + 1], x[i]),
-#              c(ylo[i], ylo[i + 1], yhi[i + 1], yhi[i]), col = col.indif,
-#              border = FALSE)
-    }
+    ## crossing segments (ylo and yhi swap sides) are left unshaded
   }
-}
+  invisible(NULL)
 }

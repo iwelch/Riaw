@@ -4,8 +4,9 @@
 #'
 #' prints nice correlation output
 #'
-#' @param d either a data frame or a matrix
-#' @param digits number of significant digits.
+#' @param d Data frame or matrix.
+#' @param digits Number of digits to display (default 2).
+#' @param use Method for handling missing values (default \code{"pairwise.complete.obs"}).
 #'
 #' @return an invisible correlation
 #'
@@ -13,15 +14,28 @@
 #' @export
 #'
 #' @examples
+#' # Simple two-variable correlation matrix
+#' set.seed(42)
+#' df <- data.frame(x = rnorm(30), y = rnorm(30), z = rnorm(30))
+#' iaw$print.cor(df)
+#'
+#' # Strongly correlated variables
 #' x <- sin(1:50) + rnorm(50, sd = 0.1)
 #' y <- sin(2:51) + rnorm(50, sd = 0.1)
-#' iaw$cor( data.frame(x,y) )
+#' iaw$print.cor(data.frame(x, y))
+#'
+#' # More decimal places for fine-grained display
+#' iaw$print.cor(data.frame(x, y), digits = 4)
+#'
+#' # Matrix input also works
+#' m <- matrix(c(x, y), ncol = 2, dimnames = list(NULL, c("x", "y")))
+#' iaw$print.cor(m)
 
 
 iaw$print.cor <- function(d, digits = 2, use =  "pairwise.complete.obs") {
   stopifnot(is.data.frame(d) | is.matrix(d))
 
-  nums <- sapply(d, is.numeric)
+  nums <- if (is.matrix(d)) rep(is.numeric(d), ncol(d)) else sapply(d, is.numeric)
   cm <- cor(d[, nums], use = use)
 
   oold <- options(knitr.kable.NA = "")

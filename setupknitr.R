@@ -6,6 +6,17 @@
 #'
 #' @return Invisible NULL.
 #'
+#' @examples
+#' \dontrun{
+#' # Call at the top of an R Markdown document to apply standard chunk defaults
+#' iaw$setupknitr()
+#'
+#' # After calling, individual chunks can still override individual options
+#' # ```{r, fig.width=10}
+#' # ... wider plot ...
+#' # ```
+#' }
+#'
 #' @family utilities
 #' @export
 

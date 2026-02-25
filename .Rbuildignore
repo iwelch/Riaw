@@ -1,0 +1,13 @@
+^[^/]*\.R$
+^tests/testbyhand\.R$
+^Rold$
+^library\.Rdata$
+^latlon\.h$
+^\.claude$
+^TODO\.md$
+^\.gitignore$
+^[^/]*\.Rout$
+^.*~$
+^Makefile$
+^\.Rhistory$
+^\.RData$

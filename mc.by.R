@@ -17,14 +17,36 @@
 #' @importFrom parallel mclapply
 #'
 #' @examples
-#' \dontrun{
+#' # Compute group means in parallel
+#' df <- data.frame(
+#'   group = c("A", "A", "B", "B", "C"),
+#'   value = c(1, 3, 2, 4, 5)
+#' )
 #' result <- iaw$mc.by(df, df$group, function(d) mean(d$value))
+#' unlist(result)  # named vector: A=2, B=3, C=5
+#'
+#' # Return a summary data frame per group (results are a list of data frames)
+#' result <- iaw$mc.by(df, df$group, function(d) {
+#'   data.frame(n = nrow(d), mean = mean(d$value), sd = sd(d$value))
+#' })
+#' do.call(rbind, result)
+#'
+#' \dontrun{
+#' # Toggle parallel off for debugging (runs serially via lapply)
+#' iaw$mc.by.cripple.toggle()
+#' result <- iaw$mc.by(df, df$group, function(d) mean(d$value))
+#' iaw$mc.by.cripple.toggle()  # toggle back on
 #' }
 
 iaw$.mc.cripple <- FALSE
 iaw$.mc.by.cache <- NULL
 iaw$.mc.by.cache.nrow <- NULL
 
+#' @rdname mc.by
+#'
+#' @param true.or.null Logical or \code{NULL}. Enable/disable the group split cache.
+#'
+#' @export
 iaw$mc.by.cache <- function(true.or.null) {
     if (is.null(true.or.null) || isFALSE(true.or.null)) {
         message("[mc.by.cache disabled]")
@@ -38,6 +60,11 @@ iaw$mc.by.cache <- function(true.or.null) {
     }
 }
 
+#' @rdname mc.by
+#'
+#' @details \code{mc.by.cripple.toggle} switches between parallel and serial execution.
+#'
+#' @export
 iaw$mc.by.cripple.toggle <- function() {
     iaw$.mc.cripple <<- !iaw$.mc.cripple
     message("[mc.by parallel: ", if (iaw$.mc.cripple) "OFF" else "ON", "]")
@@ -52,12 +79,15 @@ iaw$mc.by <- function(indata, INDICES, FUNIN, ...) {
     } else stop("INDICES must be list or vector")
 
 
-    if (inherits(iaw$.mc.by.cache, "list")) {
-        stopifnot(nrow(indata) == iaw$.mc.by.cache.nrow)
+    cache_key <- paste(INDICES, collapse = "\x01")
+    if (inherits(iaw$.mc.by.cache, "list") &&
+        identical(iaw$.mc.by.cache.nrow, nrow(indata)) &&
+        identical(attr(iaw$.mc.by.cache, "key"), cache_key)) {
         ssplit <- iaw$.mc.by.cache
     } else {
         ssplit <- split(seq_len(nrow(indata)), INDICES)
         if (!is.null(iaw$.mc.by.cache)) {
+            attr(ssplit, "key") <- cache_key
             iaw$.mc.by.cache <<- ssplit
             iaw$.mc.by.cache.nrow <<- nrow(indata)
         }
@@ -70,6 +100,14 @@ iaw$mc.by <- function(indata, INDICES, FUNIN, ...) {
     })
 }
 
+#' @rdname mc.by
+#'
+#' @param FUN Function to apply (for \code{mc.by.data.frame}).
+#' @param simplify Logical. Simplify result (default \code{TRUE}).
+#'
+#' @details \code{mc.by.data.frame} is a single-core variant using \code{tapply}.
+#'
+#' @export
 iaw$mc.by.data.frame <- function(indata, INDICES, FUN, ..., simplify = TRUE) {
     stopifnot(is.data.frame(indata))
     if (!is.list(INDICES)) {

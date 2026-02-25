@@ -6,6 +6,10 @@
 #'
 #' @return Invisible NULL.
 #'
+#' @examples
+#' # Print R debugging tips to the console
+#' iaw$debug.advice()
+#'
 #' @family utilities
 #' @export
 

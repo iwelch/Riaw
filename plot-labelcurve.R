@@ -12,6 +12,21 @@
 #'
 #' @return Invisible NULL.
 #'
+#' @examples
+#' \dontrun{
+#' # Label a sine curve at x = pi/2
+#' x <- seq(0, 2 * pi, length.out = 100)
+#' y <- sin(x)
+#' plot(x, y, type = "l", main = "Labeled curve")
+#' iaw$plot.labelcurve(x, y, xval = pi / 2, label = "sin(x)")
+#'
+#' # Label two curves at different x positions
+#' plot(x, sin(x), type = "l", ylim = c(-1.5, 1.5))
+#' lines(x, cos(x), col = "blue")
+#' iaw$plot.labelcurve(x, sin(x),  xval = 1.0,      label = "sin", col = "black")
+#' iaw$plot.labelcurve(x, cos(x),  xval = pi / 4,   label = "cos", col = "blue")
+#' }
+#'
 #' @family plotting
 #' @export
 

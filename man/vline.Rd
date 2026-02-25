@@ -18,11 +18,20 @@ Invisible NULL.
 }
 \seealso{
 
-Other plotting: \code{\link{as.PlotDate.yyyymmdd}}, \code{\link{plot.boxtext}}, \code{\link{colorblind}}, \code{\link{plot.contour}}, \code{\link{plot.ecdf.lineplot}}, \code{\link{plot.hist2d}}, \code{\link{hline}}, \code{\link{iaw.boxplot}}, \code{\link{plot.labelcurve}}, \code{\link{lambda2color}}, \code{\link{plot.loess.lineplot}}, \code{\link{MixColor}}, \code{\link{plot.native.slope}}, \code{\link{plot.p.arrows}}, \code{\link{plot.pdf.embedfonts}}, \code{\link{pdf.end}}, \code{\link{plot.pdf.start.bera}}, \code{\link{pdf.start}}, \code{\link{plot.timearea}}, \code{\link{plot.worldmap}}, \code{\link{plot.points.toomany}}, \code{\link{plot.shade.xyy}}, \code{\link{plot.text.bg}}, \code{\link{plot.text.onbg}}, \code{\link{plot.yearly.tickmarks}}, \code{\link{plot.ylab.left}}
+Other plotting: \code{\link{as.PlotDate.yyyymmdd}}, \code{\link{plot.boxtext}}, \code{\link{colorblind}}, \code{\link{plot.contour}}, \code{\link{plot.ecdf.lineplot}}, \code{\link{plot.hist2d}}, \code{\link{hline}}, \code{\link{iaw.boxplot}}, \code{\link{plot.labelcurve}}, \code{\link{lambda2color}}, \code{\link{plot.loess.lineplot}}, \code{\link{MixColor}}, \code{\link{plot.native.slope}}, \code{\link{plot.p.arrows}}, \code{\link{plot.pdf.embedfonts}}, \code{\link{pdf.end}}, \code{\link{pdf.start}}, \code{\link{plot.pdf.start.bera}}, \code{\link{plot.timearea}}, \code{\link{plot.worldmap}}, \code{\link{plot.points.toomany}}, \code{\link{plot.shade.xyy}}, \code{\link{plot.text.bg}}, \code{\link{plot.text.onbg}}, \code{\link{plot.yearly.tickmarks}}, \code{\link{plot.ylab.left}}
 }
 \examples{
 \dontrun{
 plot(1:10)
 iaw$vline(5, col = "blue")
+
+# Mark multiple event dates on a time-series plot
+plot(1:100, cumsum(rnorm(100)), type = "l")
+iaw$vline(c(25, 50, 75), col = "red", lty = 2)
+
+# Mark the mean of x on a scatter plot
+x <- rnorm(50)
+plot(x, rnorm(50))
+iaw$vline(mean(x), col = "darkgreen", lwd = 2)
 }
 }

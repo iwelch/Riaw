@@ -20,6 +20,15 @@ Other utilities: \code{\link{ascii}}, \code{\link{base}}, \code{\link{beep}}, \c
 }
 \examples{
 \dontrun{
-iaw$now()
+iaw$now()                          # "2024-03-15 09:32:07"
+
+# Date only
+iaw$now("\%Y-\%m-\%d")
+
+# Compact timestamp for filenames
+iaw$now("\%Y\%m\%d_\%H\%M\%S")
+
+# Log prefix
+paste0("[", iaw$now(), "] Starting job")
 }
 }

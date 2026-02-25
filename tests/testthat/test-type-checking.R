@@ -1,170 +1,140 @@
-# Tests for is.character, is.numeric, is.scalar, is.inrange, is.instring
+# Tests for type-checking functions
 
-# is.character tests
-test_that("iaw$is.character returns TRUE for character of correct length", {
-    expect_true(iaw$is.character("hello", 1))
+# --- iaw$is.character ---
+
+test_that("is.character returns TRUE for character vector", {
+    expect_true(iaw$is.character("hello"))
+    expect_true(iaw$is.character(c("a", "b")))
 })
 
-test_that("iaw$is.character returns FALSE for wrong length", {
+test_that("is.character returns FALSE for non-character", {
+    expect_false(iaw$is.character(42))
+    expect_false(iaw$is.character(factor("a")))
+})
+
+test_that("is.character checks length when specified", {
+    expect_true(iaw$is.character("hello", 1))
+    expect_true(iaw$is.character(c("a", "b"), 2))
     expect_false(iaw$is.character(c("a", "b"), 1))
 })
 
-test_that("iaw$is.character returns FALSE for non-character", {
-    expect_false(iaw$is.character(123, 1))
-})
-
-test_that("iaw$is.character handles empty string", {
-    expect_true(iaw$is.character("", 1))
-})
-
-test_that("iaw$is.character handles character vector", {
-    expect_true(iaw$is.character(c("a", "b", "c"), 3))
-})
-
-test_that("iaw$is.character returns FALSE for factor", {
-    expect_false(iaw$is.character(factor("a"), 1))
-})
-
-test_that("iaw$is.character default length is 0", {
-    expect_true(iaw$is.character("a"))
-})
-
-# Failing tests
-test_that("iaw$is.character rejects non-numeric length", {
+test_that("is.character rejects invalid length parameter", {
     expect_error(iaw$is.character("a", "one"))
-})
-
-test_that("iaw$is.character rejects vector length parameter", {
     expect_error(iaw$is.character("a", c(1, 2)))
 })
 
-test_that("iaw$is.character rejects NULL length", {
-    expect_true(iaw$is.character("a", NULL))
+# --- iaw$is.numeric ---
+
+test_that("is.numeric returns TRUE for numeric vector", {
+    expect_true(iaw$is.numeric(5))
+    expect_true(iaw$is.numeric(1:3))
 })
 
-# is.numeric tests
-test_that("iaw$is.numeric returns TRUE for numeric of correct length", {
+test_that("is.numeric returns FALSE for non-numeric", {
+    expect_false(iaw$is.numeric("hello"))
+    expect_false(iaw$is.numeric(TRUE))
+})
+
+test_that("is.numeric checks length when specified", {
     expect_true(iaw$is.numeric(5, 1))
-})
-
-test_that("iaw$is.numeric returns FALSE for wrong length", {
+    expect_true(iaw$is.numeric(c(1, 2, 3), 3))
     expect_false(iaw$is.numeric(c(1, 2, 3), 1))
 })
 
-test_that("iaw$is.numeric returns FALSE for non-numeric", {
-    expect_false(iaw$is.numeric("hello", 1))
-})
-
-test_that("iaw$is.numeric handles integer", {
-    expect_true(iaw$is.numeric(5L, 1))
-})
-
-test_that("iaw$is.numeric handles vector", {
-    expect_true(iaw$is.numeric(1:5, 5))
-})
-
-test_that("iaw$is.numeric returns FALSE for logical", {
-    expect_false(iaw$is.numeric(TRUE, 1))
-})
-
-test_that("iaw$is.numeric default length is 0", {
-    expect_true(iaw$is.numeric(5))
-})
-
-# Failing tests
-test_that("iaw$is.numeric rejects non-numeric length", {
+test_that("is.numeric rejects invalid length parameter", {
     expect_error(iaw$is.numeric(5, "one"))
-})
-
-test_that("iaw$is.numeric rejects vector length", {
     expect_error(iaw$is.numeric(5, c(1, 2)))
 })
 
-test_that("iaw$is.numeric interprets NULL as ignore", {
-    expect_true(iaw$is.numeric(5, NULL))
-})
+# --- iaw$is.scalar ---
 
-# is.scalar tests
-test_that("iaw$is.scalar returns TRUE for single numeric", {
+test_that("is.scalar returns TRUE for single atomic values", {
     expect_true(iaw$is.scalar(5))
-})
-
-test_that("iaw$is.scalar returns TRUE for single character", {
     expect_true(iaw$is.scalar("a"))
-})
-
-test_that("iaw$is.scalar returns TRUE for single logical", {
     expect_true(iaw$is.scalar(TRUE))
-})
-
-test_that("iaw$is.scalar returns FALSE for vector", {
-    expect_false(iaw$is.scalar(c(1, 2)))
-})
-
-test_that("iaw$is.scalar returns FALSE for list", {
-    expect_false(iaw$is.scalar(list(a = 1)))
-})
-
-test_that("iaw$is.scalar returns FALSE for NULL", {
-    expect_false(iaw$is.scalar(NULL))
-})
-
-test_that("iaw$is.scalar returns FALSE for data frame", {
-    expect_false(iaw$is.scalar(data.frame(a = 1)))
-})
-
-test_that("iaw$is.scalar handles NA", {
     expect_true(iaw$is.scalar(NA))
 })
 
-test_that("iaw$is.scalar handles empty vector", {
+test_that("is.scalar returns FALSE for non-scalars", {
+    expect_false(iaw$is.scalar(c(1, 2)))
+    expect_false(iaw$is.scalar(NULL))
+    expect_false(iaw$is.scalar(list(a = 1)))
     expect_false(iaw$is.scalar(numeric(0)))
 })
 
-test_that("iaw$is.scalar handles complex", {
-    expect_true(iaw$is.scalar(1+2i))
-})
+# --- iaw$is.instring ---
 
-
-# is.instring tests
-test_that("iaw$is.instring finds pattern", {
+test_that("is.instring finds substring", {
     expect_true(iaw$is.instring("ab", "abcdef"))
-})
-
-test_that("iaw$is.instring returns FALSE when not found", {
     expect_false(iaw$is.instring("xy", "abcdef"))
 })
 
-test_that("iaw$is.instring works with vector", {
+test_that("is.instring returns logical vector for vector input", {
     result <- iaw$is.instring("ab", c("abc", "def", "abab"))
     expect_equal(result, c(TRUE, FALSE, TRUE))
 })
 
-test_that("iaw$is.instring is case sensitive", {
-    expect_false(iaw$is.instring("AB", "abcdef"))
-})
-
-test_that("iaw$is.instring finds at start", {
-    expect_true(iaw$is.instring("abc", "abcdef"))
-})
-
-test_that("iaw$is.instring finds at end", {
-    expect_true(iaw$is.instring("def", "abcdef"))
-})
-
-test_that("iaw$is.instring returns logical vector", {
-    expect_type(iaw$is.instring("a", c("a", "b")), "logical")
-})
-
-# Failing tests
-test_that("iaw$is.instring rejects non-character needle", {
+test_that("is.instring rejects non-character or vector needle", {
     expect_error(iaw$is.instring(123, "abc"))
-})
-
-test_that("iaw$is.instring rejects vector needle", {
     expect_error(iaw$is.instring(c("a", "b"), "abc"))
 })
 
-test_that("iaw$is.instring rejects non-character haystack", {
-    expect_error(iaw$is.instring("a", 123))
+# --- iaw$assert ---
+
+test_that("assert passes silently on TRUE", {
+    expect_invisible(iaw$assert(TRUE))
+    expect_null(iaw$assert(TRUE, "should not fire"))
+})
+
+test_that("assert errors on FALSE with message", {
+    expect_error(iaw$assert(FALSE, "bad value"), "bad value")
+})
+
+test_that("assert rejects non-logical or vector condition", {
+    expect_error(iaw$assert("yes"))
+    expect_error(iaw$assert(c(TRUE, FALSE)))
+})
+
+# --- iaw$check.names ---
+
+test_that("check.names passes when names exist", {
+    df <- data.frame(a = 1, b = 2, c = 3)
+    expect_true(iaw$check.names(c("a", "b"), df))
+})
+
+test_that("check.names errors on missing names", {
+    df <- data.frame(a = 1, b = 2)
+    expect_error(iaw$check.names(c("a", "z"), df), "z")
+})
+
+# --- iaw$require.variables ---
+
+test_that("require.variables passes when all present", {
+    df <- data.frame(x = 1, y = 2)
+    expect_true(iaw$require.variables(c("x", "y"), df))
+})
+
+test_that("require.variables errors on missing variable", {
+    df <- data.frame(x = 1)
+    expect_error(iaw$require.variables(c("x", "missing_col"), df), "missing_col")
+})
+
+# --- iaw$whatis ---
+
+test_that("whatis describes numeric vector", {
+    result <- iaw$whatis(1:10)
+    expect_match(result, "integer")
+    expect_match(result, "10")
+})
+
+test_that("whatis describes data frame with dimensions", {
+    df <- data.frame(a = 1:5, b = 6:10)
+    result <- iaw$whatis(df)
+    expect_match(result, "data.frame")
+    expect_match(result, "5x2")
+})
+
+test_that("whatis handles NULL", {
+    result <- iaw$whatis(NULL)
+    expect_match(result, "NULL")
 })

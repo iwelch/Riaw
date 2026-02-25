@@ -8,6 +8,15 @@
 #'
 #' @return Invisible NULL.
 #'
+#' @examples
+#' \dontrun{
+#' # Single beep when a long job finishes
+#' iaw$beep()
+#'
+#' # Three beeps to signal an error condition
+#' iaw$beep(3)
+#' }
+#'
 #' @family utilities
 #' @export
 

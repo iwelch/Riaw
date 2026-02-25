@@ -14,8 +14,19 @@
 #' @export
 #'
 #' @examples
+#' \dontrun{
 #' plot(1:10)
 #' iaw$hline(5, col = "red")
+#'
+#' # Multiple reference lines at once
+#' plot(rnorm(100))
+#' iaw$hline(c(-2, 0, 2), col = "gray", lty = 2)
+#'
+#' # Mark a mean line on a histogram
+#' x <- rnorm(200, mean = 5)
+#' plot(density(x))
+#' iaw$hline(0.1, col = "blue", lty = 3, lwd = 2)
+#' }
 
 iaw$hline <- function(atyloc, xrange = NULL, ...) {
     stopifnot(is.numeric(atyloc))

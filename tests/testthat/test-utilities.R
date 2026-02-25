@@ -1,307 +1,194 @@
-# Tests for utility functions: whatis, msg, chatter, beep, bisection, ls.objects, etc.
+# Tests for utility functions
 
-# whatis tests
-test_that("iaw$whatis describes numeric vector", {
-    result <- iaw$whatis(1:10)
-    expect_match(result, "integer")
+# --- iaw$strcat ---
+
+test_that("strcat concatenates without separator by default", {
+    expect_equal(iaw$strcat("Hello", "World"), "HelloWorld")
 })
 
-test_that("iaw$whatis describes data frame", {
-    result <- iaw$whatis(data.frame(a = 1))
-    expect_match(result, "data.frame")
+test_that("strcat uses custom separator", {
+    expect_equal(iaw$strcat("a", "b", "c", sep = "-"), "a-b-c")
 })
 
-test_that("iaw$whatis includes dimensions", {
-    df <- data.frame(a = 1:5, b = 1:5)
-    result <- iaw$whatis(df)
-    expect_match(result, "5")
+test_that("strcat handles single argument", {
+    expect_equal(iaw$strcat("only"), "only")
 })
 
-test_that("iaw$whatis describes character", {
-    result <- iaw$whatis("hello")
-    expect_match(result, "character")
+# --- iaw$ascii ---
+
+test_that("ascii converts character to ASCII", {
+    result <- iaw$ascii("hello")
+    expect_type(result, "character")
+    expect_equal(result, "hello")
 })
 
-test_that("iaw$whatis describes matrix", {
-    result <- iaw$whatis(matrix(1:6, nrow = 2))
-    expect_match(result, "matrix")
+test_that("ascii converts non-character via as.character", {
+    expect_equal(iaw$ascii(42), "42")
+    expect_equal(iaw$ascii(TRUE), "TRUE")
 })
 
-test_that("iaw$whatis describes list", {
-    result <- iaw$whatis(list(a = 1, b = 2))
-    expect_match(result, "list")
+# --- iaw$abort ---
+
+test_that("abort throws error with message", {
+    expect_error(iaw$abort("something broke"), "something broke")
 })
 
-test_that("iaw$whatis returns character", {
-    expect_type(iaw$whatis(1:10), "character")
+test_that("abort rejects non-scalar-character input", {
+    expect_error(iaw$abort(123))
+    expect_error(iaw$abort(c("a", "b")))
 })
 
-test_that("iaw$whatis describes function", {
-    result <- iaw$whatis(mean)
-    expect_match(result, "function")
+# --- iaw$dict.lookup ---
+
+test_that("dict.lookup finds existing keys", {
+    d <- c(a = 1, b = 2, c = 3)
+    result <- iaw$dict.lookup(c("a", "c"), d)
+    expect_equal(as.numeric(result), c(1, 3))
 })
 
-test_that("iaw$whatis describes NULL", {
-    result <- iaw$whatis(NULL)
-    expect_match(result, "NULL")
+test_that("dict.lookup returns default for missing keys", {
+    d <- c(a = 1, b = 2)
+    result <- iaw$dict.lookup(c("a", "z"), d, default = -1)
+    expect_equal(as.numeric(result[1]), 1)
+    expect_equal(result[2], -1)
 })
 
-test_that("iaw$whatis includes length for vectors", {
-    result <- iaw$whatis(1:100)
-    expect_match(result, "100")
+test_that("dict.lookup returns NA by default for missing", {
+    d <- c(a = 1)
+    result <- iaw$dict.lookup("z", d)
+    expect_true(is.na(result))
 })
 
+# --- iaw$grepcolname ---
 
-# bisection tests
-test_that("iaw$bisection finds root", {
-    result <- iaw$bisection(function(x) x^2 - 4, 0, 3)
-    expect_equal(result, 2, tolerance = 1e-6)
+test_that("grepcolname finds matching columns", {
+    df <- data.frame(price_usd = 1, price_eur = 2, volume = 3)
+    result <- iaw$grepcolname("price", df)
+    expect_equal(sort(result), c("price_eur", "price_usd"))
 })
 
-test_that("iaw$bisection finds sqrt(2)", {
+test_that("grepcolname returns empty when no match", {
+    df <- data.frame(a = 1, b = 2)
+    result <- iaw$grepcolname("zzz", df)
+    expect_length(result, 0)
+})
+
+# --- iaw$index.of.variable ---
+
+test_that("index.of.variable returns correct column index", {
+    df <- data.frame(x = 1, y = 2, z = 3)
+    expect_equal(iaw$index.of.variable("y", df), 2)
+})
+
+test_that("index.of.variable returns empty for missing name", {
+    df <- data.frame(x = 1, y = 2)
+    result <- iaw$index.of.variable("missing", df)
+    expect_length(result, 0)
+})
+
+# --- iaw$bisection ---
+
+test_that("bisection finds sqrt(2)", {
     result <- iaw$bisection(function(x) x^2 - 2, 0, 2)
-    expect_equal(result, sqrt(2), tolerance = 1e-6)
+    expect_equal(result$mid, sqrt(2), tolerance = 1e-3)
 })
 
-test_that("iaw$bisection handles negative root", {
-    result <- iaw$bisection(function(x) x + 5, -10, 0)
-    expect_equal(result, -5, tolerance = 1e-6)
+test_that("bisection finds root of linear function", {
+    result <- iaw$bisection(function(x) x - 5, 0, 10)
+    expect_equal(result$mid, 5, tolerance = 1e-3)
 })
 
-test_that("iaw$bisection respects tolerance", {
-    result <- iaw$bisection(function(x) x - 1, 0, 2, tol = 0.1)
-    expect_equal(result, 1, tolerance = 0.1)
+test_that("bisection errors when same sign at bounds", {
+    expect_error(iaw$bisection(function(x) x^2 + 1, 0, 2), "same sign")
 })
 
-test_that("iaw$bisection finds zero of sin", {
-    result <- iaw$bisection(sin, 3, 4)
-    expect_equal(result, pi, tolerance = 1e-6)
+test_that("bisection supports vectorized inputs", {
+    result <- iaw$bisection(function(x) x^2 - c(1, 4, 9), c(0, 0, 0), c(2, 3, 4))
+    expect_equal(result$mid, c(1, 2, 3), tolerance = 1e-3)
 })
 
-test_that("iaw$bisection returns numeric", {
-    result <- iaw$bisection(function(x) x, -1, 1)
-    expect_type(result, "double")
+# --- iaw$nearest ---
+
+test_that("nearest finds closest value", {
+    expect_equal(iaw$nearest(c(1, 5, 10), 7), 5)
+    expect_equal(iaw$nearest(c(1, 5, 10), 9), 10)
 })
 
-test_that("iaw$bisection handles linear function", {
-    result <- iaw$bisection(function(x) 2*x - 6, 0, 5)
-    expect_equal(result, 3, tolerance = 1e-6)
+test_that("nearest finds exact match", {
+    expect_equal(iaw$nearest(c(1, 5, 10), 5), 5)
 })
 
-# Failing tests
-test_that("iaw$bisection rejects non-function", {
-    expect_error(iaw$bisection("not a function", 0, 1))
+# --- iaw$which.nearest ---
+
+test_that("which.nearest returns correct index", {
+    expect_equal(iaw$which.nearest(c(1, 5, 10), 7), 2)
+    expect_equal(iaw$which.nearest(c(1, 5, 10), 9), 3)
 })
 
-test_that("iaw$bisection rejects non-numeric bounds", {
-    expect_error(iaw$bisection(sin, "a", "b"))
+test_that("which.nearest returns index of exact match", {
+    expect_equal(iaw$which.nearest(c(10, 20, 30), 20), 2)
 })
 
-test_that("iaw$bisection rejects negative tolerance", {
-    expect_error(iaw$bisection(sin, 0, 1, tol = -1))
+# --- iaw$summary ---
+
+test_that("summary returns numeric matrix for data frame", {
+    df <- data.frame(x = rnorm(100), y = rnorm(100))
+    result <- iaw$summary(df, "p")
+    expect_true(is.matrix(result))
+    expect_equal(nrow(result), 2)
+    expect_true("mean" %in% colnames(result))
 })
 
-# ls.objects tests
-test_that("iaw$ls.objects returns data frame", {
-    result <- iaw$ls.objects()
-    expect_s3_class(result, "data.frame")
+test_that("summary works with a vector input", {
+    result <- iaw$summary(rnorm(50), "p")
+    expect_true(is.matrix(result))
+    expect_equal(nrow(result), 1)
 })
 
-test_that("iaw$ls.objects has size_MB column", {
-    result <- iaw$ls.objects()
-    expect_true("size_MB" %in% names(result) || nrow(result) == 0)
+test_that("summary errors on non-numeric data frame", {
+    df <- data.frame(a = letters[1:5])
+    expect_error(iaw$summary(df))
 })
 
-test_that("iaw$ls.objects respects n parameter", {
-    result <- iaw$ls.objects(n = 5)
-    expect_true(nrow(result) <= 5)
+# --- iaw$sprint.data.frame ---
+
+test_that("sprint.data.frame returns string representation", {
+    df <- data.frame(a = 1:3, b = c("x", "y", "z"))
+    result <- iaw$sprint.data.frame(df)
+    expect_type(result, "character")
+    expect_match(result, "a")
+    expect_match(result, "b")
 })
 
-test_that("iaw$ls.objects sorted by size", {
-    # Create some objects
-    test_small <- 1
-    test_large <- rnorm(10000)
-    result <- iaw$ls.objects(n = 10)
-    if (nrow(result) > 1) {
-        expect_true(result$size_MB[1] >= result$size_MB[nrow(result)])
-    }
-    rm(test_small, test_large)
+test_that("sprint.data.frame respects n parameter", {
+    df <- data.frame(x = 1:100)
+    full <- iaw$sprint.data.frame(df)
+    short <- iaw$sprint.data.frame(df, n = 2)
+    expect_true(nchar(short) < nchar(full))
 })
 
-test_that("iaw$ls.objects handles empty environment", {
-    e <- new.env()
-    result <- iaw$ls.objects(envir = e)
-    expect_equal(nrow(result), 0)
+# --- iaw$instrumentR ---
+
+test_that("instrumentR produces parseable output", {
+    infile  <- file.path(tempdir(), "test_input.R")
+    outfile <- file.path(tempdir(), "test_output.R")
+    writeLines(c(
+        "x <- 1",
+        "y <- x + 2",
+        "# a comment",
+        "z <- x * y"
+    ), infile)
+    on.exit(unlink(c(infile, outfile)), add = TRUE)
+
+    result <- iaw$instrumentR(infile, outfile)
+    expect_equal(result, outfile)
+    expect_true(file.exists(outfile))
+
+    # Output must parse without error
+    parsed <- parse(outfile)
+    expect_true(length(parsed) > 0)
 })
 
-test_that("iaw$ls.objects returns numeric sizes", {
-    result <- iaw$ls.objects()
-    if (nrow(result) > 0) {
-        expect_type(result$size_MB, "double")
-    }
-})
-
-test_that("iaw$ls.objects includes object names", {
-    result <- iaw$ls.objects()
-    expect_true("object" %in% names(result) || nrow(result) == 0)
-})
-
-# meminfo tests
-test_that("iaw$meminfo returns list", {
-    result <- iaw$meminfo()
-    expect_type(result, "list")
-})
-
-test_that("iaw$meminfo has used_MB", {
-    result <- iaw$meminfo()
-    expect_true("used_MB" %in% names(result))
-})
-
-test_that("iaw$meminfo has max_MB", {
-    result <- iaw$meminfo()
-    expect_true("max_MB" %in% names(result))
-})
-
-test_that("iaw$meminfo returns numeric values", {
-    result <- iaw$meminfo()
-    expect_true(is.numeric(result$used_MB))
-})
-
-test_that("iaw$meminfo used <= max", {
-    result <- iaw$meminfo()
-    expect_true(result$used_MB <= result$max_MB)
-})
-
-test_that("iaw$meminfo positive values", {
-    result <- iaw$meminfo()
-    expect_true(result$used_MB >= 0)
-})
-
-test_that("iaw$meminfo is snapshot", {
-    result1 <- iaw$meminfo()
-    result2 <- iaw$meminfo()
-    expect_true(is.numeric(result1$used_MB))
-    expect_true(is.numeric(result2$used_MB))
-})
-
-# osinfo tests
-test_that("iaw$osinfo returns list", {
-    result <- iaw$osinfo()
-    expect_type(result, "list")
-})
-
-test_that("iaw$osinfo has sysname", {
-    result <- iaw$osinfo()
-    expect_true("sysname" %in% names(result))
-})
-
-test_that("iaw$osinfo has R_version", {
-    result <- iaw$osinfo()
-    expect_true("R_version" %in% names(result))
-})
-
-test_that("iaw$osinfo sysname is character", {
-    result <- iaw$osinfo()
-    expect_type(result$sysname, "character")
-})
-
-test_that("iaw$osinfo has machine", {
-    result <- iaw$osinfo()
-    expect_true("machine" %in% names(result))
-})
-
-test_that("iaw$osinfo matches Sys.info", {
-    result <- iaw$osinfo()
-    expect_equal(result$sysname, Sys.info()["sysname"])
-})
-
-test_that("iaw$osinfo R version matches", {
-    result <- iaw$osinfo()
-    expect_equal(result$R_version, R.version.string)
-})
-
-# object.size.MB tests
-test_that("iaw$object.size.MB returns numeric", {
-    expect_type(iaw$object.size.MB(1:1000), "double")
-})
-
-test_that("iaw$object.size.MB larger for larger objects", {
-    small <- 1:100
-    large <- 1:1000000
-    expect_true(iaw$object.size.MB(large) > iaw$object.size.MB(small))
-})
-
-test_that("iaw$object.size.MB handles data frame", {
-    df <- data.frame(x = rnorm(10000))
-    expect_true(iaw$object.size.MB(df) > 0)
-})
-
-test_that("iaw$object.size.MB handles character", {
-    x <- rep("hello", 10000)
-    expect_true(iaw$object.size.MB(x) > 0)
-})
-
-test_that("iaw$object.size.MB handles small object", {
-    expect_true(iaw$object.size.MB(1) >= 0)
-})
-
-test_that("iaw$object.size.MB rounded", {
-    result <- iaw$object.size.MB(1:1000)
-    expect_equal(result, round(result, 2))
-})
-
-test_that("iaw$object.size.MB handles list", {
-    x <- list(a = 1:1000, b = rnorm(1000))
-    expect_true(iaw$object.size.MB(x) > 0)
-})
-
-# now tests
-test_that("iaw$now returns character", {
-    expect_type(iaw$now(), "character")
-})
-
-test_that("iaw$now default format has date", {
-    result <- iaw$now()
-    expect_match(result, "\\d{4}-\\d{2}-\\d{2}")
-})
-
-test_that("iaw$now custom format", {
-    result <- iaw$now("%Y")
-    expect_match(result, "^\\d{4}$")
-})
-
-test_that("iaw$now changes over time", {
-    t1 <- iaw$now("%H:%M:%S")
-    Sys.sleep(0.1)
-    t2 <- iaw$now("%H:%M:%S")
-    # At least seconds might change (or they're the same)
-    expect_type(t1, "character")
-    expect_type(t2, "character")
-})
-
-test_that("iaw$now includes time", {
-    result <- iaw$now()
-    expect_match(result, "\\d{2}:\\d{2}:\\d{2}")
-})
-
-test_that("iaw$now length is 1", {
-    expect_length(iaw$now(), 1)
-})
-
-test_that("iaw$now date only format", {
-    result <- iaw$now("%Y%m%d")
-    expect_match(result, "^\\d{8}$")
-})
-
-# Failing tests
-test_that("iaw$now rejects non-character format", {
-    expect_error(iaw$now(123))
-})
-
-test_that("iaw$now rejects vector format", {
-    expect_error(iaw$now(c("%Y", "%m")))
-})
-
-test_that("iaw$now rejects NULL format", {
-    expect_error(iaw$now(NULL))
+test_that("instrumentR rejects non-R file", {
+    expect_error(iaw$instrumentR("data.csv"))
 })

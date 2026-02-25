@@ -12,6 +12,19 @@
 #'
 #' @return Data frame with lagged columns.
 #'
+#' @examples
+#' df <- data.frame(t = 1:5, ret = c(0.01, 0.02, -0.01, 0.03, 0.00))
+#'
+#' # Add a one-period lag of "ret" (new column "ret.L1")
+#' iaw$lagdataframe(df, vars = "ret")
+#'
+#' # Add a two-period lag
+#' iaw$lagdataframe(df, vars = "ret", nlags = 2)
+#'
+#' # Lag multiple columns at once
+#' df2 <- data.frame(t = 1:4, ret = 1:4, vol = 10:13)
+#' iaw$lagdataframe(df2, vars = c("ret", "vol"))
+#'
 #' @family time-series
 #' @export
 

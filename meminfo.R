@@ -10,7 +10,16 @@
 #' @export
 #'
 #' @examples
+#' # Check current memory usage (triggers a GC cycle)
 #' iaw$meminfo()
+#'
+#' # Allocate a large object and see memory rise
+#' \dontrun{
+#' m <- matrix(rnorm(1e6), ncol = 100)
+#' iaw$meminfo()$used_MB   # higher after allocation
+#' rm(m); gc()
+#' iaw$meminfo()$used_MB   # lower after removal
+#' }
 
 iaw$meminfo <- function() {
     gc_result <- gc()

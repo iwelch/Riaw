@@ -15,8 +15,20 @@
 #' @export
 #'
 #' @examples
+#' # Lag by 1: first value becomes NA, others shift right
 #' x <- c(1, 2, 3, 4, 5)
-#' iaw$lagseries(x)
+#' iaw$lagseries(x)          # NA 1 2 3 4
+#'
+#' # Lag by 2 periods
+#' iaw$lagseries(x, numlags = 2)  # NA NA 1 2 3
+#'
+#' # Panel-aware lag: respects group boundaries
+#' panel <- data.frame(
+#'   firm = c("A","A","A","B","B","B"),
+#'   t    = c(1, 2, 3, 1, 2, 3),
+#'   ret  = c(0.01, 0.02, 0.03, 0.10, 0.11, 0.12)
+#' )
+#' iaw$lagseries(panel$ret, panelid = panel$firm, timeid = panel$t)
 
 iaw$lagseries <- function(series, numlags = 1, panelid = NULL, timeid = NULL) {
     stopifnot(is.numeric(series) || is.factor(series))

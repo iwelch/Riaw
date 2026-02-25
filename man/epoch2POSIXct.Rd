@@ -21,6 +21,17 @@ Other datetime: \code{\link{diffdays}}, \code{\link{epoch2nyc}}, \code{\link{epo
 }
 \examples{
 \dontrun{
+# 2021-01-01 00:00:00 UTC
 iaw$epoch2POSIXct(1609459200)
+
+# Convert with a specific timezone
+iaw$epoch2POSIXct(1609459200, tz = "America/New_York")
+
+# Vectorized: convert a column of timestamps
+ts <- c(1609459200, 1612137600, 1614556800)
+iaw$epoch2POSIXct(ts)
+
+# Epoch 0 is the Unix origin
+iaw$epoch2POSIXct(0)  # "1970-01-01 UTC"
 }
 }

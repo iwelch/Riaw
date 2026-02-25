@@ -1,0 +1,30 @@
+Package: iaw
+Type: Package
+Title: Ivo's Analytical Workbench
+Version: 1.0.0
+Authors@R: person("Ivo", "Welch", email = "ivo.welch@gmail.com", role = c("aut", "cre"))
+Description: A collection of utility functions for data manipulation, regression
+    analysis, plotting, and parallel computing. All functions are accessed via
+    the 'iaw' environment (e.g., iaw$olm(), iaw$cmpsum()).
+License: GPL (>= 3)
+Encoding: UTF-8
+Imports:
+    parallel,
+    data.table,
+    stats,
+    utils,
+    grDevices,
+    graphics,
+    tools
+Suggests:
+    Cairo,
+    sandwich,
+    lmtest,
+    knitr,
+    MASS,
+    dplyr,
+    fst,
+    glue,
+    bit64,
+    testthat (>= 3.0.0)
+Config/testthat/edition: 3

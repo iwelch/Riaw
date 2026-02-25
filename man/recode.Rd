@@ -25,5 +25,13 @@ Other data-manipulation: \code{\link{diffid.for.fixed.effects}}, \code{\link{kil
 \dontrun{
 x <- c(1, 2, 3, 1, 2)
 iaw$recode(x, c(1, 2), c(10, 20))
+
+# Recode character values (e.g. standardise country name variants)
+country <- c("US", "USA", "United States", "UK")
+iaw$recode(country, c("USA", "United States"), c("US", "US"))
+
+# Set unmatched values to NA with non.from.becomes.na
+x <- c(1, 2, 3, 4, 5)
+iaw$recode(x, c(1, 2, 3), c(10, 20, 30), non.from.becomes.na = TRUE)
 }
 }

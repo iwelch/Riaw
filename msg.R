@@ -2,15 +2,42 @@
 #'
 #' @name msg
 #'
-#' Prints messages with elapsed time and caller info.
+#' Prints timestamped messages with elapsed time since first call and
+#' the name of the calling function. Implemented as a closure factory
+#' (\code{make_msg}).
 #'
-#' @return A message function.
+#' @param ... Message components (passed to \code{cat}).
+#' @param len.of.funname Integer. Width for caller name formatting (default 12).
+#'
+#' @return \code{TRUE} (invisibly).
 #'
 #' @family utilities
 #' @export
 #'
 #' @examples
+#' # Print a timestamped progress message
+#' \dontrun{
 #' iaw$msg("Starting process")
+#' }
+#'
+#' # Multiple messages show elapsed time since first call
+#' \dontrun{
+#' iaw$msg("Loading data")
+#' Sys.sleep(1)
+#' iaw$msg("Processing", 1000, "rows")
+#' Sys.sleep(1)
+#' iaw$msg("Done")
+#' }
+#'
+#' # Use inside a function - caller name is shown automatically
+#' \dontrun{
+#' run_model <- function() {
+#'   iaw$msg("fitting model")
+#'   # ... model code ...
+#'   iaw$msg("model complete")
+#' }
+#' run_model()
+#' }
 
 make_msg <- function() {
     firstcall <- NULL

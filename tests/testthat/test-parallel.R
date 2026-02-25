@@ -76,15 +76,15 @@ test_that("iaw$oc.by returns list", {
 
 test_that("iaw$oc.by applies function to groups", {
     df <- data.frame(group = c("A", "A", "B", "B"), value = c(1, 2, 10, 20))
-    result <- iaw$oc.by(df, df$group, function(d) mean(d$value))
-    expect_equal(result$A, 1.5)
-    expect_equal(result$B, 15)
+    result <- iaw$oc.by(df, df$group, function(d) data.frame(m = mean(d$value)))
+    expect_equal(result$A$m, 1.5)
+    expect_equal(result$B$m, 15)
 })
 
 test_that("iaw$oc.by handles single group", {
     df <- data.frame(group = c("A", "A"), value = 1:2)
-    result <- iaw$oc.by(df, df$group, function(d) sum(d$value))
-    expect_equal(result$A, 3)
+    result <- iaw$oc.by(df, df$group, function(d) data.frame(s = sum(d$value)))
+    expect_equal(result$A$s, 3)
 })
 
 test_that("iaw$oc.by is serial version of mc.by", {
@@ -101,7 +101,7 @@ test_that("iaw$oc.by preserves group names", {
 
 test_that("iaw$oc.by handles numeric groups", {
     df <- data.frame(group = c(1, 1, 2, 2), value = 1:4)
-    result <- iaw$oc.by(df, df$group, function(d) sum(d$value))
+    result <- iaw$oc.by(df, df$group, function(d) data.frame(s = sum(d$value)))
     expect_type(result, "list")
 })
 
@@ -198,7 +198,8 @@ test_that("iaw$mclapply applies function", {
 
 test_that("iaw$mclapply handles named list", {
     result <- iaw$mclapply(list(a = 1, b = 2), function(x) x * 2)
-    expect_equal(result$a, 2)
+    expect_equal(result[[1]], 2)
+    expect_equal(result[[2]], 4)
 })
 
 test_that("iaw$mclapply handles character vector", {

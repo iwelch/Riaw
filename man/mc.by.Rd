@@ -38,7 +38,24 @@ List of results.
 Other parallel: \code{\link{mc.replicate}}, \code{\link{mclapply}}, \code{\link{mcsapply}}, \code{\link{oc.by}}, \code{\link{rbind.mc.by}}, \code{\link{rbind.oc.by}}
 }
 \examples{
-\dontrun{
+# Compute group means in parallel
+df <- data.frame(
+  group = c("A", "A", "B", "B", "C"),
+  value = c(1, 3, 2, 4, 5)
+)
 result <- iaw$mc.by(df, df$group, function(d) mean(d$value))
+unlist(result)  # named vector: A=2, B=3, C=5
+
+# Return a summary data frame per group (results are a list of data frames)
+result <- iaw$mc.by(df, df$group, function(d) {
+  data.frame(n = nrow(d), mean = mean(d$value), sd = sd(d$value))
+})
+do.call(rbind, result)
+
+\dontrun{
+# Toggle parallel off for debugging (runs serially via lapply)
+iaw$mc.by.cripple.toggle()
+result <- iaw$mc.by(df, df$group, function(d) mean(d$value))
+iaw$mc.by.cripple.toggle()  # toggle back on
 }
 }

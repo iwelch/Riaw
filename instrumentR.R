@@ -9,6 +9,19 @@
 #'
 #' @return Output filename.
 #'
+#' @examples
+#' \dontrun{
+#' # Instrument myscript.R -> debug-myscript.R
+#' iaw$instrumentR("myscript.R")
+#'
+#' # Specify a custom output path
+#' iaw$instrumentR("analysis.R", output_file = "/tmp/analysis-debug.R")
+#'
+#' # Source the instrumented version to see line-by-line progress messages
+#' iaw$instrumentR("myscript.R")
+#' source("debug-myscript.R")
+#' }
+#'
 #' @family utilities
 #' @export
 
@@ -22,24 +35,37 @@ iaw$instrumentR <- function(input_file, output_file = NULL) {
 
     lines <- readLines(input_file, warn = FALSE)
 
-    # Check if a line looks incomplete (would continue on next line)
-    is_incomplete <- function(line) {
-        # Remove strings to avoid false positives
-        line_clean <- gsub('"[^"]*"', '""', line)
-        line_clean <- gsub("'[^']*'", "''", line_clean)
-        # Remove comments
-        line_clean <- sub("#.*$", "", line_clean)
-
-        trimmed <- trimws(line_clean)
-        if (trimmed == "") return(FALSE)
-
-        # Ends with continuation indicators
-        grepl("[,+*/|&<>=-]\\s*$|\\|>\\s*$|%[^%]*%\\s*$", trimmed) ||
-        # Has unclosed parens/brackets
-        nchar(gsub("[^({[]", "", line_clean)) > nchar(gsub("[^)}\\]]", "", line_clean))
+    # Strip strings and comments from a line for bracket/operator analysis
+    clean_line <- function(line) {
+        line <- gsub('"[^"]*"', '""', line)
+        line <- gsub("'[^']*'", "''", line)
+        sub("#.*$", "", line)
     }
 
-    out <- character(0)
+    # Check if a line ends with a continuation operator (ignoring brackets)
+    ends_with_operator <- function(line) {
+        trimmed <- trimws(clean_line(line))
+        if (trimmed == "") return(FALSE)
+        grepl("[,+*/|&<>=-]\\s*$|\\|>\\s*$|%[^%]*%\\s*$", trimmed)
+    }
+
+    # Check if a line is a continuation that must stay attached to previous line
+    is_continuation <- function(line, prev_eff = "") {
+        if (grepl("^\\s*(else|\\}\\s*else)", line)) return(TRUE)
+        if (grepl("^\\s*[|%]", line)) return(TRUE)
+        # Opening brace after ) or else/repeat is a block body, not a new statement
+        if (grepl("^\\s*\\{", line)) {
+            prev <- trimws(clean_line(prev_eff))
+            if (nchar(prev) > 0 &&
+                (grepl("\\)\\s*$", prev) || grepl("\\b(else|repeat)\\s*$", prev)))
+                return(TRUE)
+        }
+        FALSE
+    }
+
+    out <- vector("list", length(lines))
+    depth <- 0L  # running bracket depth across lines
+    prev_effective <- ""  # last non-blank non-comment line
 
     for (i in seq_along(lines)) {
         trimmed <- trimws(lines[i])
@@ -47,21 +73,33 @@ iaw$instrumentR <- function(input_file, output_file = NULL) {
         # Should we instrument before this line?
         should_instrument <- FALSE
 
-        if (trimmed != "" && !grepl("^#", trimmed) && !grepl("^[})\\]]+", trimmed)) {
-            # Check if previous line was incomplete
-            if (i == 1 || !is_incomplete(lines[i - 1])) {
+        if (trimmed != "" && !grepl("^#", trimmed) &&
+            !grepl("^[})\\]]+", trimmed) && !is_continuation(lines[i], prev_effective)) {
+            # Instrument only at bracket depth 0 and not after a continuation operator
+            if (depth == 0L && (i == 1L || !ends_with_operator(lines[i - 1]))) {
                 should_instrument <- TRUE
             }
         }
 
+        # Update running bracket depth from this line
+        lc <- clean_line(lines[i])
+        depth <- max(0L, depth +
+            nchar(gsub("[^({[]", "", lc)) - nchar(gsub("[^])}]", "", lc)))
+
         # Insert message if appropriate
         if (should_instrument) {
-            out <- c(out, sprintf('message("Line %d")', i))
+            out[[i]] <- c(sprintf('message("Line %d")', i), lines[i])
+        } else {
+            out[[i]] <- lines[i]
         }
 
-        # Add the original line
-        out <- c(out, lines[i])
+        # Track last effective line for continuation detection
+        if (trimmed != "" && !grepl("^#", trimmed)) {
+            prev_effective <- lines[i]
+        }
     }
+
+    out <- unlist(out)
 
     writeLines(out, output_file)
     message("Created: ", output_file)

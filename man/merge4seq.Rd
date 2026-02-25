@@ -21,3 +21,18 @@ Merged data frame.
 
 Other data-reshaping: \code{\link{long2wide}}, \code{\link{multimerge}}, \code{\link{wide2long}}
 }
+\examples{
+\dontrun{
+# Basic order-preserving merge
+x <- data.frame(id = c(3, 1, 2), val = c("c", "a", "b"))
+y <- data.frame(id = c(1, 2, 3), extra = c(10, 20, 30))
+result <- iaw$merge4seq(x, y, by = "id")
+result  # rows match original order of x: 3, 1, 2
+
+# Left join preserving x row order
+x2 <- data.frame(date = c(20230103, 20230101, 20230102), ret = c(0.3, 0.1, 0.2))
+y2 <- data.frame(date = c(20230101, 20230102, 20230103), mkt = c(0.5, 0.6, 0.7))
+iaw$merge4seq(x2, y2, by = "date")
+
+}
+}

@@ -22,6 +22,20 @@ Other parallel: \code{\link{mc.by}}, \code{\link{mclapply}}, \code{\link{mcsappl
 }
 \examples{
 \dontrun{
-iaw$mc.replicate(100, mean(rnorm(100)))
+# Estimate the sampling distribution of the mean via parallel simulation
+means <- iaw$mc.replicate(1000, mean(rnorm(100)))
+hist(means)
+
+# Bootstrap a correlation coefficient
+x <- rnorm(50); y <- x + rnorm(50)
+boot_cors <- iaw$mc.replicate(500, {
+  idx <- sample(50, replace = TRUE)
+  cor(x[idx], y[idx])
+})
+quantile(boot_cors, c(0.025, 0.975))  # 95\% bootstrap CI
+
+# Return a list (simplify = FALSE) when each replication yields a vector
+sims <- iaw$mc.replicate(200, rnorm(5), simplify = FALSE)
+length(sims)  # 200 elements, each of length 5
 }
 }

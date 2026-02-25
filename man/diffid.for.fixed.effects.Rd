@@ -21,7 +21,18 @@ De-meaned values with the same dimensions as h.
 Other data-manipulation: \code{\link{kill.useless.cols}}, \code{\link{recode}}, \code{\link{rename.columns}}, \code{\link{subset.data.frame}}
 }
 \examples{
+# Demean a vector within groups (firm fixed effects)
+y  <- c(3, 5, 4, 10, 12, 11)
+id <- c("A", "A", "A", "B", "B", "B")
+iaw$diffid.for.fixed.effects(y, id)   # A: -1,1,0  B: -1,1,0
+
+# Demean a matrix of regressors - all columns demeaned within firm
+X  <- matrix(c(1, 2, 3, 10, 11, 12,
+               0.1, 0.2, 0.3, 1.0, 1.1, 1.2), nrow = 6)
+iaw$diffid.for.fixed.effects(X, id)
+
 \dontrun{
+# Full within-estimator for fixed-effects regression
 newy <- iaw$diffid.for.fixed.effects(y, id)
 newx <- iaw$diffid.for.fixed.effects(X, id)
 iaw$olm(newy ~ newx)

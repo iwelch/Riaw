@@ -21,3 +21,18 @@ Combined data frame.
 
 Other parallel: \code{\link{mc.by}}, \code{\link{mc.replicate}}, \code{\link{mclapply}}, \code{\link{mcsapply}}, \code{\link{oc.by}}, \code{\link{rbind.oc.by}}
 }
+\examples{
+\dontrun{
+# Demean x within each group and return all rows combined
+df <- data.frame(
+  group = c("A", "A", "B", "B", "B"),
+  x     = c(1, 3, 2, 4, 6)
+)
+result <- iaw$rbind.mc.by(df, df$group, function(sub) {
+  sub$x_dm <- sub$x - mean(sub$x)
+  sub
+})
+result  # all rows combined into one data frame, preserving columns
+}
+
+}

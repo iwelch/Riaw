@@ -19,6 +19,16 @@
 #' x <- sin(1:100)
 #' y <- sin(2:101)
 #' iaw$autocorrel(x, y, leadlags = 3)
+#'
+#' # Stock returns: does yesterday's return predict today's?
+#' set.seed(7)
+#' ret <- rnorm(200)
+#' iaw$autocorrel(ret, ret, leadlags = 5)   # near-zero: consistent with EMH
+#'
+#' # Macro: CPI changes vs industrial production with asymmetric lags
+#' cpi <- cumsum(rnorm(120, mean = 0.002))
+#' ip  <- 0.5 * c(rep(NA, 3), cpi[-(120:118)]) + rnorm(120)
+#' iaw$autocorrel(ip, cpi, leadlags = 5)   # positive cor3: IP leads CPI by 3
 
 iaw$autocorrel <- function(series.x, series.y, leadlags = 5) {
     stopifnot(is.numeric(series.x), is.vector(series.x))

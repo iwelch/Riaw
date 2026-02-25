@@ -15,8 +15,20 @@
 #' @export
 #'
 #' @examples
+#' # Basic clipping: extremes pulled to bounds
 #' x <- c(-100, 1, 2, 3, 100)
 #' iaw$winsorize.level(x, c(0, 10))
+#'
+#' # Typical finance use: clip returns to +/-50%
+#' returns <- c(-0.8, -0.2, 0.0, 0.15, 1.2)
+#' iaw$winsorize.level(returns, c(-0.5, 0.5))
+#'
+#' # NA values are preserved
+#' iaw$winsorize.level(c(NA, -5, 0, 5, NA), c(-2, 2))
+#'
+#' # verbose = TRUE shows how many values were clipped
+#' iaw$winsorize.level(c(-10, 1, 2, 3, 10), c(0, 5),
+#'                     name = "myvar", verbose = TRUE)
 
 iaw$winsorize.level <- function(x, lvlminmax, name = NULL, verbose = FALSE) {
     stopifnot(is.numeric(x), length(lvlminmax)==2L)

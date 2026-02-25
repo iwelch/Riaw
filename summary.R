@@ -14,8 +14,23 @@
 #' @export
 #'
 #' @examples
+#' # Basic profile "p": n, pct NA, mean, sd, t-stat
+#' set.seed(1)
 #' df <- data.frame(x = rnorm(100), y = rnorm(100))
 #' iaw$summary(df, "p")
+#'
+#' # Extended profile "x" adds min/median/max
+#' iaw$summary(df, "x")
+#'
+#' # Default profile "X" adds quantiles and autocorrelation
+#' iaw$summary(df)
+#'
+#' # Works on a plain vector too
+#' iaw$summary(rnorm(200, mean = 0.01, sd = 0.1), "p")
+#'
+#' # Return profile with NA values to see pctna column
+#' df2 <- data.frame(a = c(1:50, rep(NA, 50)), b = rnorm(100))
+#' iaw$summary(df2, "p")
 
 iaw$summary <- function(df, verbose = "X", digits = 4) {
     if (is.vector(df) | is.matrix(df)) df <- data.frame(df)
@@ -78,7 +93,7 @@ iaw$summary <- function(df, verbose = "X", digits = 4) {
         s <- c()
         for (sw1 in statswanted) {
             s <- c(s, get(sw1, envir = stat_env)(x, na.rm = TRUE))
-            if (sw1 != "pall") names(s)[length(s)] <- sw1
+            if (!sw1 %in% c("pall", "pmost")) names(s)[length(s)] <- sw1
         }
         s
     }

@@ -17,8 +17,17 @@
 #' @seealso tidyr::pivot_wider(d, names_from = id.time, values_from = id.val)
 #'
 #' @examples
+#' # 2 firms x 2 years -> 2x2 wide matrix of returns
 #' df <- data.frame(firm = c("A","A","B","B"), year = c(1,2,1,2), val = 1:4)
 #' iaw$long2wide(df, "year", "firm", "val")
+#'
+#' # Typical panel: stock returns, pivot time to columns
+#' panel <- data.frame(
+#'   ticker = rep(c("AAPL","GOOG"), each = 3),
+#'   yyyymm = rep(c(202001, 202002, 202003), times = 2),
+#'   ret    = c(0.05, -0.02, 0.03, 0.01, 0.04, -0.01)
+#' )
+#' iaw$long2wide(panel, "yyyymm", "ticker", "ret")
 
 iaw$long2wide <- function(d, id.time, id.firm, id.val) {
     stopifnot(is.data.frame(d))

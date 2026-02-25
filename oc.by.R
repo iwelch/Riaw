@@ -12,6 +12,22 @@
 #'
 #' @return List of results.
 #'
+#' @examples
+#' # Compute per-group column means (serial version of mc.by)
+#' df <- data.frame(
+#'   group = c("A", "A", "B", "B", "B"),
+#'   x     = c(1, 3, 2, 4, 6),
+#'   y     = c(10, 20, 30, 40, 50)
+#' )
+#' result <- iaw$oc.by(df, df$group, function(sub) colMeans(sub[, c("x", "y")]))
+#' do.call(rbind, result)
+#'
+#' # Add a derived column within each group
+#' iaw$oc.by(df, df$group, function(sub) {
+#'   sub$z <- sub$x - mean(sub$x)
+#'   sub
+#' })
+#'
 #' @family parallel
 #' @export
 

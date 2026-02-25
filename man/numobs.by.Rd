@@ -19,3 +19,18 @@ Table of counts.
 
 Other utilities: \code{\link{ascii}}, \code{\link{base}}, \code{\link{beep}}, \code{\link{bisection}}, \code{\link{cat.both}}, \code{\link{cat.stderr}}, \code{\link{chatter}}, \code{\link{check.names}}, \code{\link{debug.advice}}, \code{\link{debug.on}}, \code{\link{dict.lookup}}, \code{\link{done}}, \code{\link{enable.error.line.num}}, \code{\link{exit}}, \code{\link{grepcolname}}, \code{\link{heartbeat}}, \code{\link{index.of.variable}}, \code{\link{instrumentR}}, \code{\link{kable}}, \code{\link{latex}}, \code{\link{latlon.distance}}, \code{\link{latlonx}}, \code{\link{mklatlonid}}, \code{\link{invlatlon}}, \code{\link{testlatlon}}, \code{\link{ls.objects}}, \code{\link{meminfo}}, \code{\link{mk.random.walk}}, \code{\link{mkRdictionary}}, \code{\link{msg}}, \code{\link{nearest}}, \code{\link{now}}, \code{\link{object.size.MB}}, \code{\link{osinfo}}, \code{\link{rdraw.perfect}}, \code{\link{require.variables}}, \code{\link{rexp.perfect}}, \code{\link{rnorm.perfect}}, \code{\link{runall}}, \code{\link{setupknitr}}, \code{\link{sink}}, \code{\link{sprint.data.frame}}, \code{\link{strcat}}, \code{\link{whatis}}, \code{\link{which.nearest}}
 }
+\examples{
+\dontrun{
+# Count observations per industry group
+df <- data.frame(
+  firm   = c("A", "B", "C", "D", "E"),
+  sector = c("Tech", "Finance", "Tech", "Finance", "Tech")
+)
+iaw$numobs.by(df, by = "sector")
+
+# Works with numeric group codes too
+df2 <- data.frame(ret = rnorm(6), year = c(2020, 2020, 2021, 2021, 2022, 2022))
+iaw$numobs.by(df2, by = "year")
+
+}
+}

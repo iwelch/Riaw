@@ -16,7 +16,17 @@
 #'
 #' @examples
 #' returns <- c(0.02, -0.01, 0.03, 0.01)
-#' iaw$compoundseries(returns)
+#' iaw$compoundseries(returns)   # cumulative: 0.02, 0.0098, 0.0401, 0.0505
+#'
+#' # Rolling 3-period compound return
+#' iaw$compoundseries(returns, window = 3)
+#'
+#' # Geometric mean return at each point
+#' iaw$compoundseries(returns, geomean = TRUE)
+#'
+#' # NA treated as zero return (missing data gap)
+#' ret_with_gap <- c(0.01, NA, 0.02, 0.03)
+#' iaw$compoundseries(ret_with_gap, na.is.zero = TRUE)
 
 iaw$compoundseries <- function(rate.of.return.timeseries, window = 0,
                                 geomean = FALSE, na.is.zero = FALSE) {
@@ -40,10 +50,12 @@ iaw$compoundseries <- function(rate.of.return.timeseries, window = 0,
         return(xx.w.0)
     }
     
-    cx <- c(0, iaw$compoundseries(xx, 0))
-    prevseries <- 1 + iaw$lagseries(cx, window)
+    ## Rolling window compound return: (1+cumret[t]) / (1+cumret[t-window]) - 1
+    ## Prepend 0 so the division works for the first `window` observations too.
+    cx <- c(0, iaw$compoundseries(xx, 0))        # cumulative returns, length n+1
+    prevseries <- 1 + iaw$lagseries(cx, window)   # denominator: wealth at t-window
     rv <- (1 + cx) / ifelse(is.na(prevseries), 1.0, prevseries) - 1
-    rv <- rv[2:length(rv)]
+    rv <- rv[2:length(rv)]                         # strip the prepended 0
     if (na.is.zero) rv[is.na(rate.of.return.timeseries)] <- NA
     rv
 }

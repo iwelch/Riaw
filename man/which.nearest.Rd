@@ -21,6 +21,18 @@ Other utilities: \code{\link{ascii}}, \code{\link{base}}, \code{\link{beep}}, \c
 }
 \examples{
 \dontrun{
-iaw$which.nearest(c(1, 5, 10), 7)
+iaw$which.nearest(c(1, 5, 10), 7)   # 2 (value 5 is nearest to 7)
+
+# Use the index to retrieve the nearest element
+v <- c(0.1, 0.5, 0.9, 1.5)
+idx <- iaw$which.nearest(v, 0.8)
+v[idx]                               # 0.9
+
+# Lookup nearest row in a sorted lookup table
+knots <- c(0, 25, 50, 75, 100)
+iaw$which.nearest(knots, 37)         # 2 (value 25)
+
+# Equidistant: first index wins (consistent with which.min)
+iaw$which.nearest(c(1, 3, 5), 2)    # 1
 }
 }

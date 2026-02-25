@@ -9,6 +9,16 @@
 #'
 #' @return Named vector.
 #'
+#' @examples
+#' # Map state abbreviations to full names
+#' d <- iaw$mkRdictionary(c("CA", "NY", "TX"),
+#'                         c("California", "New York", "Texas"))
+#' d["NY"]    # "New York"
+#'
+#' # Use as a lookup table
+#' codes <- c("CA", "TX", "CA", "NY")
+#' d[codes]   # returns the full names for each code
+#'
 #' @family utilities
 #' @export
 

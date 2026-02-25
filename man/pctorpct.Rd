@@ -22,8 +22,23 @@ Invisibly returns NULL.
 Other operators: \code{\link{\%and\%}}, \code{\link{\%inrange\%}}
 }
 \examples{
-\dontrun{
+# Execute right-hand side only when condition is FALSE (assertion style)
 x <- "hello"
 (is.character(x)) \%or\% stop("x must be a character")
+
+# Condition is FALSE: right-hand side fires
+\dontrun{
+(is.numeric(x)) \%or\% iaw$abort("x must be numeric")
+}
+
+# Guard a function with readable preconditions
+\dontrun{
+process <- function(n, label) {
+  (n > 0)             \%or\% iaw$abort("n must be positive")
+  (is.character(label)) \%or\% iaw$abort("label must be a string")
+  paste(label, 1:n)
+}
+process(3, "item")   # works fine
+process(-1, "item")  # aborts with message
 }
 }

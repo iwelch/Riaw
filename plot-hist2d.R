@@ -10,6 +10,21 @@
 #'
 #' @return Invisible NULL.
 #'
+#' @examples
+#' \dontrun{
+#' # 2D histogram of bivariate normal data
+#' set.seed(1)
+#' x <- rnorm(1000)
+#' y <- rnorm(1000)
+#' iaw$plot.hist2d(x, y)
+#'
+#' # Correlated variables with finer binning
+#' set.seed(2)
+#' x2 <- rnorm(2000)
+#' y2 <- 0.8 * x2 + rnorm(2000, sd = 0.6)
+#' iaw$plot.hist2d(x2, y2, nbins = 80)
+#' }
+#'
 #' @family plotting
 #' @export
 

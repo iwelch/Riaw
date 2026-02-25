@@ -20,5 +20,19 @@ Invisible NULL.
 }
 \seealso{
 
-Other plotting: \code{\link{as.PlotDate.yyyymmdd}}, \code{\link{plot.boxtext}}, \code{\link{colorblind}}, \code{\link{plot.contour}}, \code{\link{plot.ecdf.lineplot}}, \code{\link{plot.hist2d}}, \code{\link{hline}}, \code{\link{iaw.boxplot}}, \code{\link{plot.labelcurve}}, \code{\link{lambda2color}}, \code{\link{plot.loess.lineplot}}, \code{\link{MixColor}}, \code{\link{plot.native.slope}}, \code{\link{plot.p.arrows}}, \code{\link{plot.pdf.embedfonts}}, \code{\link{pdf.end}}, \code{\link{plot.pdf.start.bera}}, \code{\link{pdf.start}}, \code{\link{plot.timearea}}, \code{\link{plot.worldmap}}, \code{\link{plot.points.toomany}}, \code{\link{plot.shade.xyy}}, \code{\link{plot.text.onbg}}, \code{\link{vline}}, \code{\link{plot.yearly.tickmarks}}, \code{\link{plot.ylab.left}}
+Other plotting: \code{\link{as.PlotDate.yyyymmdd}}, \code{\link{plot.boxtext}}, \code{\link{colorblind}}, \code{\link{plot.contour}}, \code{\link{plot.ecdf.lineplot}}, \code{\link{plot.hist2d}}, \code{\link{hline}}, \code{\link{iaw.boxplot}}, \code{\link{plot.labelcurve}}, \code{\link{lambda2color}}, \code{\link{plot.loess.lineplot}}, \code{\link{MixColor}}, \code{\link{plot.native.slope}}, \code{\link{plot.p.arrows}}, \code{\link{plot.pdf.embedfonts}}, \code{\link{pdf.end}}, \code{\link{pdf.start}}, \code{\link{plot.pdf.start.bera}}, \code{\link{plot.timearea}}, \code{\link{plot.worldmap}}, \code{\link{plot.points.toomany}}, \code{\link{plot.shade.xyy}}, \code{\link{plot.text.onbg}}, \code{\link{vline}}, \code{\link{plot.yearly.tickmarks}}, \code{\link{plot.ylab.left}}
+}
+\examples{
+\dontrun{
+# Add a label with white background so it stands out on a busy plot
+plot(rnorm(200), rnorm(200), pch = 16, col = "gray60")
+iaw$plot.text.bg(0, 0, "Origin", bg = "white")
+
+# Yellow background annotation at a specific data point
+x <- 1:10
+y <- x^2
+plot(x, y, type = "b")
+iaw$plot.text.bg(5, 25, "peak zone", bg = "yellow", col = "darkred", font = 2)
+}
+
 }

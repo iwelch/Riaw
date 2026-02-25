@@ -21,6 +21,19 @@ Other type-checking: \code{\link{is.character}}, \code{\link{is.numeric}}, \code
 }
 \examples{
 \dontrun{
+# Check which strings contain the substring "ab"
 iaw$is.instring("ab", c("abc", "def", "ab"))
+
+# Filter a vector to keep only matching elements
+tickers <- c("AAPL", "MSFT", "AMZN", "AAPLX", "META")
+tickers[iaw$is.instring("AAPL", tickers)]
+
+# Case-sensitive: "AB" does not match "abc"
+iaw$is.instring("AB", c("abc", "ABC", "Ab"))
+
+# Useful for filtering data frame rows by a string column
+df <- data.frame(name = c("alpha", "beta", "alphabet"), val = 1:3,
+                 stringsAsFactors = FALSE)
+df[iaw$is.instring("alpha", df$name), ]
 }
 }

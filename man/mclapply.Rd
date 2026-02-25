@@ -25,6 +25,17 @@ Other parallel: \code{\link{mc.by}}, \code{\link{mc.replicate}}, \code{\link{mcs
 }
 \examples{
 \dontrun{
+# Square numbers in parallel
 iaw$mclapply(1:10, function(x) x^2)
+
+# Process a list of data frames in parallel, one per ticker
+tickers <- list(AAPL = df_aapl, MSFT = df_msft, GOOG = df_goog)
+results <- iaw$mclapply(tickers, function(d) lm(ret ~ mkt, data = d))
+
+# Use stop.on.error = FALSE to collect partial results despite failures
+out <- iaw$mclapply(1:5, function(x) {
+  if (x == 3) stop("bad element")
+  x^2
+}, stop.on.error = FALSE)
 }
 }

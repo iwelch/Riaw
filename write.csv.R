@@ -9,9 +9,7 @@
 #' @param ... Arguments passed to fwrite.
 #' @param allow.overwrite Allow overwriting existing files.
 #' @param abort.on.overwrite Abort if file exists.
-#' @param verbose Print file info.
-#' @param use.data.table Retained for compatibility.
-#' @param gzip.in.background Retained for compatibility.
+#' @param quiet If TRUE, suppress file info message. Default FALSE.
 #'
 #' @return Invisibly returns input object.
 #'
@@ -22,15 +20,23 @@
 #'
 #' @examples
 #' \dontrun{
+#' # Basic write
 #' iaw$write.csv(df, "output.csv")
+#'
+#' # Write compressed CSV, suppress confirmation message
+#' iaw$write.csv(df, "output.csv.gz", quiet = TRUE)
+#'
+#' # Protect against accidental overwrites - abort if file already exists
+#' iaw$write.csv(df, "results.csv", abort.on.overwrite = TRUE)
+#'
+#' # Pass fwrite options: use tab separator
+#' iaw$write.csv(df, "output.csv", sep = "\t")
 #' }
 
 iaw$write.csv <- function(object, filename, ...,
                            allow.overwrite = TRUE,
                            abort.on.overwrite = FALSE,
-                           verbose = FALSE,
-                           use.data.table = TRUE,
-                           gzip.in.background = FALSE) {
+                           quiet = FALSE) {
     stopifnot(is.data.frame(object))
     stopifnot(is.character(filename), length(filename) == 1L)
 
@@ -42,21 +48,24 @@ iaw$write.csv <- function(object, filename, ...,
         }
     }
 
-    stopifnot(grepl(".csv$", filename) | grepl("sv.gz$", filename))
+    stopifnot(grepl("\\.csv$", filename) | grepl("\\.csv\\.gz$", filename))
 
     # if (verbose) cat("[write.csv: saving", filename, "]\n")
 
     data.table::fwrite(object, file = filename, ...)
     iaw$.Riolog("O", filename)
 
-    if (verbose) {
-        cat("[wrote:", nrow(object), "rows & ", ncol(object), "cols to", filename, "]\n")
-    } else {
-        message("[iaw$write.csv: wrote: ", nrow(object), " rows & ", ncol(object), " cols to ", filename, "]\n")
+    if (!quiet) {
+        message("[wrote: ", nrow(object), " rows & ", ncol(object), " cols to ", filename, "]")
     }
 
     invisible(object)
 }
 
+#' @rdname write.csv
+#' @export
 iaw$write.csv.gz <- iaw$write.csv
+
+#' @rdname write.csv
+#' @export
 iaw$fwrite <- iaw$write.csv

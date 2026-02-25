@@ -19,5 +19,18 @@ Invisible NULL.
 }
 \seealso{
 
-Other plotting: \code{\link{as.PlotDate.yyyymmdd}}, \code{\link{colorblind}}, \code{\link{plot.contour}}, \code{\link{plot.ecdf.lineplot}}, \code{\link{plot.hist2d}}, \code{\link{hline}}, \code{\link{iaw.boxplot}}, \code{\link{plot.labelcurve}}, \code{\link{lambda2color}}, \code{\link{plot.loess.lineplot}}, \code{\link{MixColor}}, \code{\link{plot.native.slope}}, \code{\link{plot.p.arrows}}, \code{\link{plot.pdf.embedfonts}}, \code{\link{pdf.end}}, \code{\link{plot.pdf.start.bera}}, \code{\link{pdf.start}}, \code{\link{plot.timearea}}, \code{\link{plot.worldmap}}, \code{\link{plot.points.toomany}}, \code{\link{plot.shade.xyy}}, \code{\link{plot.text.bg}}, \code{\link{plot.text.onbg}}, \code{\link{vline}}, \code{\link{plot.yearly.tickmarks}}, \code{\link{plot.ylab.left}}
+Other plotting: \code{\link{as.PlotDate.yyyymmdd}}, \code{\link{colorblind}}, \code{\link{plot.contour}}, \code{\link{plot.ecdf.lineplot}}, \code{\link{plot.hist2d}}, \code{\link{hline}}, \code{\link{iaw.boxplot}}, \code{\link{plot.labelcurve}}, \code{\link{lambda2color}}, \code{\link{plot.loess.lineplot}}, \code{\link{MixColor}}, \code{\link{plot.native.slope}}, \code{\link{plot.p.arrows}}, \code{\link{plot.pdf.embedfonts}}, \code{\link{pdf.end}}, \code{\link{pdf.start}}, \code{\link{plot.pdf.start.bera}}, \code{\link{plot.timearea}}, \code{\link{plot.worldmap}}, \code{\link{plot.points.toomany}}, \code{\link{plot.shade.xyy}}, \code{\link{plot.text.bg}}, \code{\link{plot.text.onbg}}, \code{\link{vline}}, \code{\link{plot.yearly.tickmarks}}, \code{\link{plot.ylab.left}}
+}
+\examples{
+\dontrun{
+# Add a label with a box background on an existing plot
+plot(1:10, 1:10)
+iaw$plot.boxtext(5, 5, "Center label")
+
+# Customize text appearance
+plot(1:10, 1:10, type = "n")
+iaw$plot.boxtext(3, 7, "Group A", col = "blue", cex = 1.2)
+iaw$plot.boxtext(7, 3, "Group B", col = "red",  cex = 1.2)
+}
+
 }

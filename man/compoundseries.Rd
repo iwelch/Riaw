@@ -24,6 +24,16 @@ Other time-series: \code{\link{chgseries}}, \code{\link{cumulateseries}}, \code{
 \examples{
 \dontrun{
 returns <- c(0.02, -0.01, 0.03, 0.01)
-iaw$compoundseries(returns)
+iaw$compoundseries(returns)   # cumulative: 0.02, 0.0098, 0.0401, 0.0505
+
+# Rolling 3-period compound return
+iaw$compoundseries(returns, window = 3)
+
+# Geometric mean return at each point
+iaw$compoundseries(returns, geomean = TRUE)
+
+# NA treated as zero return (missing data gap)
+ret_with_gap <- c(0.01, NA, 0.02, 0.03)
+iaw$compoundseries(ret_with_gap, na.is.zero = TRUE)
 }
 }

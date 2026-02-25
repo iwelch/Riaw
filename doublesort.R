@@ -13,13 +13,26 @@
 #'
 #' @family data-manipulation
 #' @export
+#'
+#' @examples
+#' # Simple case: 9 stocks, 3 per group, size then value double-sort
+#' size  <- c(1, 2, 3, 4, 5, 6, 7, 8, 9)
+#' value <- c(9, 3, 7, 1, 5, 8, 2, 6, 4)
+#' iaw$doublesort(size, value, NUMPERGROUP = 3)
+#'
+#' # Larger example with excluded middle observations (N not divisible)
+#' crit1 <- c(4, 9, 13, 11, 5, 7, 10, 1, 12, 8, 3, 6, 2)
+#' crit2 <- c(-1, 10, 104, 103, 22, -99, 102, 1, 105, 11, 2, 33, -2)
+#' iaw$doublesort(crit1, crit2, NUMPERGROUP = 4)  # NA = excluded middle obs
 
+#' @keywords internal
 iaw$.mkusefullist <- function(N, NUMPERGROUP) {
   NUMGROUPS <- N %/% NUMPERGROUP
   KEEP <- NUMGROUPS * NUMPERGROUP
   RMNUM <- N - KEEP
-  HALFKEEP <- KEEP %/% 2
-  c(seq_len(HALFKEEP), rep(NA, RMNUM), HALFKEEP + seq_len(HALFKEEP))
+  FIRSTHALF <- KEEP %/% 2
+  SECONDHALF <- KEEP - FIRSTHALF
+  c(seq_len(FIRSTHALF), rep(NA, RMNUM), FIRSTHALF + seq_len(SECONDHALF))
 }
 
 iaw$doublesort <- function(crit.holdconstant, crit.spread, NUMPERGROUP = 5) {

@@ -17,11 +17,19 @@ Numeric vector converted to the other format.
 }
 \seealso{
 
-Other datetime: \code{\link{diffdays}}, \code{\link{epoch2nyc}}, \code{\link{epoch2POSIXct}}, \code{\link{epoch2yyyymmdd}}, \code{\link{tmdiffsec}}, \code{\link{yyyymmdd}}
+Other datetime: \code{\link{diffdays}}, \code{\link{epoch2POSIXct}}, \code{\link{epoch2nyc}}, \code{\link{epoch2yyyymmdd}}, \code{\link{tmdiffsec}}, \code{\link{yyyymmdd}}
 }
 \examples{
 \dontrun{
-iaw$yyyymmdd.toggle(20210115)
-iaw$yyyymmdd.toggle(18642)  # back to YYYYMMDD
+iaw$yyyymmdd.toggle(20210115)   # -> 18642 (days since 1970-01-01)
+iaw$yyyymmdd.toggle(18642)      # -> 20210115 (back to YYYYMMDD)
+
+# Useful for doing date arithmetic: add 30 days then convert back
+greg <- iaw$yyyymmdd.toggle(20230601)
+iaw$yyyymmdd.toggle(greg + 30)  # 30 days later as YYYYMMDD
+
+# Vectorised: convert a column of dates
+dates <- c(20200101, 20201231, 20210630)
+iaw$yyyymmdd.toggle(dates)
 }
 }

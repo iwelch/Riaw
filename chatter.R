@@ -1,51 +1,45 @@
-#' Toggle Console Output Verbosity ("Chatter")
+#' Toggle Console Output Verbosity
 #'
-#' Creates a closure-based function that controls whether console messages and
-#' output are printed (`"verbose"`) or temporarily suppressed (`"quiet"`).
+#' @name chatter
 #'
-#' When in `"quiet"` mode, both standard output and message streams are redirected
-#' to a temporary file (`/tmp/R-suppressed.Rout`), allowing silent loading of
-#' packages or functions that normally print a lot of information.
-#' When switched back to `"verbose"`, both sinks are closed, the connection is
-#' released, and normal console output resumes.
+#' Controls whether console messages and output are printed (\code{"verbose"})
+#' or suppressed (\code{"quiet"}). In quiet mode, both output and message
+#' streams are redirected to \code{/tmp/R-suppressed.Rout}.
 #'
-#' If called with no arguments, the current chatter state is returned invisibly
-#' (`"quiet"` or `"verbose"`), allowing you to query the mode.
+#' Implemented as a closure factory (\code{make_chatter}). Call with no
+#' arguments to query the current state.
 #'
-#' @return
-#' A function that toggles or queries the current verbosity state.
-#' Each call returns (invisibly) the active state.
+#' @param quiet.verbose Character scalar: \code{"quiet"}, \code{"verbose"},
+#'   \code{""} (no-op), or missing (query mode).
 #'
-#' @param quiet.verbose Character scalar; must be one of:
-#'   \describe{
-#'     \item{"quiet"}{Suppress console chatter by redirecting output and messages.}
-#'     \item{"verbose"}{Re-enable normal console output and close the sink.}
-#'     \item{""}{No effect (used internally).}
-#'     \item{missing}{If no argument is provided, returns the current state.}
-#'   }
+#' @return The current state (\code{"quiet"} or \code{"verbose"}).
 #'
-#' @details
-#' Internally, two closure variables persist between calls:
-#' \itemize{
-#'   \item `toggle_state` — the current verbosity mode.
-#'   \item `filecon` — the connection used for temporary output suppression.
-#' }
-#' No global variables are created or modified.
+#' @family utilities
+#' @export
 #'
 #' @examples
+#' # Query current verbosity mode (no argument)
 #' \dontrun{
-#' # Attach to existing iaw environment or list
-#' iaw$chatter <- make_chatter()
+#' iaw$chatter()
+#' }
 #'
-#' iaw$chatter("quiet")     # Suppress output
-#' iaw$chatter("verbose")   # Restore normal output
+#' # Suppress noisy library loading, then restore
+#' \dontrun{
+#' iaw$chatter("quiet")
+#' library(data.table)   # startup messages go to file, not console
+#' library(lfe)
+#' iaw$chatter("verbose")
+#' }
 #'
-#' iaw$chatter()            # Query current mode (returns "verbose" or "quiet")
+#' # Typical pattern: wrap a block of code that produces output
+#' \dontrun{
+#' iaw$chatter("quiet")
+#' source("setup_heavy_libs.R")
+#' iaw$chatter("verbose")
+#' iaw$msg("all libraries loaded")
 #' }
 #'
 #' @seealso [sink()], [message()]
-#'
-#' @export
 
 make_chatter <- function() {
 

@@ -30,3 +30,17 @@ Called for side effect. Opens a PDF device.
 
 Other plotting: \code{\link{as.PlotDate.yyyymmdd}}, \code{\link{plot.boxtext}}, \code{\link{colorblind}}, \code{\link{plot.contour}}, \code{\link{plot.ecdf.lineplot}}, \code{\link{plot.hist2d}}, \code{\link{hline}}, \code{\link{iaw.boxplot}}, \code{\link{plot.labelcurve}}, \code{\link{lambda2color}}, \code{\link{plot.loess.lineplot}}, \code{\link{MixColor}}, \code{\link{plot.native.slope}}, \code{\link{plot.p.arrows}}, \code{\link{plot.pdf.embedfonts}}, \code{\link{pdf.end}}, \code{\link{plot.pdf.start.bera}}, \code{\link{plot.timearea}}, \code{\link{plot.worldmap}}, \code{\link{plot.points.toomany}}, \code{\link{plot.shade.xyy}}, \code{\link{plot.text.bg}}, \code{\link{plot.text.onbg}}, \code{\link{vline}}, \code{\link{plot.yearly.tickmarks}}, \code{\link{plot.ylab.left}}
 }
+\examples{
+\dontrun{
+# Open a PDF, draw a plot, close it
+iaw$pdf.start("myplot")
+plot(1:10, main = "Test")
+iaw$pdf.end()
+
+# Smaller custom dimensions
+iaw$pdf.start("narrow", wd = 5, ht = 4)
+hist(rnorm(200))
+iaw$pdf.end()
+}
+
+}

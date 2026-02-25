@@ -19,3 +19,23 @@ Numeric vector.
 
 Other utilities: \code{\link{ascii}}, \code{\link{base}}, \code{\link{beep}}, \code{\link{bisection}}, \code{\link{cat.both}}, \code{\link{cat.stderr}}, \code{\link{chatter}}, \code{\link{check.names}}, \code{\link{debug.advice}}, \code{\link{debug.on}}, \code{\link{dict.lookup}}, \code{\link{done}}, \code{\link{enable.error.line.num}}, \code{\link{exit}}, \code{\link{grepcolname}}, \code{\link{heartbeat}}, \code{\link{index.of.variable}}, \code{\link{instrumentR}}, \code{\link{kable}}, \code{\link{latex}}, \code{\link{latlon.distance}}, \code{\link{latlonx}}, \code{\link{mklatlonid}}, \code{\link{invlatlon}}, \code{\link{testlatlon}}, \code{\link{ls.objects}}, \code{\link{meminfo}}, \code{\link{mk.random.walk}}, \code{\link{mkRdictionary}}, \code{\link{msg}}, \code{\link{nearest}}, \code{\link{now}}, \code{\link{numobs.by}}, \code{\link{object.size.MB}}, \code{\link{osinfo}}, \code{\link{require.variables}}, \code{\link{rexp.perfect}}, \code{\link{rnorm.perfect}}, \code{\link{runall}}, \code{\link{setupknitr}}, \code{\link{sink}}, \code{\link{sprint.data.frame}}, \code{\link{strcat}}, \code{\link{whatis}}, \code{\link{which.nearest}}
 }
+\examples{
+\dontrun{
+# Normal draws with exact quantiles
+x <- iaw$rdraw.perfect(100, qnorm)
+mean(x)  # Very close to 0
+sd(x)    # Very close to 1
+
+# Uniform draws covering [0, 1] evenly
+u <- iaw$rdraw.perfect(10, qunif)
+sort(u)   # 0.05, 0.15, ..., 0.95
+
+# Exponential draws
+e <- iaw$rdraw.perfect(50, qexp)
+mean(e)  # Close to 1 (theoretical mean of Exp(1))
+
+# Custom quantile function via closure
+q_t5 <- function(p) qt(p, df = 5)
+iaw$rdraw.perfect(20, q_t5)
+}
+}

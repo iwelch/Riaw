@@ -9,6 +9,21 @@
 #'
 #' @return Invisible TRUE if valid, otherwise stops with diagnostic.
 #'
+#' @examples
+#' # Build a rectangular list (2 data frames, same number of columns)
+#' res <- list(
+#'   data.frame(a = 1:3, b = 4:6),
+#'   data.frame(a = 7:9, b = 10:12)
+#' )
+#' iaw$by.check.rectangular(res)  # returns invisible TRUE
+#'
+#' # A mismatched list triggers a descriptive error
+#' bad <- list(
+#'   data.frame(a = 1, b = 2),
+#'   data.frame(a = 3, b = 4, c = 5)
+#' )
+#' tryCatch(iaw$by.check.rectangular(bad), error = function(e) message(e$message))
+#'
 #' @family utilities
 #' @export
 

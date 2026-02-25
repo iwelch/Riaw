@@ -18,5 +18,15 @@ Other utilities: \code{\link{ascii}}, \code{\link{base}}, \code{\link{beep}}, \c
 \examples{
 \dontrun{
 iaw$osinfo()
+
+# Access individual fields
+info <- iaw$osinfo()
+info$sysname     # e.g. "Darwin" or "Linux"
+info$R_version   # e.g. "R version 4.3.2 (2023-10-31)"
+
+# Conditionally run platform-specific code
+if (iaw$osinfo()$sysname == "Darwin") {
+  message("Running on macOS")
+}
 }
 }

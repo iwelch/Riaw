@@ -11,6 +11,21 @@
 #'
 #' @return Combined data frame.
 #'
+#' @examples
+#' # Demean x within each group and rbind all groups back together
+#' df <- data.frame(
+#'   group = c("A", "A", "B", "B", "B"),
+#'   x     = c(1, 3, 2, 4, 6)
+#' )
+#' result <- iaw$rbind.oc.by(df, df$group, function(sub) {
+#'   sub$x_dm <- sub$x - mean(sub$x)
+#'   sub
+#' })
+#' result  # 5-row data frame with x_dm column added
+#'
+#' # Filter rows within groups and recombine
+#' iaw$rbind.oc.by(df, df$group, function(sub) sub[sub$x > mean(sub$x), ])
+#'
 #' @family parallel
 #' @export
 

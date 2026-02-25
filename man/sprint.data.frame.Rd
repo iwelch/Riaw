@@ -19,3 +19,15 @@ Invisible data frame.
 
 Other utilities: \code{\link{ascii}}, \code{\link{base}}, \code{\link{beep}}, \code{\link{bisection}}, \code{\link{cat.both}}, \code{\link{cat.stderr}}, \code{\link{chatter}}, \code{\link{check.names}}, \code{\link{debug.advice}}, \code{\link{debug.on}}, \code{\link{dict.lookup}}, \code{\link{done}}, \code{\link{enable.error.line.num}}, \code{\link{exit}}, \code{\link{grepcolname}}, \code{\link{heartbeat}}, \code{\link{index.of.variable}}, \code{\link{instrumentR}}, \code{\link{kable}}, \code{\link{latex}}, \code{\link{latlon.distance}}, \code{\link{latlonx}}, \code{\link{mklatlonid}}, \code{\link{invlatlon}}, \code{\link{testlatlon}}, \code{\link{ls.objects}}, \code{\link{meminfo}}, \code{\link{mk.random.walk}}, \code{\link{mkRdictionary}}, \code{\link{msg}}, \code{\link{nearest}}, \code{\link{now}}, \code{\link{numobs.by}}, \code{\link{object.size.MB}}, \code{\link{osinfo}}, \code{\link{rdraw.perfect}}, \code{\link{require.variables}}, \code{\link{rexp.perfect}}, \code{\link{rnorm.perfect}}, \code{\link{runall}}, \code{\link{setupknitr}}, \code{\link{sink}}, \code{\link{strcat}}, \code{\link{whatis}}, \code{\link{which.nearest}}
 }
+\examples{
+\dontrun{
+df <- data.frame(id = 1:3, name = c("Alice", "Bob", "Carol"), score = c(88, 92, 79))
+s <- iaw$sprint.data.frame(df)
+cat(s, "\n")
+
+# Limit to first 2 rows
+big <- data.frame(x = 1:10, y = letters[1:10])
+cat(iaw$sprint.data.frame(big, n = 2), "\n")
+
+}
+}

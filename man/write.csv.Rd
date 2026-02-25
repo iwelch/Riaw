@@ -23,10 +23,20 @@ Invisibly returns input object.
 }
 \seealso{
 
-Other io: \code{\link{lock}}, \code{\link{read.csv}}, \code{\link{.Riolog}}, \code{\link{touch}}
+Other io: \code{\link{.Riolog}}, \code{\link{lock}}, \code{\link{read.csv}}, \code{\link{touch}}
 }
 \examples{
 \dontrun{
+# Basic write
 iaw$write.csv(df, "output.csv")
+
+# Write compressed CSV, suppress confirmation message
+iaw$write.csv(df, "output.csv.gz", quiet = TRUE)
+
+# Protect against accidental overwrites - abort if file already exists
+iaw$write.csv(df, "results.csv", abort.on.overwrite = TRUE)
+
+# Pass fwrite options: use tab separator
+iaw$write.csv(df, "output.csv", sep = "\t")
 }
 }

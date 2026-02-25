@@ -12,8 +12,19 @@
 #' @export
 #'
 #' @examples
-#' iaw$whatis(1:10)
-#' iaw$whatis(data.frame(a = 1))
+#' iaw$whatis(1:10)                        # "integer (integer) length=10"
+#' iaw$whatis(data.frame(a = 1))           # "data.frame (list) [1x1]"
+#'
+#' # Matrix shows dimensions
+#' iaw$whatis(matrix(1:6, nrow = 2))       # "matrix (integer) [2x3]"
+#'
+#' # List and logical
+#' iaw$whatis(list(a = 1, b = "x"))        # "list (list) length=2"
+#' iaw$whatis(c(TRUE, FALSE, TRUE))        # "logical (logical) length=3"
+#'
+#' # Useful for quick inspection inside scripts
+#' x <- rnorm(50)
+#' message(iaw$whatis(x))                  # "numeric (double) length=50"
 
 iaw$whatis <- function(x) {
     type <- typeof(x)

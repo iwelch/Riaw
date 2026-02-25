@@ -18,3 +18,13 @@ Never returns; always stops with an error.
 
 Other regression: \code{\link{famamacbeth}}, \code{\link{neweywest}}, \code{\link{olm}}, \code{\link{ooslm}}, \code{\link{print.olm}}, \code{\link{residuals}}
 }
+\examples{
+\dontrun{
+# ols.nona is deprecated; calling it always stops with a message
+iaw$ols.nona()
+# Use RcppArmadillo::fastLm instead:
+# library(RcppArmadillo)
+# fastLm(y ~ x, data = df)
+}
+
+}

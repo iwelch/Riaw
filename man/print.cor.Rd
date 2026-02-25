@@ -22,8 +22,21 @@ Other statistics: \code{\link{autocorrel}}, \code{\link{autopcorrel}}, \code{\li
 }
 \examples{
 \dontrun{
+# Simple two-variable correlation matrix
+set.seed(42)
+df <- data.frame(x = rnorm(30), y = rnorm(30), z = rnorm(30))
+iaw$print.cor(df)
+
+# Strongly correlated variables
 x <- sin(1:50) + rnorm(50, sd = 0.1)
 y <- sin(2:51) + rnorm(50, sd = 0.1)
-iaw$print.cor( data.frame(x,y) )
+iaw$print.cor(data.frame(x, y))
+
+# More decimal places for fine-grained display
+iaw$print.cor(data.frame(x, y), digits = 4)
+
+# Matrix input also works
+m <- matrix(c(x, y), ncol = 2, dimnames = list(NULL, c("x", "y")))
+iaw$print.cor(m)
 }
 }

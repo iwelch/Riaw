@@ -23,7 +23,19 @@ Other time-series: \code{\link{chgseries}}, \code{\link{compoundseries}}, \code{
 }
 \examples{
 \dontrun{
+# Lead by 1: first value becomes the second element, last becomes NA
 x <- c(1, 2, 3, 4, 5)
-iaw$leadseries(x)
+iaw$leadseries(x)          # 2 3 4 5 NA
+
+# Lead by 2 periods
+iaw$leadseries(x, numleads = 2)  # 3 4 5 NA NA
+
+# Panel-aware lead: does not bleed across group boundaries
+panel <- data.frame(
+  firm = c("A","A","A","B","B","B"),
+  t    = c(1, 2, 3, 1, 2, 3),
+  ret  = c(0.01, 0.02, 0.03, 0.10, 0.11, 0.12)
+)
+iaw$leadseries(panel$ret, panelid = panel$firm, timeid = panel$t)
 }
 }

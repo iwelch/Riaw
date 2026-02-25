@@ -19,10 +19,19 @@ Integer YYYYMMDD.
 }
 \seealso{
 
-Other datetime: \code{\link{diffdays}}, \code{\link{epoch2nyc}}, \code{\link{epoch2POSIXct}}, \code{\link{tmdiffsec}}, \code{\link{yyyymmdd.toggle}}, \code{\link{yyyymmdd}}
+Other datetime: \code{\link{diffdays}}, \code{\link{epoch2POSIXct}}, \code{\link{epoch2nyc}}, \code{\link{tmdiffsec}}, \code{\link{yyyymmdd.toggle}}, \code{\link{yyyymmdd}}
 }
 \examples{
 \dontrun{
-iaw$epoch2yyyymmdd(1609459200)
+iaw$epoch2yyyymmdd(1609459200)   # 20210101 (2021-01-01 00:00 UTC)
+
+# Convert a vector of timestamps
+iaw$epoch2yyyymmdd(c(0, 86400, 1000000000))   # 19700101, 19700102, 20010909
+
+# Extract HHMMSS from the same timestamp
+iaw$epoch2hhmmss(1609459200 + 3723)   # 10123 -> 01:01:23 UTC
+
+# Use a local timezone instead of UTC
+iaw$epoch2yyyymmdd(1609459200, tz = "America/New_York")  # still 20201231 EST
 }
 }

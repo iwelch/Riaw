@@ -25,5 +25,16 @@ Other statistics: \code{\link{autocorrel}}, \code{\link{cmpsum}}, \code{\link{co
 x <- sin(1:50) + rnorm(50, sd = 0.1)
 y <- sin(2:51) + rnorm(50, sd = 0.1)
 iaw$autopcorrel(x, y, around = 3)
+
+# With a macro series: does GDP growth predict future inflation?
+set.seed(42)
+gdp <- cumsum(rnorm(80))
+inf <- 0.4 * c(NA, gdp[-80]) + rnorm(80)   # inflation lags GDP by 1
+pc <- iaw$autopcorrel(gdp, inf, around = 4)
+pc   # pcor-1 should be largest, showing GDP leads inflation by 1 period
+
+# Compare partial correlations to simple cross-correlations
+cc <- iaw$autocorrel(gdp, inf, leadlags = 4)
+rbind(partial = pc[-1], simple = cc)  # partial controls for other lags
 }
 }

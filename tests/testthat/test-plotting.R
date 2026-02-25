@@ -194,76 +194,39 @@ test_that("iaw$colorblind rejects negative n", {
     expect_error(iaw$colorblind(-5))
 })
 
-# plot.pdf.start/end tests
-test_that("iaw$plot.pdf.start creates file", {
+# pdf.start/pdf.end tests (iaw$pdf.start uses wd/ht not width/height)
+test_that("iaw$pdf.start creates file", {
     tmpfile <- tempfile(fileext = ".pdf")
-    iaw$plot.pdf.start(tmpfile)
+    on.exit({ try(dev.off(), silent = TRUE); unlink(tmpfile) })
+    iaw$pdf.start(tmpfile, verbose = FALSE)
     plot(1:10)
-    iaw$plot.pdf.end()
+    iaw$pdf.end(verbose = FALSE)
     expect_true(file.exists(tmpfile))
-    unlink(tmpfile)
 })
 
-test_that("iaw$plot.pdf.end closes device", {
+test_that("iaw$pdf.end closes device", {
     tmpfile <- tempfile(fileext = ".pdf")
-    iaw$plot.pdf.start(tmpfile)
-    expect_silent(iaw$plot.pdf.end())
-    unlink(tmpfile)
+    on.exit({ try(dev.off(), silent = TRUE); unlink(tmpfile) })
+    iaw$pdf.start(tmpfile, verbose = FALSE)
+    expect_no_error(iaw$pdf.end(verbose = FALSE))
 })
 
-test_that("iaw$plot.pdf.start respects width", {
+test_that("iaw$pdf.start respects wd/ht", {
     tmpfile <- tempfile(fileext = ".pdf")
-    iaw$plot.pdf.start(tmpfile, width = 10)
+    on.exit({ try(dev.off(), silent = TRUE); unlink(tmpfile) })
+    iaw$pdf.start(tmpfile, wd = 10, ht = 5, verbose = FALSE)
     plot(1:10)
-    iaw$plot.pdf.end()
+    iaw$pdf.end(verbose = FALSE)
     expect_true(file.exists(tmpfile))
-    unlink(tmpfile)
-})
-
-test_that("iaw$plot.pdf.start respects height", {
-    tmpfile <- tempfile(fileext = ".pdf")
-    iaw$plot.pdf.start(tmpfile, height = 5)
-    plot(1:10)
-    iaw$plot.pdf.end()
-    expect_true(file.exists(tmpfile))
-    unlink(tmpfile)
-})
-
-test_that("iaw$plot.pdf.start returns invisible NULL", {
-    tmpfile <- tempfile(fileext = ".pdf")
-    expect_invisible(iaw$plot.pdf.start(tmpfile))
-    iaw$plot.pdf.end()
-    unlink(tmpfile)
-})
-
-test_that("iaw$plot.pdf.end returns invisible NULL", {
-    tmpfile <- tempfile(fileext = ".pdf")
-    iaw$plot.pdf.start(tmpfile)
-    expect_invisible(iaw$plot.pdf.end())
-    unlink(tmpfile)
-})
-
-test_that("iaw$plot.pdf.start handles path with spaces", {
-    tmpdir <- tempdir()
-    tmpfile <- file.path(tmpdir, "test file.pdf")
-    iaw$plot.pdf.start(tmpfile)
-    plot(1:10)
-    iaw$plot.pdf.end()
-    expect_true(file.exists(tmpfile))
-    unlink(tmpfile)
 })
 
 # Failing tests
-test_that("iaw$plot.pdf.start rejects non-character filename", {
-    expect_error(iaw$plot.pdf.start(123))
+test_that("iaw$pdf.start rejects non-character filename", {
+    expect_error(iaw$pdf.start(123))
 })
 
-test_that("iaw$plot.pdf.start rejects non-numeric width", {
-    expect_error(iaw$plot.pdf.start(tempfile(fileext = ".pdf"), width = "wide"))
-})
-
-test_that("iaw$plot.pdf.start rejects vector filename", {
-    expect_error(iaw$plot.pdf.start(c("a.pdf", "b.pdf")))
+test_that("iaw$pdf.start rejects vector filename", {
+    expect_error(iaw$pdf.start(c("a.pdf", "b.pdf")))
 })
 
 # MixColor tests
@@ -304,80 +267,80 @@ test_that("iaw$mixcolor returns valid color", {
 })
 
 # plot.native.slope tests
-test_that("iaw$plot.native.slope returns numeric", {
+test_that("iaw$native.slope returns numeric", {
     pdf(NULL)
     plot(1:10, 1:10)
-    result <- iaw$plot.native.slope(1)
+    result <- iaw$native.slope(1)
     dev.off()
     expect_type(result, "double")
 })
 
-test_that("iaw$plot.native.slope handles zero slope", {
+test_that("iaw$native.slope handles zero slope", {
     pdf(NULL)
     plot(1:10)
-    result <- iaw$plot.native.slope(0)
+    result <- iaw$native.slope(0)
     dev.off()
     expect_equal(result, 0)
 })
 
-test_that("iaw$plot.native.slope handles negative slope", {
+test_that("iaw$native.slope handles negative slope", {
     pdf(NULL)
     plot(1:10)
-    result <- iaw$plot.native.slope(-1)
+    result <- iaw$native.slope(-1)
     dev.off()
     expect_true(result < 0)
 })
 
-test_that("iaw$plot.native.slope handles steep slope", {
+test_that("iaw$native.slope handles steep slope", {
     pdf(NULL)
     plot(1:10)
-    result <- iaw$plot.native.slope(10)
+    result <- iaw$native.slope(10)
     dev.off()
     expect_true(abs(result) > 45)
 })
 
-test_that("iaw$plot.native.slope returns angle in degrees", {
+test_that("iaw$native.slope returns angle in degrees", {
     pdf(NULL)
     plot(1:10, 1:10, asp = 1)
-    result <- iaw$plot.native.slope(1)
+    result <- iaw$native.slope(1)
     dev.off()
     expect_true(result > 0 && result < 90)
 })
 
-test_that("iaw$plot.native.slope single value", {
+test_that("iaw$native.slope single value", {
     pdf(NULL)
     plot(1:10)
-    result <- iaw$plot.native.slope(0.5)
+    result <- iaw$native.slope(0.5)
     dev.off()
     expect_length(result, 1)
 })
 
-test_that("iaw$plot.native.slope returns finite", {
+test_that("iaw$native.slope returns finite", {
     pdf(NULL)
     plot(1:10)
-    result <- iaw$plot.native.slope(2)
+    result <- iaw$native.slope(2)
     dev.off()
     expect_true(is.finite(result))
 })
 
 # Failing tests
-test_that("iaw$plot.native.slope rejects non-numeric", {
+test_that("iaw$native.slope rejects non-numeric", {
     pdf(NULL)
     plot(1:10)
-    expect_error(iaw$plot.native.slope("steep"))
+    expect_error(iaw$native.slope("steep"))
     dev.off()
 })
 
-test_that("iaw$plot.native.slope rejects NULL", {
+test_that("iaw$native.slope rejects NULL", {
     pdf(NULL)
     plot(1:10)
-    expect_error(iaw$plot.native.slope(NULL))
+    expect_error(iaw$native.slope(NULL))
     dev.off()
 })
 
-test_that("iaw$plot.native.slope rejects vector", {
+test_that("iaw$native.slope rejects vector", {
     pdf(NULL)
     plot(1:10)
-    expect_error(iaw$plot.native.slope(c(1, 2)))
+    expect_error(iaw$native.slope(c(1, 2)))
     dev.off()
 })

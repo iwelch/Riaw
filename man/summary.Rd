@@ -22,7 +22,22 @@ Other statistics: \code{\link{autocorrel}}, \code{\link{autopcorrel}}, \code{\li
 }
 \examples{
 \dontrun{
+# Basic profile "p": n, pct NA, mean, sd, t-stat
+set.seed(1)
 df <- data.frame(x = rnorm(100), y = rnorm(100))
 iaw$summary(df, "p")
+
+# Extended profile "x" adds min/median/max
+iaw$summary(df, "x")
+
+# Default profile "X" adds quantiles and autocorrelation
+iaw$summary(df)
+
+# Works on a plain vector too
+iaw$summary(rnorm(200, mean = 0.01, sd = 0.1), "p")
+
+# Return profile with NA values to see pctna column
+df2 <- data.frame(a = c(1:50, rep(NA, 50)), b = rnorm(100))
+iaw$summary(df2, "p")
 }
 }

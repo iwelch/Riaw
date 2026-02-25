@@ -22,5 +22,29 @@ Invisible NULL.
 }
 \seealso{
 
-Other plotting: \code{\link{as.PlotDate.yyyymmdd}}, \code{\link{plot.boxtext}}, \code{\link{colorblind}}, \code{\link{plot.contour}}, \code{\link{plot.ecdf.lineplot}}, \code{\link{plot.hist2d}}, \code{\link{hline}}, \code{\link{iaw.boxplot}}, \code{\link{plot.labelcurve}}, \code{\link{lambda2color}}, \code{\link{plot.loess.lineplot}}, \code{\link{MixColor}}, \code{\link{plot.native.slope}}, \code{\link{plot.p.arrows}}, \code{\link{plot.pdf.embedfonts}}, \code{\link{pdf.end}}, \code{\link{plot.pdf.start.bera}}, \code{\link{pdf.start}}, \code{\link{plot.timearea}}, \code{\link{plot.worldmap}}, \code{\link{plot.points.toomany}}, \code{\link{plot.text.bg}}, \code{\link{plot.text.onbg}}, \code{\link{vline}}, \code{\link{plot.yearly.tickmarks}}, \code{\link{plot.ylab.left}}
+Other plotting: \code{\link{as.PlotDate.yyyymmdd}}, \code{\link{plot.boxtext}}, \code{\link{colorblind}}, \code{\link{plot.contour}}, \code{\link{plot.ecdf.lineplot}}, \code{\link{plot.hist2d}}, \code{\link{hline}}, \code{\link{iaw.boxplot}}, \code{\link{plot.labelcurve}}, \code{\link{lambda2color}}, \code{\link{plot.loess.lineplot}}, \code{\link{MixColor}}, \code{\link{plot.native.slope}}, \code{\link{plot.p.arrows}}, \code{\link{plot.pdf.embedfonts}}, \code{\link{pdf.end}}, \code{\link{pdf.start}}, \code{\link{plot.pdf.start.bera}}, \code{\link{plot.timearea}}, \code{\link{plot.worldmap}}, \code{\link{plot.points.toomany}}, \code{\link{plot.text.bg}}, \code{\link{plot.text.onbg}}, \code{\link{vline}}, \code{\link{plot.yearly.tickmarks}}, \code{\link{plot.ylab.left}}
+}
+\examples{
+\dontrun{
+# Shade between two sinusoids: blue where ylo > yhi, red where ylo < yhi
+x    <- seq(0, 4 * pi, length.out = 200)
+ylo  <- sin(x)
+yhi  <- cos(x)
+plot(x, ylo, type = "n", ylim = c(-1.5, 1.5),
+     xlab = "x", ylab = "y", main = "Shaded difference")
+iaw$plot.shade.xyy(x, ylo, yhi)
+lines(x, ylo, lwd = 2)
+lines(x, yhi, lwd = 2, lty = 2)
+legend("topright", c("sin > cos", "cos > sin"),
+       fill = c("blue", "red"))
+
+# Shade between a series and zero
+x2   <- 1:50
+y2   <- cumsum(rnorm(50))
+plot(x2, y2, type = "l", main = "Cumulative sum vs. zero")
+iaw$plot.shade.xyy(x2, ylo = y2, yhi = 0,
+                   col.plus = "blue", col.minus = "red")
+abline(h = 0, lty = 2)
+}
+
 }

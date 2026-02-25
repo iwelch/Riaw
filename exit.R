@@ -8,6 +8,15 @@
 #'
 #' @return Does not return.
 #'
+#' @examples
+#' \dontrun{
+#' # Exit R cleanly (no save prompt)
+#' iaw$exit()
+#'
+#' # Exit with a non-zero status code to signal failure to the calling shell
+#' iaw$exit(1)
+#' }
+#'
 #' @family utilities
 #' @export
 

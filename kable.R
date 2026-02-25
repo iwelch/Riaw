@@ -1,21 +1,21 @@
-#' Kable Wrapper
+#' Kable Wrapper with LaTeX Alignment
 #'
 #' @name kable
 #'
-#' Wrapper for knitr::kable.
-#'
-#' @param df Table to format.
-#' @param both indicator whether to also give plain text output
-#' @param format request to underlying kable
-#' @param booktabs usually TRUE
-#' @param linesep usually outputs \\addlinespace every 6th row
-#'
-#' @return Formatted table.
+#' \code{kable} wraps \code{knitr::kable} with alignment post-processing for
+#' LaTeX output. \code{align_kable} aligns columns and reformats the raw
+#' LaTeX table.
 #'
 #' @family utilities
 #' @export
 
-
+#' @rdname kable
+#'
+#' @param kable_output A kable object to align.
+#'
+#' @return Aligned kable object with reformatted LaTeX.
+#'
+#' @export
 iaw$align_kable <- function(kable_output) {
 
     ## unfortunately, this corrupts the numeric table into a string one, and then all hell breaks loose --- like '\n' in the string instead of just
@@ -86,6 +86,31 @@ iaw$align_kable <- function(kable_output) {
 
 
 
+#' @rdname kable
+#'
+#' @param df Data frame or matrix to format.
+#' @param both Logical. If \code{TRUE}, also print plain text (default \code{FALSE}).
+#' @param format Output format passed to \code{knitr::kable} (default \code{"latex"}).
+#' @param booktabs Logical. Use booktabs LaTeX style (default \code{TRUE}).
+#' @param linesep Line separator string (default \code{""}).
+#' @param ... Additional arguments passed to \code{knitr::kable}.
+#'
+#' @return Formatted kable object (aligned if LaTeX format).
+#'
+#' @examples
+#' \dontrun{
+#' # Produce a LaTeX table from a small data frame
+#' df <- data.frame(Mean = c(1.23, 4.56), SD = c(0.12, 0.34), row.names = c("A", "B"))
+#' cat(iaw$kable(df))
+#'
+#' # Also print plain text alongside the LaTeX output
+#' cat(iaw$kable(df, both = TRUE))
+#'
+#' # HTML output (skips alignment post-processing)
+#' cat(iaw$kable(df, format = "html"))
+#' }
+#'
+#' @export
 iaw$kable <- function( df, both=FALSE, format="latex", booktabs=TRUE, linesep="", ... ) {
     if (both) print( df )
     o <- kable( df, format=format,  booktabs=booktabs, linesep=linesep, ... )

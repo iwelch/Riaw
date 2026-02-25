@@ -28,6 +28,22 @@ Other regression: \code{\link{neweywest}}, \code{\link{olm}}, \code{\link{ols.no
 }
 \examples{
 \dontrun{
+# Build a small panel: 3 stocks x 4 months
+set.seed(42)
+panel <- data.frame(
+  yyyymm = rep(c(202001, 202002, 202003, 202004), each = 3),
+  firm   = rep(c("A", "B", "C"), times = 4),
+  ret    = rnorm(12, mean = 0.01, sd = 0.05),
+  beta   = rnorm(12, mean = 1, sd = 0.3),
+  size   = rnorm(12, mean = 5, sd = 1)
+)
+
+# Run full Fama-MacBeth: cross-sectional regressions each month,
+# then summarize time-series of gammas
 iaw$famamacbeth(ret ~ beta + size, data = panel)
+
+# Get the per-period gammas directly
+gs <- iaw$famamacbeth.gammas(ret ~ beta + size, data = panel)
+gs
 }
 }

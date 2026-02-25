@@ -19,3 +19,15 @@ Vector of ranks.
 
 Other statistics: \code{\link{autocorrel}}, \code{\link{autopcorrel}}, \code{\link{cmpsum}}, \code{\link{colN}}, \code{\link{colSds}}, \code{\link{covp}}, \code{\link{print.cor}}, \code{\link{rank}}, \code{\link{rowSds}}, \code{\link{sdp}}, \code{\link{sse}}, \code{\link{sst}}, \code{\link{summary}}, \code{\link{tabularsummary}}, \code{\link{varp}}
 }
+\examples{
+\dontrun{
+# Rank a plain numeric vector (no groups)
+iaw$dependent.rank(c(3, 1, 4, 1, 5))   # 3 1.5 4 1.5 5
+
+# Rank within groups -- each group gets its own 1..n ranks
+x      <- c(10, 30, 20, 40, 15, 25)
+groups <- c( "A", "A", "A", "B", "B", "B")
+iaw$dependent.rank(x, groups)           # ranks within A and within B separately
+
+}
+}

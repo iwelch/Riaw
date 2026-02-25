@@ -19,3 +19,18 @@ Residuals vector (with NAs preserved if \code{na.exclude} was used).
 
 Other regression: \code{\link{famamacbeth}}, \code{\link{neweywest}}, \code{\link{olm}}, \code{\link{ols.nona}}, \code{\link{ooslm}}, \code{\link{print.olm}}
 }
+\examples{
+\dontrun{
+# With na.exclude: residuals keep NA positions for alignment
+df <- data.frame(y = c(1, NA, 3, 4, 5), x = c(1, 2, 3, 4, 5))
+fit <- lm(y ~ x, data = df, na.action = na.exclude)
+r <- iaw$residuals(fit)
+length(r)  # 5: NA slot preserved at position 2
+
+# Without na.exclude: a warning is issued
+fit2 <- lm(y ~ x, data = df)
+r2 <- iaw$residuals(fit2)
+length(r2)  # 4: NA row silently dropped
+
+}
+}

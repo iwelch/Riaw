@@ -9,6 +9,7 @@
 #' @param ... Arguments to FUN.
 #' @param mc.cores Number of cores.
 #' @param stop.on.error If TRUE, stop all workers on first error. Default TRUE.
+#' @param verbose Logical. Print error details on failure (default \code{TRUE}).
 #'
 #' @return List of results.
 #'
@@ -19,10 +20,21 @@
 #'
 #' @examples
 #' \dontrun{
+#' # Square numbers in parallel
 #' iaw$mclapply(1:10, function(x) x^2)
+#'
+#' # Process a list of data frames in parallel, one per ticker
+#' tickers <- list(AAPL = df_aapl, MSFT = df_msft, GOOG = df_goog)
+#' results <- iaw$mclapply(tickers, function(d) lm(ret ~ mkt, data = d))
+#'
+#' # Use stop.on.error = FALSE to collect partial results despite failures
+#' out <- iaw$mclapply(1:5, function(x) {
+#'   if (x == 3) stop("bad element")
+#'   x^2
+#' }, stop.on.error = FALSE)
 #' }
 
-iaw$mclapply <- function(X, FUN, ..., mc.cores = parallel::detectCores(),
+iaw$mclapply <- function(X, FUN, ..., mc.cores = getOption("mc.cores", parallel::detectCores()),
                          stop.on.error = TRUE, verbose = TRUE) {
   stopifnot(is.list(X) || is.vector(X))
   stopifnot(is.function(FUN))
@@ -37,6 +49,8 @@ iaw$mclapply <- function(X, FUN, ..., mc.cores = parallel::detectCores(),
   on.exit(unlink(c(flag, errfile)), add = TRUE)
 
   n <- length(X)
+  if (n == 0L) return(list())
+
   wrapper <- function(i) {
     if (file.exists(flag)) return(NULL)
     tryCatch(

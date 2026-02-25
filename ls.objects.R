@@ -13,7 +13,24 @@
 #' @export
 #'
 #' @examples
+#' \dontrun{
+#' # List all objects in the global environment, largest first
 #' iaw$ls.objects()
+#'
+#' # Create some objects and inspect sizes
+#' big   <- matrix(rnorm(1e6), ncol = 1000)
+#' small <- 1:10
+#' iaw$ls.objects()   # big should appear at the top
+#'
+#' # Limit to top 5 objects
+#' iaw$ls.objects(n = 5)
+#'
+#' # Inspect a specific environment
+#' e <- new.env()
+#' e$x <- rnorm(1000)
+#' e$y <- "hello"
+#' iaw$ls.objects(envir = e)
+#' }
 
 iaw$ls.objects <- function(envir = .GlobalEnv, n = 20) {
     objs <- ls(envir = envir)

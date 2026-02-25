@@ -15,7 +15,18 @@
 #' @export
 #'
 #' @examples
+#' # Distance from New York to Los Angeles (~3940 km)
 #' iaw$latlon.distance(40.7128, -74.0060, 34.0522, -118.2437)
+#'
+#' # Distance from London to Paris (~341 km)
+#' iaw$latlon.distance(51.5074, -0.1278, 48.8566, 2.3522)
+#'
+#' # Vectorised: distances from one city to several others
+#' iaw$latlon.distance(
+#'   rep(40.7128, 3), rep(-74.0060, 3),
+#'   c(34.0522, 41.8781, 29.7604),    # LA, Chicago, Houston
+#'   c(-118.2437, -87.6298, -95.3698)
+#' )
 
 iaw$latlon.distance <- function(lat1, lon1, lat2, lon2) {
     stopifnot(is.numeric(lat1), is.numeric(lon1))
@@ -51,12 +62,22 @@ iaw$latlon.distance <- function(lat1, lon1, lat2, lon2) {
 #'
 #' @family utilities
 #' @export
+#'
+#' @examples
+#' # Forward: lat/lon pair to integer ID
+#' iaw$latlonx(40, -74)
+#'
+#' # Forward via two-element vector
+#' iaw$latlonx(c(40, -74))
+#'
+#' # Inverse: single integer ID back to lat/lon
+#' iaw$latlonx(iaw$latlonx(40, -74))
 
 iaw$latlonx <- function( lat1, lon2=NULL ) {
     if (!is.null( ncol(lat1) )) {
         ## we are passing a matrix or dataframe
         if (ncol(lat1)>=2) return( iaw$mklatlonid( as.numeric(lat1[,1]), as.numeric( lat1[,2] )) ) ## a matrix of 2 vectors is standard
-        return( invlatlon( as.numeric(argc[,1]) ) )  ## a matrix of 1 vector is an inverse operation
+        return( iaw$invlatlon( as.numeric(lat1[,1]) ) )  ## a matrix of 1 vector is an inverse operation
     }
 
     if (is.null(lon2)) {
@@ -77,15 +98,26 @@ iaw$latlonx <- function( lat1, lon2=NULL ) {
 #' Converts lat/lon to unique integer ID.
 #'
 #' @param lat Latitude (-90 to 90).
-#' @param lon Longitude (-180 to 180).
+#' @param lon Longitude (-180 to 180), or \code{NULL} if \code{lat} is a two-element
+#'   vector \code{c(lat, lon)}.
 #'
 #' @return Integer ID (1 to 64800).
 #'
 #' @family utilities
 #' @export
+#'
+#' @examples
+#' # New York City
+#' iaw$mklatlonid(40, -74)
+#'
+#' # Passing lat/lon as a two-element vector
+#' iaw$mklatlonid(c(51, -0))   # London (integer degrees)
+#'
+#' # Vectorised: create IDs for several cities at once
+#' iaw$mklatlonid(c(40, 51, 35), c(-74, 0, 139))   # NYC, London, Tokyo
 
 iaw$mklatlonid <- function( lat, lon=NULL ) {
-    if ((is.null(lon)) & (length(lat==2))) { lon <- lat[2]; lat <- lat[1] } ## mklatlonid( c(30,-140) ) -> mklatlonid( 30, -140 )
+    if ((is.null(lon)) & (length(lat) == 2)) { lon <- lat[2]; lat <- lat[1] } ## mklatlonid( c(30,-140) ) -> mklatlonid( 30, -140 )
     stopifnot( all( is.na(lat) | (abs(lat) <= 90)) )
     stopifnot( all( is.na(lon) | (abs(lon) <= 180)) )
 
@@ -108,6 +140,15 @@ iaw$mklatlonid <- function( lat, lon=NULL ) {
 #'
 #' @family utilities
 #' @export
+#'
+#' @examples
+#' # Recover lat/lon from an integer ID
+#' id <- iaw$mklatlonid(40, -74)
+#' iaw$invlatlon(id)   # lat ~= 40.5, lon ~= -73.5
+#'
+#' # Round-trip: mklatlonid -> invlatlon -> mklatlonid
+#' id2 <- iaw$mklatlonid(iaw$invlatlon(id))
+#' stopifnot(id == id2)
 
 ## note that (0,0) is interpreted as (0.5,0.5).  thus GMT = 0,0 = 0.5,0.5 = id 32581
 iaw$invlatlon <- function( latlonid ) {
@@ -117,8 +158,8 @@ iaw$invlatlon <- function( latlonid ) {
     FORSURE <- 0.01  ## not needed.
     rv <- cbind( lat=as.integer( (latlonid-1 +FORSURE)/360) - 90 + 0.5, lon=as.integer((latlonid-1 +FORSURE)%%360) - 180 + 0.5 )
 
-    if (is.null(dim(latlonid))) return(rv)
-    as.numeric( lat=rv[1], lon=rv[2] )
+    if (!is.null(dim(latlonid))) return(rv)
+    c( lat=rv[1], lon=rv[2] )
 }
 
 
@@ -143,7 +184,7 @@ iaw$testlatlon <- function( ) {
                 stop("CHECK")
             }
             if ( abs(latlon[2] - lon) > 1e-4 ) {
-                message("LON bad latlon xfer :", lon, ",calc=", latlon[2], ": on lon=", lat, " to id=", id, " and laton=", latlon)
+                message("LON bad latlon xfer :", lon, ",calc=", latlon[2], ": on lat=", lat, " to id=", id, " and laton=", latlon)
                 stop("CHECK")
             }
         }

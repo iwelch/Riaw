@@ -20,6 +20,17 @@ Other data-transformation: \code{\link{standardize}}, \code{\link{winsorize.leve
 }
 \examples{
 \dontrun{
+# Basic normalization to [0, 1]
 iaw$normalize(c(1, 2, 3, 4, 5))
+
+# NA values are preserved; range computed from non-NA elements
+iaw$normalize(c(0, NA, 5, 10))
+
+# Constant vector maps to 0.5
+iaw$normalize(c(7, 7, 7))
+
+# Normalize each column of a matrix
+m <- matrix(c(10, 20, 30, 100, 200, 300), nrow = 3)
+apply(m, 2, iaw$normalize)
 }
 }

@@ -23,6 +23,16 @@ Other utilities: \code{\link{ascii}}, \code{\link{base}}, \code{\link{beep}}, \c
 \examples{
 \dontrun{
 x <- iaw$rnorm.perfect(100)
-mean(x)  # Very close to 0
+mean(x)  # Exactly 0 (by construction)
+sd(x)    # Exactly 1
+
+# Custom mean and sd
+y <- iaw$rnorm.perfect(50, mean = 10, sd = 2)
+mean(y)  # Exactly 10
+sd(y)    # Exactly 2
+
+# Useful for simulation studies that need exact moments
+z <- iaw$rnorm.perfect(1000)
+range(z)   # Wider tails than rnorm() because quantiles are exact
 }
 }

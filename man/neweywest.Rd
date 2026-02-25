@@ -19,3 +19,17 @@ Covariance matrix.
 
 Other regression: \code{\link{famamacbeth}}, \code{\link{olm}}, \code{\link{ols.nona}}, \code{\link{ooslm}}, \code{\link{print.olm}}, \code{\link{residuals}}
 }
+\examples{
+\dontrun{
+# Compute Newey-West covariance matrix for a simple regression
+df <- data.frame(y = cumsum(rnorm(30)), x = cumsum(rnorm(30)))
+fit <- lm(y ~ x, data = df)
+vcov_nw <- iaw$neweywest(fit, lag = 2)
+sqrt(diag(vcov_nw))  # Newey-West standard errors
+
+# lag = 0 gives heteroskedasticity-consistent (HC) SEs
+vcov_hc <- iaw$neweywest(fit, lag = 0)
+sqrt(diag(vcov_hc))
+
+}
+}

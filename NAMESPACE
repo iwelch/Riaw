@@ -1,0 +1,14 @@
+export(iaw)
+export("%and%")
+export("%or%")
+export("%inrange%")
+S3method(print, olm)
+importFrom(parallel, mclapply, detectCores)
+importFrom(data.table, fread, fwrite)
+importFrom(stats, lm, coef, residuals, formula, sd, var, cor, median, quantile,
+           rnorm, runif, na.exclude, predict, fitted, pf, sigma, anova)
+importFrom(utils, head, tail, object.size)
+importFrom(grDevices, pdf, dev.off, col2rgb, rgb)
+importFrom(graphics, par, plot, points, lines, abline, polygon, rect, segments,
+           text, mtext, axis)
+importFrom(tools, md5sum)

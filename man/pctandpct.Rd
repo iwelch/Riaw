@@ -23,8 +23,19 @@ Invisibly returns NULL.
 Other operators: \code{\link{\%inrange\%}}, \code{\link{\%or\%}}
 }
 \examples{
-\dontrun{
+# Execute right-hand side only when condition is TRUE
 x <- 5
 (x > 3) \%and\% message("x is greater than 3")
+
+# Condition is FALSE: right-hand side is never evaluated
+(x > 10) \%and\% message("this will not print")
+
+# Common pattern: conditional abort on bad input
+\dontrun{
+validate <- function(df) {
+  (nrow(df) == 0) \%and\% iaw$abort("data frame is empty")
+}
+validate(data.frame(x = 1:5))   # passes silently
+validate(data.frame())           # aborts
 }
 }

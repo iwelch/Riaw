@@ -22,6 +22,22 @@ Other statistics: \code{\link{autocorrel}}, \code{\link{autopcorrel}}, \code{\li
 }
 \examples{
 \dontrun{
+# Basic rank with average ties (same as base rank default)
 iaw$rank(c(3, 1, 4, 1, 5))
+
+# NA values are preserved (na.last = "keep")
+iaw$rank(c(3, NA, 1, 4))
+
+# Ties method "first" breaks ties by position
+iaw$rank(c(3, 1, 4, 1, 5), ties.method = "first")
+
+# Descending rank: negate the input
+iaw$rank(-c(3, 1, 4, 1, 5))
+
+# Quantile ranks (0 to 1)
+iaw$rank(c(10, 20, 30, 40, 50), ngroups = "quantiles")
+
+# Assign to 3 groups (portfolio formation)
+iaw$rank(c(10, 20, 30, 40, 50, 60), ngroups = 3)
 }
 }

@@ -9,9 +9,17 @@
 #'
 #' @return Invisible NULL.
 #'
+#' @examples
+#' \dontrun{
+#' # Open a PDF with Bera-style font settings
+#' iaw$pdf.start.bera("output/figure.pdf")
+#' plot(1:10, main = "Bera-style PDF")
+#' iaw$pdf.end()
+#' }
+#'
 #' @family plotting
 #' @keywords internal
 
 iaw$pdf.start.bera <- function(filename, ...) {
-    iaw$plot.pdf.start(filename, ...)
+    iaw$pdf.start(filename, ...)
 }

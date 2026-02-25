@@ -4,13 +4,33 @@
 #'
 #' Plots loess-smoothed line.
 #'
-#' @param x X values.
-#' @param y Y values.
-#' @param lo default number of points for which to draw
-#' @param span Smoothing span.
-#' @param ... Plot arguments.
+#' @param x Numeric vector of x values.
+#' @param y Numeric vector of y values.
+#' @param lo Number of points for the smoothed line (default 200).
+#' @param span Smoothing span for \code{loess} (default 0.75).
+#' @param mean.hatch X-value at which to draw a cross-hatch mark, or \code{NA}
+#'   to skip (default \code{NA}).
+#' @param ... Additional arguments passed to \code{lines}.
 #'
-#' @return Invisible NULL.
+#' @return Data frame of smoothed x and y values (invisibly).
+#'
+#' @examples
+#' \dontrun{
+#' # Smooth a noisy sine wave and overlay on scatter plot
+#' set.seed(1)
+#' x <- runif(100, 0, 2 * pi)
+#' y <- sin(x) + rnorm(100, sd = 0.3)
+#' plot(x, y, pch = 16, col = "gray70", main = "Loess smoother")
+#' iaw$plot.loess.lineplot(x, y, col = "blue", lwd = 2)
+#'
+#' # Add a cross-hatch mark at the mean of x
+#' plot(x, y, pch = 16, col = "gray70")
+#' iaw$plot.loess.lineplot(x, y, mean.hatch = pi, col = "red", lwd = 2)
+#'
+#' # Tighter span for less smoothing
+#' plot(x, y, pch = 16, col = "gray70")
+#' iaw$plot.loess.lineplot(x, y, span = 0.3, col = "darkgreen", lwd = 2)
+#' }
 #'
 #' @family plotting
 #' @export

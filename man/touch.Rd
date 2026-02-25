@@ -16,5 +16,18 @@ Invisible TRUE.
 }
 \seealso{
 
-Other io: \code{\link{lock}}, \code{\link{read.csv}}, \code{\link{.Riolog}}, \code{\link{write.csv}}
+Other io: \code{\link{.Riolog}}, \code{\link{lock}}, \code{\link{read.csv}}, \code{\link{write.csv}}
+}
+\examples{
+\dontrun{
+# Create an empty sentinel file
+iaw$touch(file.path(tempdir(), "done.flag"))
+
+# Update the modification timestamp of an existing file
+f <- tempfile()
+writeLines("hello", f)
+iaw$touch(f)
+file.info(f)$mtime   # now equals (approximately) Sys.time()
+}
+
 }

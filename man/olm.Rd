@@ -25,3 +25,22 @@ print.olm
 
 Other regression: \code{\link{famamacbeth}}, \code{\link{neweywest}}, \code{\link{ols.nona}}, \code{\link{ooslm}}, \code{\link{print.olm}}, \code{\link{residuals}}
 }
+\examples{
+\dontrun{
+# Basic regression
+df <- data.frame(y = c(1, 2, 3, 4, 5), x = c(1.1, 1.9, 3.2, 3.8, 5.1))
+fit <- iaw$olm(y ~ x, data = df)
+print(fit)
+
+# With NA values (na.exclude keeps original indices in residuals)
+df2 <- data.frame(y = c(1, NA, 3, 4, 5), x = c(1, 2, 3, 4, 5))
+fit2 <- iaw$olm(y ~ x, data = df2)
+print(fit2)
+
+# Multiple predictors; disable standardised coefficients
+df3 <- data.frame(y = rnorm(20), x1 = rnorm(20), x2 = rnorm(20))
+fit3 <- iaw$olm(y ~ x1 + x2, data = df3, stdcoefs = FALSE)
+print(fit3)
+
+}
+}

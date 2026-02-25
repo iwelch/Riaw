@@ -21,6 +21,16 @@ Other utilities: \code{\link{ascii}}, \code{\link{base}}, \code{\link{beep}}, \c
 }
 \examples{
 \dontrun{
+# Basic concatenation with no separator
 iaw$strcat("Hello", "World")
+
+# Multiple arguments joined into one string
+iaw$strcat("file", "_", "2024", ".csv")
+
+# Use sep to join with a delimiter
+iaw$strcat("a", "b", "c", sep = "-")
+
+# Build a file path from parts
+iaw$strcat("/data", "/raw", "/prices.csv")
 }
 }

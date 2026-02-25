@@ -2,15 +2,34 @@
 #'
 #' @name leadlagseries
 #'
-#' Support functions for panel-aware time series operations.
+#' Internal support functions for panel-aware time series operations.
+#' \code{panelcheck} validates panel sort order.
+#' \code{seriescheck} validates series input.
+#' \code{funseries} applies a lag/lead function respecting panel boundaries.
 #'
 #' @param seriesin Numeric vector.
 #' @param panelid Optional panel identifier vector.
 #' @param timeid Optional time identifier vector.
-#' @param errormsg Error message for validation failures.
-#' @param fun.and.data List with function, parameter, and series.
+#' @param errormsg Error message for validation failures (default \code{"unused"}).
+#' @param fun.and.data List with components \code{fun}, \code{param}, and \code{series}.
 #'
-#' @return Various depending on function.
+#' @return \code{panelcheck}: 0 (invisibly) if no panel, or stops on error.
+#'   \code{seriescheck}: \code{NULL} (invisibly).
+#'   \code{funseries}: transformed numeric vector.
+#'
+#' @examples
+#' \dontrun{
+#' # panelcheck: validate that a panel is sorted by id then time
+#' series  <- c(1, 2, 3, 4, 5, 6)
+#' firm    <- c("A", "A", "A", "B", "B", "B")
+#' time    <- c(1, 2, 3, 1, 2, 3)
+#' iaw$panelcheck(series, firm, time)  # returns 0 silently when valid
+#'
+#' # funseries: apply a lag function respecting panel boundaries
+#' lag_fun <- list(fun = function(x, p) c(rep(NA, p), head(x, -p)), param = 1,
+#'                 series = series)
+#' iaw$funseries(lag_fun, series, firm, time)
+#' }
 #'
 #' @family time-series
 #' @keywords internal
@@ -30,7 +49,7 @@ iaw$panelcheck <- function(seriesin, panelid, timeid, errormsg = "unused") {
     stopifnot(!any(is.na(timeid)))
 
     if (!(all(panelid >= iaw$lagseries(panelid), na.rm = TRUE))) {
-        problemids <- head(which(panelid < iaw$lagseries(panelid)), na.rm = TRUE)
+        problemids <- head(which(panelid < iaw$lagseries(panelid)))
         message("Panel not sorted by panel id. Problem IDs: ")
         print(problemids)
     }

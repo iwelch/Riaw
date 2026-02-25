@@ -26,5 +26,13 @@ Other utilities: \code{\link{ascii}}, \code{\link{base}}, \code{\link{beep}}, \c
 \dontrun{
 d <- c(a = 1, b = 2, c = 3)
 iaw$dict.lookup(c("a", "c", "x"), d, NA)
+
+# Map ticker symbols to full company names; missing get a default
+tickers <- c(AAPL = "Apple", MSFT = "Microsoft", GOOG = "Alphabet")
+iaw$dict.lookup(c("AAPL", "GOOG", "TSLA"), tickers, default = "Unknown")
+
+# Use 0 as default instead of NA for numeric dictionaries
+sector_cap <- c(tech = 5e12, energy = 2e12)
+iaw$dict.lookup(c("tech", "finance", "energy"), sector_cap, default = 0)
 }
 }
